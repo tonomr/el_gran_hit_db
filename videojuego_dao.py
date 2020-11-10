@@ -1,7 +1,7 @@
 # CLASE VIDEOJUEGO DAO (DATA ACCESS OBJECT) PARA ADMINISTRAR LOS DATOS DE LA BASE DE DATOS
 
 from videojuego import Videojuego # IMPORTAMOS LA CLASE VIDEOJUEGO
-from cursor import CursorDelPool # IMPORTAMOS LA CONEXION
+from cursor import CursorDelPool # IMPORTAMOS EL CURSOR DEL POOL DE CONEXIONES
 from logger_conf import logger # IMPORTAMOS EL LOGGER
 
 # LA CLASE VIDEOJUEGODAO CONTIENE LAS CONSTANTES PARA HACER LAS CONSULTAS A LA BASE DE DATOS Y SUS RESPECTIVOS METODOS PARA MOSTRARLAS AL USUARIO
@@ -31,7 +31,7 @@ class VideojuegoDao:
     def insertar(cls, videojuego):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__INSERTAR)) # SENTENCIA A EJECUTAR
-            logger.debug(f"Videojuego a insertar: {videojuego}") # SE IMPRIME EL OBJETO videojuego A INSERTAR
+            logger.debug(f"Videojuego a insertar: {videojuego}") # OBJETO videojuego A INSERTAR
             valores = (videojuego.getCodigo(), videojuego.getNombre(), videojuego.getCategoria(), videojuego.getPrecio(), videojuego.getDescripcion(), videojuego.getClasificacion(), videojuego.getCopias(), videojuego.getPublicacion(), videojuego.getEstado(), videojuego.getDesarrolladora())
             cursor.execute(cls.__INSERTAR, valores) # EJECUCION DE LA SENTENCIA
             
