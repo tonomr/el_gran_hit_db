@@ -9,6 +9,8 @@ class VideojuegoDao:
     # SENTENCIAS
     __SELECT = "SELECT * FROM articulo"
     __INSERTAR = "INSERT INTO articulo(codigo, nombre, categoria, precio, descripcion, clasificacion, copias, publicacion, estado, desarrolladora) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    __UPDATE = "UPDATE articulo SET nombre = %s, categoria = %s, precio = %s, descripcion = %s, clasificacion = %s, copias = %s, publicacion = %s, estado = %s, desarrolladora = %s WHERE codigo = %s"
+    __DELETE = "DELETE FROM articulo WHERE codigo = %s"
     
     # METODO SELECT PARA MOSTRAR LOS REGISTROS DE LA TABLA VIDEOJUEGOS
     @classmethod
@@ -36,6 +38,28 @@ class VideojuegoDao:
             cursor.execute(cls.__INSERTAR, valores) # EJECUCION DE LA SENTENCIA
             
             return cursor.rowcount # RETORNAMOS EL NUMERO DE INSERCIONES
+        
+    # METODO ACTUALIZAR PARA MODIFICAR REGISTROS
+    @classmethod
+    def actualizar(cls, videojuego):
+        with CursorDelPool() as cursor:
+            logger.debug(cursor.mogrify(cls.__UPDATE)) # SENTENCIA A EJECUTAR
+            logger.debug(f"Videojuego a actualizar: {videojuego}") # SE IMPRIME EL OBJETO videojuego A ACTUALIZAR
+            valores = (videojuego.getNombre(), videojuego.getCategoria(), videojuego.getPrecio(), videojuego.getDescripcion(), videojuego.getClasificacion(), videojuego.getCopias(), videojuego.getPublicacion(), videojuego.getEstado(), videojuego.getDesarrolladora(), videojuego.getCodigo())
+            cursor.execute(cls.__UPDATE, valores) # EJECUCION DE LA SENTENCIA
+            
+            return cursor.rowcount # RETORNAMOS EL NUMERO DE ACTUALIZACIONES
+        
+    # METODO ELIMINAR PARA BORRAR REGISTROS
+    @classmethod
+    def eliminar(cls, videojuego):
+        with CursorDelPool() as cursor:
+            logger.debug(cursor.mogrify(cls.__DELETE)) # SENTENCIA A EJECUTAR
+            logger.debug(f"Videojuego a eliminar: {videojuego}") # SE IMPRIME EL OBJETO videojuego A ELIMINAR
+            valores = (videojuego.getCodigo(),)
+            cursor.execute(cls.__DELETE, valores) # EJECUCION DE LA SENTENCIA
+            
+            return cursor.rowcount # RETORNAMOS EL NUMERO DE ELIMINACIONES
 
 # PRUEBA DE CONFIGURACION (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":
@@ -51,3 +75,12 @@ if __name__ == "__main__":
     #registros_insertados = VideojuegoDao.insertar(videojuego)
     #logger.debug(f"Registros insertados: {registros_insertados}")
     
+    #PRUEBA UPDATE
+    #videojuego = Videojuego("QWE567R8", "Mario Bros 3", "Plataforma", 200.87, "Juego clasico de plataformas de los 90s", "E", 4, "5/6/1995", "Semi-nuevo", "Nintendo")
+    #registros_actualizados = VideojuegoDao.actualizar(videojuego)
+    #logger.debug(f"Registros actualizados: {registros_actualizados}")
+    
+    #PRUEBA DELETE
+    #videojuego = Videojuego(codigo="QWE567R8")
+    #registros_eliminados = VideojuegoDao.eliminar(videojuego)
+    #logger.debug(f"Registros eliminados: {registros_eliminados}")    
