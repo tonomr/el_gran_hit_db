@@ -1,12 +1,10 @@
 # CONFIGURACION PARA LA CONEXION A LA BASE DE DATOS
 
-# DE NUESTRA CONFIGURACION DE LOGGER IMPORTAMOS LA DEFINICION
-from logger_conf import logger
+from logger_conf import logger # DE NUESTRA CONFIGURACION DE LOGGER IMPORTAMOS LA DEFINICION
 from psycopg2 import pool  # MODULO PARA LA CONEXION PYTHON CON POSTGRESQL
 import sys  # MODULO PARA TERMINAR LA EJECUCION DEL PROGRAMA SI HAY ERROR
 
-# CLASE CONEXION, DATOS DE LA CONEXION Y LOS OBJETOS CONEXION Y CURSOR
-
+# CLASE CONEXION, DATOS DE LA CONEXION Y Y OBJETO POOL DE CONEXIONES
 
 class Conexion:
     __DATABASE = "el_gran_hit_db"
@@ -18,6 +16,7 @@ class Conexion:
     __MAX_CON = 5
     __pool = None
 
+    # EL METODO obtenerPool CREA UN POOL DE CONEXIONES SIMPLE CON LOS DATOS DE LA CONEXION,  LIMITES DE LAS CONEXIONES Y LO REGRESA A LA VARIABLE __pool
     @classmethod
     def obtenerPool(cls):
         if cls.__pool is None:
@@ -30,46 +29,45 @@ class Conexion:
                                                        port=cls.__PORT,
                                                        database=cls.__DATABASE)
 
-                logger.info(f"Pool exitoso {cls.__pool}")
+                logger.info(f"Creacion del pool de conexiones exitoso: {cls.__pool}")
                 return cls.__pool
 
             except Exception as excepcion:
-                logger.error(f"Error {excepcion}")
+                logger.error(f"ERROR, al crear un pool de conexiones: {excepcion}")
                 sys.exit()
         else:
             return cls.__pool
 
-    # EL METODO obtenerConexion REGRESA UN OBJETO CONEXION SI ES POSIBLE CONECTAR A LA BASE DE DATOS, SINO, TERMINA EL PROGRAMA
+    # EL METODO obtenerConexion REGRESA UN OBJETO CONEXION DEL POOL DE CONEXIONES
     @classmethod
     def obtenerConexion(cls):
         conexion = cls.obtenerPool().getconn()
-        logger.debug(f"Pool exitoso {conexion}")
+        logger.debug(f"Conexion exitosa: {conexion}")
         return conexion
         
+    # EL METODO liberarConexion LIBERAMOS UNA CONEXION AL POOL DE CONEXIONES
     @classmethod
     def liberarConexion(cls, conexion):
-        #Regresar una conexion al pool
         cls.obtenerPool().putconn(conexion)
-        logger.debug(f"Regresamos la conexion al pool: {conexion}")
+        logger.debug(f"Se libera la conexion al pool: {conexion}")
         logger.debug(f"Estado del pool: {cls.__pool}")
 
-    # EL METODO cerrarConexiones CIERRA LA CONEXION Y EL CURSOR SI ES QUE EXISTEN, SINO, IMPRIME ERROR
+    # EL METODO cerrarConexiones CIERRA TODAS LAS CONEXIONES DEL POOL
     @classmethod
     def cerrarConexiones(cls):
         cls.obtenerPool().closeall()
-        logger.debug(f"Cerramos todas las conexiones del pool: {cls.__pool}")
+        logger.debug(f"Conexiones del pool cerradas: {cls.__pool}")
 
 # PRUEBA DE CONFIGURACION (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":
-    #Obtener conexion a partir del pool
+    # OBTENIENDO CONEXIONES DE UN POOL
     conexion1 = Conexion.obtenerConexion()
     conexion2 = Conexion.obtenerConexion()
-    #Regresar conexiones al pool
+    # LIBERANDO ESAS CONEXIONES AL POOL
     Conexion.liberarConexion(conexion1)
     Conexion.liberarConexion(conexion2)
-    conexion3 = Conexion.obtenerConexion()
     
-    #Cerrar pool
+    conexion3 = Conexion.obtenerConexion()
     Conexion.cerrarConexiones()
-    #Si intentamos pedir una conexion al pool cerrado
-    #conexion3 = Conexion.obtenerConexion() #Error: Pool cerrado
+    #conexion3 = Conexion.obtenerConexion() # ERROR, POOL DE CONEXIONES CERRADA
+    
