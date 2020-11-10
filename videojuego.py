@@ -2,7 +2,7 @@
 
 from logger_conf import logger # DE NUESTRA CONFIGURACION DE LOGGER IMPORTAMOS LA DEFINICION
 
-# LA CLASE VIDEOJUEGO CONTIENE SU CONSTRUCTOR CON LOS ATRIBUTOS DE LA ENTIDAD, SU METODO STR Y SUS GET Y SET
+# VIDEOJUEGO CONTIENE SU CONSTRUCTOR CON LOS ATRIBUTOS DE LA ENTIDAD, SU METODO STR Y SUS GET Y SET
 class Videojuego:
     # CONSTRUCTOR DE LA CLASE
     def __init__(self, codigo=None, nombre=None, categoria=None, precio=None, descripcion=None, clasificacion=None, copias=None, publicacion=None, estado=None, desarrolladora=None):
