@@ -1,24 +1,25 @@
+# CONFIGURACION DE LOS CURSORES DE LA CONEXION
+
 from conexion import Conexion
 from logger_conf import logger
 
+# CLASE CursorDelPool CON ATRIBUTOS OBJETO DE CONEXION Y CURSOR
 class CursorDelPool:
+    # CONSTRUCTOR DE LA CLASE
     def __init__(self):
         self.__conn = None
         self.__cursor = None
     
-    #Inicio de With
+    # CUANDO SE LLAME ESTA CLASE CON with SE EJECUTARA ESTE METODO
     def __enter__(self):
-        logger.debug(f"Inicio de with metodo __enter__")
         self.__conn = Conexion.obtenerConexion()
         self.__cursor = self.__conn.cursor()
+        logger.debug(f"Cursor exitoso: {self.__cursor}")
         
         return self.__cursor
     
-    #Fin de With
+    # CUANDO TERMINE DE EJECUTARSE __enter__ SE EJECUTARA ESTE METODO, SI HUBO ERRORES NO SE HACE COMMIT
     def __exit__(self, exception_type, exception_value, exception_traceback):
-        logger.debug(f"Se ejecuta metodo __exit__")
-        
-        #if exception_value is not None:
         if exception_value:
             self.__conn.rollback()
             logger.debug(f"Ocurrio una excepcion: {exception_value}")
@@ -27,15 +28,11 @@ class CursorDelPool:
             self.__conn.commit()
             logger.debug(f"Commit de la transaccion")
             
-        #Cerramos el cursor | Regresar conexion al pool
         self.__cursor.close()
         Conexion.liberarConexion(self.__conn)
-        
-        
+
+# PRUEBA DE CONFIGURACION (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)        
 if __name__ == "__main__":
-    #Obtenemos un cursor a partir de la conexion del pool
-    #with se ejecuta primero __enter__ y termina con __exit___
     with CursorDelPool() as cursor:
-        cursor.execute("SELECT * FROM persona")
-        logger.debug("Listado de personas")
+        cursor.execute("SELECT * FROM articulo")
         logger.debug(cursor.fetchall())
