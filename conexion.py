@@ -3,15 +3,18 @@
 from logger_conf import logger # DE NUESTRA CONFIGURACION DE LOGGER IMPORTAMOS LA DEFINICION
 from psycopg2 import pool  # MODULO PARA LA CONEXION PYTHON CON POSTGRESQL
 import sys  # MODULO PARA TERMINAR LA EJECUCION DEL PROGRAMA SI HAY ERROR
-
+import dotenv
+import os
 # CLASE CONEXION, DATOS DE LA CONEXION Y OBJETO POOL DE CONEXIONES
 
+dotenv.load_dotenv()
+
 class Conexion:
-    __DATABASE = "el_gran_hit_db"
-    __USERNAME = "postgres"
-    __PASSWORD = "admin"
-    __PORT = "5433"
-    __HOST = "127.0.0.1"
+    __DATABASE = os.getenv("DB_NAME")
+    __USERNAME = os.getenv("DB_USERNAME")
+    __PASSWORD = os.getenv("DB_USER_PASSWORD")
+    __PORT = os.getenv("DB_PORT")
+    __HOST = os.getenv("DB_HOST")
     __MIN_CON = 1
     __MAX_CON = 5
     __pool = None
