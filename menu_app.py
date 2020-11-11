@@ -1,8 +1,8 @@
 # MENU PARA EL USUARIO PARA LA TABLA ARTICULO
 
-from videojuego import Videojuego
-from videojuego_dao import VideojuegoDao
-from logger_conf import logger
+from models.videojuego import Videojuego
+from controllers.videojuego_dao import VideojuegoDao
+from services.logger_conf import logger
 
 opcion = None
 

@@ -1,7 +1,7 @@
 # CONFIGURACION DE LOS CURSORES DE LA CONEXION
 
-from conexion import Conexion
-from logger_conf import logger
+from services.conexion import Conexion
+from services.logger_conf import logger
 
 # CLASE CursorDelPool CON ATRIBUTOS OBJETO DE CONEXION Y CURSOR
 class CursorDelPool:
