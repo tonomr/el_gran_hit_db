@@ -34,5 +34,5 @@ class CursorDelPool:
 # PRUEBA DE CONFIGURACION (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)        
 if __name__ == "__main__":
     with CursorDelPool() as cursor:
-        cursor.execute("SELECT * FROM articulo")
+        cursor.execute("SELECT * FROM videojuego")
         logger.debug(cursor.fetchall())

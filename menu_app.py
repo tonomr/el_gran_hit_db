@@ -3,7 +3,7 @@
 from models.videojuego import Videojuego
 from controllers.videojuego_dao import VideojuegoDao
 from services.logger_conf import logger
-from views.mainmenu import GUI
+#from views.mainmenu import GUI
 
 opcion = None
 
@@ -24,43 +24,40 @@ while opcion != "5":
             print(videojuego)
     
     elif opcion == "2":
-        codigo = input("Escribe el CODIGO: ")
-        nombre = input("Escribe el NOMBRE: ")
-        precio = float(input("Escribe el PRECIO: "))
-        categoria = input("Escribe la CATEGORIA: ")
-        descripcion = input("Escribe la DESCRIPCION: ")
-        clasificacion = input("Escribe la CLASIFICACION: ")
-        copias = int(input("Escribe la cantidad de COPIAS: "))
-        publicacion = input("Escribe la fecha de PUBLICACION: ")
+        nombre_juego = input("Escribe el NOMBRE: ")
         estado = input("Escribe el ESTADO: ")
-        desarrolladora = input("Escribe la DESARROLLADORA: ")
+        cantidad = int(input("Escribe la CANTIDAD: "))
+        clasificacion = input("Escribe la CLASIFICACION: ")
+        descripcion = input("Escribe la DESCRIPCION: ")
+        precio = float(input("Escribe el PRECIO: "))        
+        fecha_publicacion = input("Escribe la FECHA de PUBLICACION: ")
+        codigo_desarrolladora = input("Escribe el CODIGO de la DESARROLLADORA: ")
         
-        videojuego = Videojuego(codigo, nombre, categoria, precio, descripcion, clasificacion, copias, publicacion, estado, desarrolladora)
+        videojuego = Videojuego(nombre_juego=nombre_juego, estado=estado, cantidad=cantidad, clasificacion=clasificacion, descripcion=descripcion, precio=precio, fecha_publicacion=fecha_publicacion, codigo_desarrolladora=codigo_desarrolladora)
         registros_insertados = VideojuegoDao.insertar(videojuego)
         
         print(f"Registros insertados: {registros_insertados}")
     
     elif opcion == "3":
-        codigo = input("Escribe el CODIGO del videojuego: ")
-        nombre = input("Escribe el nuevo NOMBRE: ")
-        precio = float(input("Escribe el nuevo PRECIO: "))
-        categoria = input("Escribe la nueva CATEGORIA: ")
-        descripcion = input("Escribe la nueva DESCRIPCION: ")
-        clasificacion = input("Escribe la nueva CLASIFICACION: ")
-        copias = int(input("Escribe la nueva cantidad de COPIAS: "))
-        publicacion = input("Escribe la nueva fecha de PUBLICACION: ")
+        id_juego = input("Escribe el ID del videojuego: ")
+        nombre_juego = input("Escribe el nuevo NOMBRE: ")
         estado = input("Escribe el nuevo ESTADO: ")
-        desarrolladora = input("Escribe la nueva DESARROLLADORA: ")
+        cantidad = int(input("Escribe la nueva CANTIDAD: "))
+        clasificacion = input("Escribe la nueva CLASIFICACION: ")
+        descripcion = input("Escribe la nueva DESCRIPCION: ")
+        precio = float(input("Escribe el nuevo PRECIO: "))        
+        fecha_publicacion = input("Escribe la nueva FECHA de PUBLICACION: ")
+        codigo_desarrolladora = input("Escribe el nuevo CODIGO de la DESARROLLADORA: ")
         
-        videojuego = Videojuego(codigo, nombre, categoria, precio, descripcion, clasificacion, copias, publicacion, estado, desarrolladora)
+        videojuego = Videojuego(id_juego, nombre_juego, estado, cantidad, clasificacion, descripcion, precio, fecha_publicacion, codigo_desarrolladora)
         registros_actualizados = VideojuegoDao.actualizar(videojuego)
         
         print(f"Registros actualizados: {registros_actualizados}")
         
     elif opcion == "4":
-        codigo = input("Escribe el CODIGO del videojuego: ")
+        id_juego = input("Escribe el ID del videojuego: ")
         
-        videojuego = Videojuego(codigo=codigo)
+        videojuego = Videojuego(id_juego=id_juego)
         registros_eliminados = VideojuegoDao.eliminar(videojuego)
         
         print(f"Registros eliminados: {registros_eliminados}")

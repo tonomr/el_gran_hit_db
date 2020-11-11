@@ -5,78 +5,72 @@ from services.logger_conf import logger # DE NUESTRA CONFIGURACION DE LOGGER IMP
 # VIDEOJUEGO CONTIENE SU CONSTRUCTOR CON LOS ATRIBUTOS DE LA ENTIDAD, SU METODO STR Y SUS GET Y SET
 class Videojuego:
     # CONSTRUCTOR DE LA CLASE
-    def __init__(self, codigo=None, nombre=None, categoria=None, precio=None, descripcion=None, clasificacion=None, copias=None, publicacion=None, estado=None, desarrolladora=None):
-        self.__codigo = codigo
-        self.__nombre = nombre
-        self.__categoria = categoria
-        self.__precio = precio
-        self.__descripcion = descripcion
-        self.__clasificacion = clasificacion
-        self.__copias = copias
-        self.__publicacion = publicacion
+    def __init__(self, id_juego=None, nombre_juego=None, estado=None, cantidad=None, clasificacion=None, descripcion=None, precio=None, fecha_publicacion=None, codigo_desarrolladora=None):
+        self.__id_juego = id_juego
+        self.__nombre_juego = nombre_juego
         self.__estado = estado
-        self.__desarrolladora = desarrolladora
+        self.__cantidad = cantidad
+        self.__clasificacion = clasificacion
+        self.__descripcion = descripcion
+        self.__precio = precio
+        self.__fecha_publicacion = fecha_publicacion
+        self.__codigo_desarrolladora = codigo_desarrolladora
         
     # METODO STR DE LA CLASE
     def __str__(self):
-        return (f"Codigo: {self.__codigo}, "
-                f"Nombre: {self.__nombre}, "
-                f"Categoria: {self.__categoria}, "
-                f"Precio: {self.__precio}, "
-                f"Descripcion: {self.__descripcion}, "
-                f"Clasificacion: {self.__clasificacion}, "
-                f"Copias: {self.__copias}, "
-                f"Publicacion: {self.__publicacion}, "
+        return (f"ID: {self.__id_juego}, "
+                f"Nombre: {self.__nombre_juego}, "
                 f"Estado: {self.__estado}, "
-                f"Desarrolladora: {self.__desarrolladora}")
+                f"Cantidad: {self.__cantidad}, "
+                f"Clasificacion: {self.__clasificacion}, "
+                f"Descripcion: {self.__descripcion}, "
+                f"Precio: {self.__precio}, "
+                f"Fecha de publicacion: {self.__fecha_publicacion}, "
+                f"ID de la desarrolladora: {self.__codigo_desarrolladora}")
     
     # METODOS GET DE LA CLASE
-    def getCodigo(self):
-        return self.__codigo
-    def getNombre(self):
-        return self.__nombre
-    def getCategoria(self):
-        return self.__categoria
-    def getPrecio(self):
-        return self.__precio
-    def getDescripcion(self):
-        return self.__descripcion
-    def getClasificacion(self):
-        return self.__clasificacion
-    def getCopias(self):
-        return self.__copias
-    def getPublicacion(self):
-        return self.__publicacion
+    def getIdJuego(self):
+        return self.__id_juego
+    def getNombreJuego(self):
+        return self.__nombre_juego
     def getEstado(self):
         return self.__estado
-    def getDesarrolladora(self):
-        return self.__desarrolladora
+    def getCantidad(self):
+        return self.__cantidad
+    def getClasificacion(self):
+        return self.__clasificacion
+    def getDescripcion(self):
+        return self.__descripcion
+    def getPrecio(self):
+        return self.__precio  
+    def getFechaPublicacion(self):
+        return self.__fecha_publicacion
+    def getCodigoDesarrolladora(self):
+        return self.__codigo_desarrolladora
     
     # METODOS SET DE LA CLASE
-    def setCodigo(self, codigo):
-        self.__codigo = codigo
-    def setNombre(self, nombre):
-        self.__nombre = nombre
-    def setCategoria(self, categoria):
-        self.__categoria = categoria
-    def setPrecio(self, precio):
-        self.__precio = precio
-    def setDescripcion(self, descripcion):
-        self.__descripcion = descripcion
-    def setClasificacion(self, clasificacion):
-        self.__clasificacion = clasificacion
-    def setCopias(self, copias):
-        self.__copias = copias
-    def setPublicacion(self, publicacion):
-        self.__publicacion = publicacion
+    def setIdJuego(self, id_juego):
+        self.__id_juego = id_juego
+    def setNombreJuego(self, nombre_juego):
+        self.__nombre_juego = nombre_juego
     def setEstado(self, estado):
         self.__estado = estado
-    def setDesarrolladora(self, desarrolladora):
-        self.__desarrolladora = desarrolladora
+    def setCantidad(self, cantidad):
+        self.__cantidad = cantidad
+    def setClasificacion(self, clasificacion):
+        self.__clasificacion = clasificacion
+    def setDescripcion(self, descripcion):
+        self.__descripcion = descripcion
+    def setPrecio(self, precio):
+        self.__precio = precio
+    def setFechaPublicacion(self, fecha_publicacion):
+        self.__fecha_publicacion = fecha_publicacion
+    def setCodigoDesarrolladora(self, codigo_desarrolladora):
+        self.__codigo_desarrolladora = codigo_desarrolladora
 
 # PRUEBA DE CONFIGURACION (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":
-    videojuego1 = Videojuego("ASD123F4", "Bioshock", "Shooter", 500.00, "Disparos en primera persona submarino.", "M", 100, "9/4/2008", "Nuevo", "2K Games")
+    videojuego1 = Videojuego(2, "Bioshock", "Nuevo", 100, "M", "Juego de disparos en primera persona submarino.", 499.99, "9/4/2008", 1)
     logger.debug(videojuego1)
-    videojuego2 = Videojuego(nombre="Age of Empires", desarrolladora="Microsoft Games")
+    videojuego2 = Videojuego(nombre_juego="Age of Empires", codigo_desarrolladora=1)
     logger.debug(videojuego2)
