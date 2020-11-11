@@ -3,6 +3,7 @@
 from models.videojuego import Videojuego
 from controllers.videojuego_dao import VideojuegoDao
 from services.logger_conf import logger
+from views.mainmenu import GUI
 
 opcion = None
 

@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
-from add_game_win import *
-from menubar import *
+from views.add_game_win import AddGameWindow
+from views.menubar import *
 
 
 class GameWindow(ttk.Frame):

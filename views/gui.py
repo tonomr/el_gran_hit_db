@@ -1,9 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 
-from game_window import *
-from menubar import *
-
+from views.game_window import GameWindow
+from views.menubar import Menubar
 class GUI(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
         ttk.Frame.__init__(self, parent, *args, **kwargs)

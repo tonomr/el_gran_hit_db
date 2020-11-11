@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-from menubar import *
+from views.menubar import Menubar
 
 from models.videojuego import Videojuego
 from controllers.videojuego_dao import VideojuegoDao
