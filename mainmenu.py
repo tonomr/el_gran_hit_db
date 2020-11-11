@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 
+from game_window import *
 from menubar import *
 
 class GUI(ttk.Frame):
@@ -10,7 +11,9 @@ class GUI(ttk.Frame):
         self.init_gui()
 
     def games_window(self):
-        pass
+        #self.new_win = tkinter.Toplevel(self.root) # Set parent
+        self.clear_frames()
+        GameWindow(self.root)
 
     def customer_window(self):
         pass
@@ -25,6 +28,7 @@ class GUI(ttk.Frame):
         pass
  
     def init_gui(self):
+
         self.root.title('El Gran Hit Videogames')
         self.root.geometry("600x400")
       
@@ -74,6 +78,10 @@ class GUI(ttk.Frame):
         # Padding
         for child in self.winfo_children():
             child.grid_configure(padx=8, pady=5)
+
+    def clear_frames(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
 
 
 if __name__ == '__main__':
