@@ -39,7 +39,7 @@ class GUI(ttk.Frame):
         self.root.title('El Gran Hit Videogames')
         self.root.geometry("600x400")
       
-        """ img = PhotoImage(Image.open('logo.gif'))
+        """ img = PhotoImage(Image.open  ('logo.gif'))
         panel = tk.Label(self, image = img)
         panel.pack(side = "bottom", fill = "both", expand = "yes") """
         self.grid(column=0, row=0, sticky=("nswe"))
