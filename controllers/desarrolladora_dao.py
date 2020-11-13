@@ -59,6 +59,15 @@ class DesarrolladoraDao:
             cursor.execute(cls.__DELETE, values) # EJECUCION DE LA SENTENCIA
             
             return cursor.rowcount # RETORNAMOS EL NUMERO DE ELIMINACIONES
+        
+    # ESTE METODO RECIBE UN ID DE DESARROLLADORA PARA DEVOLVER MEDIANTE UNA BUSQUEDA EL NOMBRE DE TAL
+    def buscarNombre(id_busqueda):
+        nombre_encontrado = None
+        desarrolladoras = DesarrolladoraDao.seleccionar()
+        for desarrolladora in desarrolladoras:
+            if desarrolladora.getIdDesarrolladora() == id_busqueda:
+                nombre_encontrado = desarrolladora.getNombreDesarrolladora()
+        return nombre_encontrado
 
 # SIMULACIONES (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":

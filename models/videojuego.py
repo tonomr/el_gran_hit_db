@@ -2,6 +2,7 @@
 
 # DE NUESTRA CONFIGURACION DE LOGGER IMPORTAMOS LA DEFINICION
 from services.logger_conf import logger
+from controllers.desarrolladora_dao import DesarrolladoraDao
 
 
 class Videojuego:
@@ -19,6 +20,7 @@ class Videojuego:
 
     # METODO STR DE LA CLASE
     def __str__(self):
+        nombre_desarrolladora = DesarrolladoraDao.buscarNombre(self.__codigo_desarrolladora)
         return (f"ID: {self.__id_juego}, "
                 f"Nombre: {self.__nombre_juego}, "
                 f"Estado: {self.__estado}, "
@@ -27,7 +29,7 @@ class Videojuego:
                 f"Descripcion: {self.__descripcion}, "
                 f"Precio: {self.__precio}, "
                 f"Fecha de publicacion: {self.__fecha_publicacion}, "
-                f"ID de la desarrolladora: {self.__codigo_desarrolladora}")
+                f"Nombre de la desarrolladora: {nombre_desarrolladora}")
 
     # METODOS GET DE LA CLASE
     def getIdJuego(self):
