@@ -3,7 +3,6 @@
 # DE NUESTRA CONFIGURACION DE LOGGER IMPORTAMOS LA DEFINICION
 from services.logger_conf import logger
 
-
 class Desarrolladora:
     # CONSTRUCTOR DE LA CLASE
     def __init__(self, id_desarrolladora=None, nombre_desarrolladora=None, telefono_desarrolladora=None, direccion_desarrolladora=None):
@@ -42,15 +41,13 @@ class Desarrolladora:
     def setTelefonoDesarrolladora(self, telefono_desarrolladora):
         self.__telefono_desarrolladora = telefono_desarrolladora
 
-    def setDesarrolladora(self, id_desarrolladora):
-        self.__id_desarrolladora = id_desarrolladora
+    def setDireccionDesarrolladora(self, direccion_desarrolladora):
+        self.__direccion_desarrolladora = direccion_desarrolladora
 
 
 # SIMULACION (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":
-    desarrolladora1 = Desarrolladora(
-        1, "Sega", "9341156600", "544 Puntasvergas")
+    desarrolladora1 = Desarrolladora(1, "Sega", "9341156600", "544 Puntasvergas")
     logger.debug(desarrolladora1)
-    desarrolladora2 = Desarrolladora(
-        nombre_desarrolladora="Dell Games", direccion_desarrolladora="544 PuebloMagico")
+    desarrolladora2 = Desarrolladora(nombre_desarrolladora="Dell Games", direccion_desarrolladora="544 PuebloMagico")
     logger.debug(desarrolladora2)
