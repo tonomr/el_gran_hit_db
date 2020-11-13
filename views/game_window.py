@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from views.add_game_win import AddGameWindow
 from views.menubar import *
-
+from views.index_window import IndexWindow
 
 class GameWindow(ttk.Frame):
 
@@ -10,19 +10,24 @@ class GameWindow(ttk.Frame):
         ttk.Frame.__init__(self, parent, *args, **kwargs)
         self.root = parent
         self.init_gui()
-
+    # Create a new Videogame
     def create_window(self):
         # self.new_win = Toplevel(self.root) # Set parent and create a new window
         # AddGameWindow(self.new_win) #New window
-        self.clear_frames()
-        AddGameWindow(self.root)
+        self.clear_frames()         #Limpia los widgets en la ventana
+        AddGameWindow(self.root)    # Instancia una nueva ventana de AddGameWindow
 
+    # Show all VideoGames
     def index_window(self):
+        self.clear_frames()
+        IndexWindow(self.root, "Lista de Videojuegos", "500x600", "sidebar.png", "titles-header.png")
         pass
-
+    
+    # Edit a videogame
     def edit_window(self):
         pass
-
+    
+    # Delete a videogame
     def destroy_window(self):
         pass
     
