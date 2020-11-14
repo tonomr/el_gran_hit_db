@@ -1,8 +1,11 @@
 from tkinter import *
 from tkinter import ttk
-
+from services.logger_conf import logger
+from views.crud_window import CrudWindow
 from views.game_window import GameWindow
+from controllers.videojuego_dao import VideojuegoDao
 from views.menubar import Menubar
+from views.index_window import IndexWindow
 class GUI(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
         ttk.Frame.__init__(self, parent, *args, **kwargs)
@@ -13,35 +16,60 @@ class GUI(ttk.Frame):
         for widget in self.root.winfo_children():
             widget.destroy()
         
+    def show_all(self):
+            game_list = VideojuegoDao.seleccionar()
+            self.games_listbox = []
+            for game in game_list:
+                logger.debug(game)
+                self.games_listbox.append(game)
+            self.new_win = Toplevel(self.root)
+            IndexWindow(self.new_win, "Lista de Videojuegos", "530x600", "listbox-games.png", self.games_listbox)
 
     def games_window(self):
-        #self.new_win = tkinter.Toplevel(self.root) # Set parent
+        self.index_games = self.show_all
         self.clear_frames()
-        GameWindow(self.root)
+        #GameWindow(self.root)
+        CrudWindow(self.root, "Administra Videojuego", "title-game-menu.png", "sidebar.png", "Videojuegos", self.index_games)
 
     def customer_window(self):
+        self.index_games = self.show_all
+        self.clear_frames()
+        #GameWindow(self.root)
+        CrudWindow(self.root, "Administra Clientes", "title-game-menu.png", "sidebar.png", "Clientes", self.index_games)
         pass
 
     def sells_window(self):
+        self.index_games = self.show_all
+        self.clear_frames()
+        #GameWindow(self.root)
+        CrudWindow(self.root, "Administra Ventas", "title-game-menu.png", "sidebar.png", "Ventas" , self.index_games)
         pass
 
     def employees_window(self):
+        self.index_games = self.show_all
+        self.clear_frames()
+        #GameWindow(self.root)
+        CrudWindow(self.root, "Administra Empleados", "title-game-menu.png", "sidebar.png", "Empleados", self.index_games)
         pass
 
     def devs_window(self):
+        self.index_games = self.show_all
+        self.clear_frames()
+        #GameWindow(self.root)
+        CrudWindow(self.root, "Administra Desarrolladoras", "title-game-menu.png", "sidebar.png", "Desarrolladoras", self.index_games)
         pass
 
     def purchases_window(self):
+        self.index_games = self.show_all
+        self.clear_frames()
+        #GameWindow(self.root)
+        CrudWindow(self.root, "Administra Compras", "title-game-menu.png", "sidebar.png", "Compras", self.index_games)
         pass
  
     def init_gui(self):
-
         self.root.title('El Gran Hit Videogames')
         self.root.geometry("600x400")
       
-        """ img = PhotoImage(Image.open  ('logo.gif'))
-        panel = tk.Label(self, image = img)
-        panel.pack(side = "bottom", fill = "both", expand = "yes") """
         self.grid(column=0, row=0, sticky=("nswe"))
         self.grid_columnconfigure(0, weight=0)
         self.grid_columnconfigure(2, weight=1)
@@ -69,7 +97,7 @@ class GUI(ttk.Frame):
         self.btn_games = ttk.Button(self, text='Videojuegos', width=30, command=self.games_window)
         self.btn_employees = ttk.Button(self, text='Empleados', width=30, command=self.employees_window)
         self.btn_customers = ttk.Button(self, text='Clientes', width=30, command=self.customer_window)
-        self.btn_sells = ttk.Button(self, text='Ventas', width=30, command=self.customer_window)
+        self.btn_sells = ttk.Button(self, text='Ventas', width=30, command=self.sells_window)
         self.btn_devs = ttk.Button(self, text='Desarrolladoras', width=30, command=self.devs_window)
         self.btn_purchases = ttk.Button(self, text='Compras', width=30, command=self.purchases_window)
 

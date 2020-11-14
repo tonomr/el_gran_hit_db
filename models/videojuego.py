@@ -21,6 +21,18 @@ class Videojuego:
     # METODO STR DE LA CLASE
     def __str__(self):
         nombre_desarrolladora = DesarrolladoraDao.buscarNombre(self.__codigo_desarrolladora)
+        result = '{:3d}'.format(self.__id_juego) + "   "
+        result += '{:32}'.format(self.__nombre_juego)
+        result += '{:12}'.format(self.__estado)
+        result += '{:3d}'.format(self.__cantidad) + "   "
+        result += '{:6}'.format(self.__clasificacion)
+        result += '{:6f}'.format(self.__precio) + "   "
+        result += '{:16}'.format(nombre_desarrolladora)
+
+        return result
+        
+        
+        """ 
         return (f"ID: {self.__id_juego}, "
                 f"Nombre: {self.__nombre_juego}, "
                 f"Estado: {self.__estado}, "
@@ -29,7 +41,8 @@ class Videojuego:
                 f"Descripcion: {self.__descripcion}, "
                 f"Precio: {self.__precio}, "
                 f"Fecha de publicacion: {self.__fecha_publicacion}, "
-                f"Nombre de la desarrolladora: {nombre_desarrolladora}")
+                f"Nombre de la desarrolladora: {nombre_desarrolladora}") 
+        """
 
     # METODOS GET DE LA CLASE
     def getIdJuego(self):
