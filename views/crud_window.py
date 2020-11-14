@@ -9,7 +9,10 @@ from models.videojuego import Videojuego
 
 class CrudWindow(ttk.Frame):
 
-    def __init__(self, parent, win_title, header_title, sidebar, entity_name, index_controller, *args, **kwargs):
+    def __init__(self, parent, win_title,
+                header_title, sidebar, entity_name,
+                index_controller, create_controller,
+                *args, **kwargs):
         ttk.Frame.__init__(self, parent, *args, **kwargs)
         self.root = parent                              # Ventana padre
         self.root.title(win_title)                      # Título de ventana
@@ -17,15 +20,17 @@ class CrudWindow(ttk.Frame):
         self.sidebar = PhotoImage(file=sidebar)         # Objeto del tipo imagen
         self.entity_name = entity_name                  # El string nombre de la entidad
         self.index_controller = index_controller
+        self.create_controller = create_controller
         self.init_gui()                                 # Inicia el grid y los widgets
 
     # Create a new Videogame
     def create_window(self):
-      pass
+      self.create_controller()
+      
     # Show all VideoGames
     def index_window(self):
         self.index_controller()
-        pass
+        
     
     # Edit a videogame
     def edit_window(self):

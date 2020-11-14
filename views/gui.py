@@ -3,6 +3,7 @@ from tkinter import ttk
 from services.logger_conf import logger
 from views.crud_window import CrudWindow
 from views.game_window import GameWindow
+from views.add_employee import AddEmployee
 from controllers.videojuego_dao import VideojuegoDao
 from views.menubar import Menubar
 from views.index_window import IndexWindow
@@ -25,45 +26,51 @@ class GUI(ttk.Frame):
             self.new_win = Toplevel(self.root)
             IndexWindow(self.new_win, "Lista de Videojuegos", "530x600", "listbox-games.png", self.games_listbox)
 
+    
+
     def games_window(self):
         self.index_games = self.show_all
         self.clear_frames()
         #GameWindow(self.root)
-        CrudWindow(self.root, "Administra Videojuego", "title-game-menu.png", "sidebar.png", "Videojuegos", self.index_games)
+        #CrudWindow(self.root, "Administra Videojuego", "title-game-menu.png", "sidebar.png", "Videojuegos", self.index_games)
 
     def customer_window(self):
         self.index_games = self.show_all
         self.clear_frames()
         #GameWindow(self.root)
-        CrudWindow(self.root, "Administra Clientes", "title-game-menu.png", "sidebar.png", "Clientes", self.index_games)
+        #CrudWindow(self.root, "Administra Clientes", "title-game-menu.png", "sidebar.png", "Clientes", self.index_games, self.create_employee)
         pass
 
     def sells_window(self):
         self.index_games = self.show_all
         self.clear_frames()
         #GameWindow(self.root)
-        CrudWindow(self.root, "Administra Ventas", "title-game-menu.png", "sidebar.png", "Ventas" , self.index_games)
+        #CrudWindow(self.root, "Administra Ventas", "title-game-menu.png", "sidebar.png", "Ventas" , self.index_games)
         pass
+    
+    def add_employee(self):
+        AddEmployee(self.root)
 
     def employees_window(self):
         self.index_games = self.show_all
+        self.create_employee = self.add_employee
         self.clear_frames()
         #GameWindow(self.root)
-        CrudWindow(self.root, "Administra Empleados", "title-game-menu.png", "sidebar.png", "Empleados", self.index_games)
+        CrudWindow(self.root, "Administra Empleados", "title-game-menu.png", "sidebar.png", "Empleados", self.index_games, self.create_employee)
         pass
 
     def devs_window(self):
         self.index_games = self.show_all
         self.clear_frames()
         #GameWindow(self.root)
-        CrudWindow(self.root, "Administra Desarrolladoras", "title-game-menu.png", "sidebar.png", "Desarrolladoras", self.index_games)
+        #CrudWindow(self.root, "Administra Desarrolladoras", "title-game-menu.png", "sidebar.png", "Desarrolladoras", self.index_games)
         pass
 
     def purchases_window(self):
         self.index_games = self.show_all
         self.clear_frames()
         #GameWindow(self.root)
-        CrudWindow(self.root, "Administra Compras", "title-game-menu.png", "sidebar.png", "Compras", self.index_games)
+        #CrudWindow(self.root, "Administra Compras", "title-game-menu.png", "sidebar.png", "Compras", self.index_games)
         pass
  
     def init_gui(self):
