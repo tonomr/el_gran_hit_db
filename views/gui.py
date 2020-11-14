@@ -56,7 +56,7 @@ class GUI(ttk.Frame):
         self.create_employee = self.add_employee
         self.clear_frames()
         #GameWindow(self.root)
-        CrudWindow(self.root, "Administra Empleados", "title-game-menu.png", "sidebar.png", "Empleados", self.index_games, self.create_employee)
+        CrudWindow(self.root, "Administra Empleados", "title-employee-menu.png", "sidebar.png", "Empleados", self.index_games, self.create_employee)
         pass
 
     def devs_window(self):
