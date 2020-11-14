@@ -1,10 +1,12 @@
 from tkinter import *
 from tkinter import ttk
 from services.logger_conf import logger
+from controllers.videojuego_dao import VideojuegoDao
+from controllers.desarrolladora_dao import DesarrolladoraDao
 from views.crud_window import CrudWindow
 from views.game_window import GameWindow
 from views.add_employee import AddEmployee
-from controllers.videojuego_dao import VideojuegoDao
+from views.add_dev import AddDev
 from views.menubar import Menubar
 from views.index_window import IndexWindow
 class GUI(ttk.Frame):
@@ -16,7 +18,8 @@ class GUI(ttk.Frame):
     def clear_frames(self):
         for widget in self.root.winfo_children():
             widget.destroy()
-        
+    
+    #------------- VIDEOGAMES --------------
     def show_all(self):
             game_list = VideojuegoDao.seleccionar()
             self.games_listbox = []
@@ -25,8 +28,6 @@ class GUI(ttk.Frame):
                 self.games_listbox.append(game)
             self.new_win = Toplevel(self.root)
             IndexWindow(self.new_win, "Lista de Videojuegos", "530x600", "listbox-games.png", self.games_listbox)
-
-    
 
     def games_window(self):
         self.index_games = self.show_all
@@ -41,6 +42,7 @@ class GUI(ttk.Frame):
         #CrudWindow(self.root, "Administra Clientes", "title-game-menu.png", "sidebar.png", "Clientes", self.index_games, self.create_employee)
         pass
 
+    #---------------- SELLS ----------------
     def sells_window(self):
         self.index_games = self.show_all
         self.clear_frames()
@@ -48,8 +50,10 @@ class GUI(ttk.Frame):
         #CrudWindow(self.root, "Administra Ventas", "title-game-menu.png", "sidebar.png", "Ventas" , self.index_games)
         pass
     
+    #------------- EMPLOYEES --------------
     def add_employee(self):
-        AddEmployee(self.root)
+        self.new_win = Toplevel(self.root)
+        AddEmployee(self.new_win)
 
     def employees_window(self):
         self.index_games = self.show_all
@@ -57,22 +61,29 @@ class GUI(ttk.Frame):
         self.clear_frames()
         #GameWindow(self.root)
         CrudWindow(self.root, "Administra Empleados", "title-employee-menu.png", "sidebar.png", "Empleados", self.index_games, self.create_employee)
-        pass
+    
+    #------------- DESARROLLADORAS --------------
+    def add_dev(self):
+        self.new_win = Toplevel(self.root)
+        AddDev(self.new_win)
 
     def devs_window(self):
         self.index_games = self.show_all
+        self.create_dev = self.add_dev
         self.clear_frames()
         #GameWindow(self.root)
-        #CrudWindow(self.root, "Administra Desarrolladoras", "title-game-menu.png", "sidebar.png", "Desarrolladoras", self.index_games)
-        pass
-
+        CrudWindow(self.root, "Administra Desarrolladoras", "title-dev-menu.png", "sidebar.png", "Desarrolladoras", self.index_games, self.create_dev)
+        
+    
+    #------------- COMPRAS ----------------
     def purchases_window(self):
         self.index_games = self.show_all
         self.clear_frames()
         #GameWindow(self.root)
         #CrudWindow(self.root, "Administra Compras", "title-game-menu.png", "sidebar.png", "Compras", self.index_games)
         pass
- 
+    
+    #--------------- INTERFAZ ------------------
     def init_gui(self):
         self.root.title('El Gran Hit Videogames')
         self.root.geometry("600x400")
@@ -123,37 +134,9 @@ class GUI(ttk.Frame):
         for child in self.winfo_children():
             child.grid_configure(padx=8, pady=2)
 
-    
-
 if __name__ == '__main__':
     root = tkinter.Tk()
     GUI(root)
     root.mainloop()
 
-
-""" 
-  try:
-    value = float(feet.get())
-    meters.set((0.3048 * value * 10000.0 + 0.5)/10000.0)
-  except ValueError:
-    pass
-
-feet = StringVar()
-meters = StringVar()
-
-feet_entry = ttk.Entry(mainframe, width = 10, textvariable = feet)
-feet_entry.grid(column = 2, row = 1, sticky = (W,E))
-
-ttk.Label(mainframe, textvariable=meters).grid(column=2, row=2, sticky=(W, E))
-
-ttk.Button(mainframe, text="Calculate", command=calculate).grid(column=3, row=3, sticky=W)
-
-ttk.Label(mainframe, text="feet").grid(column=3, row=1, sticky=W)
-ttk.Label(mainframe, text="is equivalent to").grid(column=1, row=2, sticky=E)
-ttk.Label(mainframe, text="meters").grid(column=3, row=2, sticky=W)
-
-for child in mainframe.winfo_children():
-  child.grid_configure(padx=5, pady=5)
-
-feet_entry.focus() """
 

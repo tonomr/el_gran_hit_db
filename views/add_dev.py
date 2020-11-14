@@ -2,11 +2,11 @@ from tkinter import *
 from tkinter import ttk
 from views.menubar import Menubar
 
-from models.empleado import Empleado 
-from controllers.empleado_dao import EmpleadoDao
+from models.desarrolladora import Desarrolladora 
+from controllers.desarrolladora_dao import DesarrolladoraDao
 
 # Clase recibe una ventana como parametro, la ventana padre
-class AddEmployee(ttk.Frame):
+class AddDev(ttk.Frame):
     # El constructor toma la ventana que se le mando y en esta nueva ventana usamos
     # la ventana padre para seguir tranbajando la misma ventana y agregar nuevo contenido
     def __init__(self, parent, *args, **kwargs):
@@ -21,15 +21,14 @@ class AddEmployee(ttk.Frame):
             widget.destroy()
 
     # Add video game, function called from game
-    def add_employee(self):
+    def add_dev(self):
         # Get input fields .get
-        name = self.employee_name.get()
-        address = self.employee_address.get()
-        telephone = self.employee_telephone.get()
+        name = self.dev_name.get()
+        address = self.dev_address.get()
+        telephone = self.dev_telephone.get()
         # Create Employee instance
-        
-        employee = Empleado(nombre_empleado=name, direccion_empleado=address, telefono_empleado=telephone)
-        EmpleadoDao.insertar(employee)
+        dev = Desarrolladora(nombre_desarrolladora=name, telefono_desarrolladora=telephone, direccion_desarrolladora=address)
+        DesarrolladoraDao.insertar(dev)
 
     # Go back to previous window
     def back_to_prev(self):
@@ -47,7 +46,7 @@ class AddEmployee(ttk.Frame):
     def init_gui(self):
         self.clear_frames()
         # WINDOW TITLE
-        self.root.title("Agregar Empleado")
+        self.root.title("Agregar Desarrolladora")
 
         # WINDOW SIZE
         self.root.geometry("600x400")
@@ -61,14 +60,14 @@ class AddEmployee(ttk.Frame):
         # Entry es un widget del tipo input
         #--------------------------------------------------------------------------
         # Name
-        self.label_name = ttk.Label(self.root, text="Nombre del empleado")
-        self.employee_name = ttk.Entry(self.root, width=50)
+        self.label_name = ttk.Label(self.root, text="Nombre de la Desarrolladora")
+        self.dev_name = ttk.Entry(self.root, width=50)
         # Address    
         self.label_address = ttk.Label(self.root, text="Dirección")
-        self.employee_address = ttk.Entry(self.root, width=15)
+        self.dev_address = ttk.Entry(self.root, width=15)
         # Telephone
         self.label_telephone = ttk.Label(self.root, text="Teléfono")
-        self.employee_telephone = ttk.Entry(self.root, width=50)
+        self.dev_telephone = ttk.Entry(self.root, width=50)
 
         #--------------------------------------------------------------------------
         # BUTTONS
@@ -78,7 +77,7 @@ class AddEmployee(ttk.Frame):
         #--------------------------------------------------------------------------
         # Add
         self.btn_add = ttk.Button(
-            self.root, text='Agregar', width=30, command=self.add_employee)
+            self.root, text='Agregar', width=30, command=self.add_dev)
         # Back
         self.btn_back = ttk.Button(
             self.root, text='Atrás', width=30, command=self.back_to_prev)
@@ -98,11 +97,11 @@ class AddEmployee(ttk.Frame):
         #---------------------------------------------------------------------------
         # Inputs
         self.label_name.grid(row=0, column=0)
-        self.employee_name.grid(row=0, column=2, sticky=("we"))
+        self.dev_name.grid(row=0, column=2, sticky=("we"))
         self.label_address.grid(row=1, column=0)
-        self.employee_address.grid(row=1, column=2, sticky=("we"))
+        self.dev_address.grid(row=1, column=2, sticky=("we"))
         self.label_telephone.grid(row=2, column=0)
-        self.employee_telephone.grid(row=2, column=2, sticky=("we"))
+        self.dev_telephone.grid(row=2, column=2, sticky=("we"))
 
         # Buttons
         self.btn_add.grid(row=19, column=2, sticky=("we"))
