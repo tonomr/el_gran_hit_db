@@ -19,6 +19,8 @@ class GUI(ttk.Frame):
         for widget in self.root.winfo_children():
             widget.destroy()
     
+    #------------- UTILITIES ---------------
+    
     #------------- VIDEOGAMES --------------
     def show_all(self):
             game_list = VideojuegoDao.seleccionar()
@@ -59,7 +61,6 @@ class GUI(ttk.Frame):
         self.index_games = self.show_all
         self.create_employee = self.add_employee
         self.clear_frames()
-        #GameWindow(self.root)
         CrudWindow(self.root, "Administra Empleados", "title-employee-menu.png", "sidebar.png", "Empleados", self.index_games, self.create_employee)
     
     #------------- DESARROLLADORAS --------------
@@ -74,7 +75,6 @@ class GUI(ttk.Frame):
         #GameWindow(self.root)
         CrudWindow(self.root, "Administra Desarrolladoras", "title-dev-menu.png", "sidebar.png", "Desarrolladoras", self.index_games, self.create_dev)
         
-    
     #------------- COMPRAS ----------------
     def purchases_window(self):
         self.index_games = self.show_all
@@ -86,7 +86,7 @@ class GUI(ttk.Frame):
     #--------------- INTERFAZ ------------------
     def init_gui(self):
         self.root.title('El Gran Hit Videogames')
-        self.root.geometry("600x400")
+        #self.root.geometry("600x400")
       
         self.grid(column=0, row=0, sticky=("nswe"))
         self.grid_columnconfigure(0, weight=0)
