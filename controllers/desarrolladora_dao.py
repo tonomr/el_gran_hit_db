@@ -11,6 +11,8 @@ class DesarrolladoraDao:
     __UPDATE = "UPDATE desarrolladora SET nombre_desarrolladora = %s, telefono_desarrolladora = %s, direccion_desarrolladora = %s WHERE id_desarrolladora = %s"
     __DELETE = "DELETE FROM desarrolladora WHERE id_desarrolladora = %s"
     
+    listadoDesarrolladoras = None
+    
     # METODO SELECT PARA MOSTRAR LOS REGISTROS DE LA TABLA DESARROLLADORA
     @classmethod
     def seleccionar(cls):
@@ -61,12 +63,15 @@ class DesarrolladoraDao:
             return cursor.rowcount # RETORNAMOS EL NUMERO DE ELIMINACIONES
         
     # ESTE METODO RECIBE UN ID DE DESARROLLADORA PARA DEVOLVER MEDIANTE UNA BUSQUEDA EL NOMBRE DE TAL
-    def buscarNombre(id_busqueda):
+    @classmethod
+    def buscarNombre(cls, id_busqueda):
         nombre_encontrado = None
-        desarrolladoras = DesarrolladoraDao.seleccionar()
-        for desarrolladora in desarrolladoras:
+        if cls.listadoDesarrolladoras == None:
+            cls.listadoDesarrolladoras = DesarrolladoraDao.seleccionar()
+        for desarrolladora in cls.listadoDesarrolladoras:
             if desarrolladora.getIdDesarrolladora() == id_busqueda:
                 nombre_encontrado = desarrolladora.getNombreDesarrolladora()
+                break
         return nombre_encontrado
 
 # SIMULACIONES (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
