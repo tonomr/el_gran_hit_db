@@ -4,8 +4,11 @@ from services.logger_conf import logger
 from controllers.videojuego_dao import VideojuegoDao
 from controllers.desarrolladora_dao import DesarrolladoraDao
 from views.crud_window import CrudWindow
-from views.game_window import GameWindow
+from views.add_game import AddGame
 from views.add_employee import AddEmployee
+from views.add_customer import AddCustomer
+from views.add_purchase import AddPurchase
+from views.add_sell import AddSell
 from views.add_dev import AddDev
 from views.menubar import Menubar
 from views.index_window import IndexWindow
@@ -26,31 +29,41 @@ class GUI(ttk.Frame):
             game_list = VideojuegoDao.seleccionar()
             self.games_listbox = []
             for game in game_list:
-                logger.debug(game)
+                logger.debug(game) 
                 self.games_listbox.append(game)
             self.new_win = Toplevel(self.root)
             IndexWindow(self.new_win, "Lista de Videojuegos", "530x600", "listbox-games.png", self.games_listbox)
 
+    def add_game(self):
+        self.new_win = Toplevel(self.root)
+        AddGame(self.new_win)
+
     def games_window(self):
-        self.index_games = self.show_all
+        self.index_game = self.show_all
+        self.create_game = self.add_game
         self.clear_frames()
-        #GameWindow(self.root)
-        #CrudWindow(self.root, "Administra Videojuego", "title-game-menu.png", "sidebar.png", "Videojuegos", self.index_games)
+        CrudWindow(self.root, "Administra Videojuego", "title-game-menu.png", "sidebar.png", "Videojuegos", self.index_game, self.create_game)
+    # -------------- CUSTOMERS -------------
+    def add_customer(self):
+        self.new_win = Toplevel(self.root)
+        AddCustomer(self.new_win)
 
     def customer_window(self):
-        self.index_games = self.show_all
+        self.index_customer = self.show_all
+        self.create_customer = self.add_customer
         self.clear_frames()
-        #GameWindow(self.root)
-        #CrudWindow(self.root, "Administra Clientes", "title-game-menu.png", "sidebar.png", "Clientes", self.index_games, self.create_employee)
-        pass
+        CrudWindow(self.root, "Administra Clientes", "title-customer-menu.png", "sidebar.png", "Clientes", self.index_customer, self.create_customer)
 
     #---------------- SELLS ----------------
+    def add_sell(self):
+        self.new_win = Toplevel(self.root)
+        AddSell(self.new_win)
+
     def sells_window(self):
-        self.index_games = self.show_all
+        self.index_sell = self.show_all
+        self.create_sell = self.add_sell
         self.clear_frames()
-        #GameWindow(self.root)
-        #CrudWindow(self.root, "Administra Ventas", "title-game-menu.png", "sidebar.png", "Ventas" , self.index_games)
-        pass
+        CrudWindow(self.root, "Administra Ventas", "title-sell-menu.png", "sidebar.png", "Ventas" , self.index_sell, self.create_sell)
     
     #------------- EMPLOYEES --------------
     def add_employee(self):
@@ -76,11 +89,15 @@ class GUI(ttk.Frame):
         CrudWindow(self.root, "Administra Desarrolladoras", "title-dev-menu.png", "sidebar.png", "Desarrolladoras", self.index_games, self.create_dev)
         
     #------------- COMPRAS ----------------
+    def add_purchase(self):
+        self.new_win = Toplevel(self.root)
+        AddPurchase(self.new_win)
+
     def purchases_window(self):
-        self.index_games = self.show_all
+        self.index_purchase = self.show_all
+        self.create_purchase = self.add_purchase
         self.clear_frames()
-        #GameWindow(self.root)
-        #CrudWindow(self.root, "Administra Compras", "title-game-menu.png", "sidebar.png", "Compras", self.index_games)
+        CrudWindow(self.root, "Administra Compras", "title-purchase-menu.png", "sidebar.png", "Compras", self.index_purchase, self.create_purchase)
         pass
     
     #--------------- INTERFAZ ------------------

@@ -6,7 +6,7 @@ from models.videojuego import Videojuego
 from controllers.videojuego_dao import VideojuegoDao
 
 # Clase recibe una ventana como parametro, la ventana padre
-class AddGameWindow(ttk.Frame):
+class AddGame(ttk.Frame):
     # El constructor toma la ventana que se le mando y en esta nueva ventana usamos
     # la ventana padre para seguir tranbajando la misma ventana y agregar nuevo contenido
     def __init__(self, parent, *args, **kwargs):
@@ -68,7 +68,7 @@ class AddGameWindow(ttk.Frame):
         self.game_name = ttk.Entry(self.root, width=50)
         # Multiple Option input
         # Crea la etiqueta "Condición"
-        self.label_condition = ttk.Label(self.root, text="Condición")
+        self.label_condition = ttk.Label(self.root, text="Estado")
         # Crea el objeto de input múltiple, recibe ventana padre y ocpional el ancho
         self.game_condition = ttk.Combobox(self.root, width=30)
         # Agrega una tupla a la configuración 'values' del input

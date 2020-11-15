@@ -33,7 +33,7 @@ class VideojuegoDao:
     def insertar(cls, videojuego):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__INSERT)) # SENTENCIA A EJECUTAR
-            logger.debug(f"Videojuego a insertar: {videojuego}") # OBJETO videojuego A INSERTAR
+            #logger.debug(f"Videojuego a insertar: {videojuego}") # OBJETO videojuego A INSERTAR
             values = (videojuego.getNombreJuego(), videojuego.getEstado(), videojuego.getCantidad(), videojuego.getClasificacion(), videojuego.getDescripcion(), videojuego.getPrecio(), videojuego.getFechaPublicacion(), videojuego.getCodigoDesarrolladora())
             cursor.execute(cls.__INSERT, values) # EJECUCION DE LA SENTENCIA
             

@@ -2,13 +2,14 @@ from tkinter import *
 from tkinter import ttk
 from views.menubar import Menubar
 
-from models.desarrolladora import Desarrolladora 
-from controllers.desarrolladora_dao import DesarrolladoraDao
+from models.cliente import Cliente
+from controllers.clientes_dao import ClienteDao
 
 # Clase recibe una ventana como parametro, la ventana padre
-class AddDev(ttk.Frame):
+class AddCustomer(ttk.Frame):
     # El constructor toma la ventana que se le mando y en esta nueva ventana usamos
-    # la ventana padre para seguir tranbajando la misma ventana y agregar nuevo contenido
+    # la ventana original (padre) para seguir tranbajando 
+    # sobre la misma ventana y agregar nuevo contenido
     def __init__(self, parent, *args, **kwargs):
         ttk.Frame.__init__(self, parent, *args, **kwargs)
         self.root = parent # Set parent
@@ -21,14 +22,15 @@ class AddDev(ttk.Frame):
             widget.destroy()
 
     # Add video game, function called from game
-    def add_dev(self):
+    def add_customer(self):
         # Get input fields .get
-        name = self.dev_name.get()
-        address = self.dev_address.get()
-        telephone = self.dev_telephone.get()
+        name = self.customer_name.get()
+        email = self.customer_email.get()
+        address = self.customer_address.get()
+        telephone = self.customer_telephone.get()
         # Create Employee instance
-        dev = Desarrolladora(nombre_desarrolladora=name, telefono_desarrolladora=telephone, direccion_desarrolladora=address)
-        DesarrolladoraDao.insertar(dev)
+        customer = Cliente(nombre_cliente=name, email=email,direccion_cliente=address, telefono_cliente=telephone)
+        ClienteDao.insertar(customer)
 
     # Go back to previous window
     def back_to_prev(self):
@@ -45,7 +47,7 @@ class AddDev(ttk.Frame):
     def init_gui(self):
         self.clear_frames()
         # WINDOW TITLE
-        self.root.title("Agregar Desarrolladora")
+        self.root.title("Agregar Cliente")
 
         # WINDOW SIZE
         self.root.geometry("600x400")
@@ -59,14 +61,17 @@ class AddDev(ttk.Frame):
         # Entry es un widget del tipo input
         #--------------------------------------------------------------------------
         # Name
-        self.label_name = ttk.Label(self.root, text="Nombre de la Desarrolladora")
-        self.dev_name = ttk.Entry(self.root, width=50)
+        self.label_name = ttk.Label(self.root, text="Nombre del cliente")
+        self.customer_name = ttk.Entry(self.root, width=50)
+        # Email
+        self.label_email = ttk.Label(self.root, text="Email")
+        self.customer_email = ttk.Entry(self.root, width=50)
         # Address    
         self.label_address = ttk.Label(self.root, text="Dirección")
-        self.dev_address = ttk.Entry(self.root, width=15)
+        self.customer_address = ttk.Entry(self.root, width=15)
         # Telephone
         self.label_telephone = ttk.Label(self.root, text="Teléfono")
-        self.dev_telephone = ttk.Entry(self.root, width=50)
+        self.customer_telephone = ttk.Entry(self.root, width=50)
 
         #--------------------------------------------------------------------------
         # BUTTONS
@@ -76,7 +81,7 @@ class AddDev(ttk.Frame):
         #--------------------------------------------------------------------------
         # Add
         self.btn_add = ttk.Button(
-            self.root, text='Agregar', width=30, command=self.add_dev)
+            self.root, text='Agregar', width=30, command=self.add_customer)
         # Back
         self.btn_back = ttk.Button(
             self.root, text='Atrás', width=30, command=self.back_to_prev)
@@ -96,11 +101,13 @@ class AddDev(ttk.Frame):
         #---------------------------------------------------------------------------
         # Inputs
         self.label_name.grid(row=0, column=0)
-        self.dev_name.grid(row=0, column=2, sticky=("we"))
-        self.label_address.grid(row=1, column=0)
-        self.dev_address.grid(row=1, column=2, sticky=("we"))
-        self.label_telephone.grid(row=2, column=0)
-        self.dev_telephone.grid(row=2, column=2, sticky=("we"))
+        self.customer_name.grid(row=0, column=2, sticky=("we"))
+        self.label_email.grid(row=1, column=0)
+        self.customer_email.grid(row=1, column=2, sticky=("we"))
+        self.label_address.grid(row=2, column=0)
+        self.customer_address.grid(row=2, column=2, sticky=("we"))
+        self.label_telephone.grid(row=3, column=0)
+        self.customer_telephone.grid(row=3, column=2, sticky=("we"))
 
         # Buttons
         self.btn_add.grid(row=19, column=2, sticky=("we"))

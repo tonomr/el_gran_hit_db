@@ -2,13 +2,14 @@ from tkinter import *
 from tkinter import ttk
 from views.menubar import Menubar
 
-from models.desarrolladora import Desarrolladora 
-from controllers.desarrolladora_dao import DesarrolladoraDao
+from models.venta import Venta
+from controllers.venta_dao import VentaDao
 
 # Clase recibe una ventana como parametro, la ventana padre
-class AddDev(ttk.Frame):
+class AddSell(ttk.Frame):
     # El constructor toma la ventana que se le mando y en esta nueva ventana usamos
-    # la ventana padre para seguir tranbajando la misma ventana y agregar nuevo contenido
+    # la ventana original (padre) para seguir tranbajando 
+    # sobre la misma ventana y agregar nuevo contenido
     def __init__(self, parent, *args, **kwargs):
         ttk.Frame.__init__(self, parent, *args, **kwargs)
         self.root = parent # Set parent
@@ -21,14 +22,18 @@ class AddDev(ttk.Frame):
             widget.destroy()
 
     # Add video game, function called from game
-    def add_dev(self):
+    def add_sell(self):
         # Get input fields .get
-        name = self.dev_name.get()
-        address = self.dev_address.get()
-        telephone = self.dev_telephone.get()
-        # Create Employee instance
-        dev = Desarrolladora(nombre_desarrolladora=name, telefono_desarrolladora=telephone, direccion_desarrolladora=address)
-        DesarrolladoraDao.insertar(dev)
+        date = self.sell_date.get()
+        quantity = self.sell_quantity.get()
+        subtotal = self.sell_subtotal.get()
+        total = self.sell_total.get()
+        delivery = self.sell_delivery.get()
+        id_game = self.sell_idgame.get()
+        id_customer = self.sell_idcustomer.get()
+        # Create Purchase instance
+        sell = Venta(fecha_venta=date, cantidad=quantity, subtotal=subtotal, total=total, direccion_envio=delivery, codigo_videojuego=id_game, codigo_cliente=id_customer)
+        VentaDao.insertar(sell)
 
     # Go back to previous window
     def back_to_prev(self):
@@ -45,7 +50,7 @@ class AddDev(ttk.Frame):
     def init_gui(self):
         self.clear_frames()
         # WINDOW TITLE
-        self.root.title("Agregar Desarrolladora")
+        self.root.title("Agregar Venta")
 
         # WINDOW SIZE
         self.root.geometry("600x400")
@@ -58,15 +63,28 @@ class AddDev(ttk.Frame):
         # Label es una etiqueta, que describe lo que deberías escribir en el campo
         # Entry es un widget del tipo input
         #--------------------------------------------------------------------------
-        # Name
-        self.label_name = ttk.Label(self.root, text="Nombre de la Desarrolladora")
-        self.dev_name = ttk.Entry(self.root, width=50)
-        # Address    
-        self.label_address = ttk.Label(self.root, text="Dirección")
-        self.dev_address = ttk.Entry(self.root, width=15)
-        # Telephone
-        self.label_telephone = ttk.Label(self.root, text="Teléfono")
-        self.dev_telephone = ttk.Entry(self.root, width=50)
+
+        # Fecha de venta
+        self.label_date = ttk.Label(self.root, text="Fecha de venta")
+        self.sell_date = ttk.Entry(self.root, width=50)
+        # Cantidad
+        self.label_quantity = ttk.Label(self.root, text="Cantidad")
+        self.sell_quantity = ttk.Entry(self.root, width=50)
+        # Subtotal
+        self.label_subtotal = ttk.Label(self.root, text="Subtotal")
+        self.sell_subtotal = ttk.Entry(self.root, width=50)
+        # Total  
+        self.label_total = ttk.Label(self.root, text="Total")
+        self.sell_total = ttk.Entry(self.root, width=15)
+        # Dirección de envío  
+        self.label_delivery = ttk.Label(self.root, text="Envío a")
+        self.sell_delivery = ttk.Entry(self.root, width=15)
+        # Id del videjuego
+        self.label_idgame = ttk.Label(self.root, text="ID videojuego")
+        self.sell_idgame = ttk.Entry(self.root, width=50)
+        # Id del empleado
+        self.label_idcustomer = ttk.Label(self.root, text="ID cliente")
+        self.sell_idcustomer = ttk.Entry(self.root, width=50)
 
         #--------------------------------------------------------------------------
         # BUTTONS
@@ -76,7 +94,7 @@ class AddDev(ttk.Frame):
         #--------------------------------------------------------------------------
         # Add
         self.btn_add = ttk.Button(
-            self.root, text='Agregar', width=30, command=self.add_dev)
+            self.root, text='Agregar', width=30, command=self.add_sell)
         # Back
         self.btn_back = ttk.Button(
             self.root, text='Atrás', width=30, command=self.back_to_prev)
@@ -95,12 +113,20 @@ class AddDev(ttk.Frame):
         # 'w' west (izquierda) 'e' east (derecha) 'n' north 's' south
         #---------------------------------------------------------------------------
         # Inputs
-        self.label_name.grid(row=0, column=0)
-        self.dev_name.grid(row=0, column=2, sticky=("we"))
-        self.label_address.grid(row=1, column=0)
-        self.dev_address.grid(row=1, column=2, sticky=("we"))
-        self.label_telephone.grid(row=2, column=0)
-        self.dev_telephone.grid(row=2, column=2, sticky=("we"))
+        self.label_date.grid(row=1, column=0)
+        self.sell_date.grid(row=1, column=2, sticky=("we"))
+        self.label_quantity.grid(row=2, column=0)
+        self.sell_quantity.grid(row=2, column=2, sticky=("we"))
+        self.label_subtotal.grid(row=3, column=0)
+        self.sell_subtotal.grid(row=3, column=2, sticky=("we"))
+        self.label_total.grid(row=4, column=0)
+        self.sell_total.grid(row=4, column=2, sticky=("we"))
+        self.label_delivery.grid(row=5, column=0)
+        self.sell_delivery.grid(row=5, column=2, sticky=("we"))
+        self.label_idgame.grid(row=6, column=0)
+        self.sell_idgame.grid(row=6, column=2, sticky=("we"))
+        self.label_idcustomer.grid(row=7, column=0)
+        self.sell_idcustomer.grid(row=7, column=2, sticky=("we"))
 
         # Buttons
         self.btn_add.grid(row=19, column=2, sticky=("we"))
