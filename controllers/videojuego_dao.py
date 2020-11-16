@@ -11,6 +11,7 @@ class VideojuegoDao:
     __INSERT = "INSERT INTO videojuego(nombre_juego, estado, cantidad, clasificacion, descripcion, precio, fecha_publicacion, codigo_desarrolladora) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
     __UPDATE = "UPDATE videojuego SET nombre_juego = %s, estado = %s, cantidad = %s, clasificacion = %s, descripcion = %s, precio = %s, fecha_publicacion = %s, codigo_desarrolladora = %s WHERE id_juego = %s"
     __DELETE = "DELETE FROM videojuego WHERE id_juego = %s"
+    __SEARCH = "SELECT * FROM videojuego WHERE nombre_juego LIKE %s"
     
     # METODO SELECT PARA MOSTRAR LOS REGISTROS DE LA TABLA VIDEOJUEGOS
     @classmethod
@@ -55,11 +56,26 @@ class VideojuegoDao:
     def eliminar(cls, videojuego):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__DELETE)) # SENTENCIA A EJECUTAR
-            logger.debug(f"Videojuego a eliminar: {videojuego}") # SE IMPRIME EL OBJETO videojuego A ELIMINAR
             values = (videojuego.getIdJuego(),)
             cursor.execute(cls.__DELETE, values) # EJECUCION DE LA SENTENCIA
             
             return cursor.rowcount # RETORNAMOS EL NUMERO DE ELIMINACIONES
+
+    @classmethod
+    def buscar(cls, key_word):
+        with CursorDelPool() as cursor:
+            logger.debug(cursor.mogrify(cls.__SEARCH))
+            cursor.execute(cls.__SEARCH, key_word)
+            registros = cursor.fetchall()
+
+            videojuegos = []
+            for registro in registros:
+                videojuego = Videojuego(registro[0], registro[1], registro[2], registro[3],
+                                        registro[4], registro[5], registro[6], registro[7], registro[8])
+                videojuegos.append(videojuego)
+            
+            return videojuegos
+        
 
 # SIMULACIONES (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":
