@@ -28,11 +28,9 @@ class IndexWindow(ttk.Frame):
         # Header image widget
         self.header_label = ttk.Label(self)
         self.header_label['image'] = self.header
-
-        
         self.items = StringVar(value=self.items_listbox)
-        self.listbox = Listbox(self.root, listvariable=self.items)
-
+        self.listbox = Listbox(self.root, font='consolas', listvariable=self.items, width=80)
+        
         # Buttons
         # Widgets LAYOUT
         self.header_label.grid(row=0, column=0, rowspan=19, columnspan=2, sticky=("we"))
