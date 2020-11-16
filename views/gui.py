@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from services.logger_conf import logger
+from models.videojuego import Videojuego
 from controllers.videojuego_dao import VideojuegoDao
 from controllers.desarrolladora_dao import DesarrolladoraDao
 from views.crud_window import CrudWindow
@@ -10,6 +11,7 @@ from views.add_customer import AddCustomer
 from views.add_purchase import AddPurchase
 from views.add_sell import AddSell
 from views.add_dev import AddDev
+from views.delete_window import DeleteWindow
 from views.menubar import Menubar
 from views.index_window import IndexWindow
 class GUI(ttk.Frame):
@@ -23,6 +25,9 @@ class GUI(ttk.Frame):
             widget.destroy()
     
     #------------- UTILITIES ---------------
+
+    
+            
     
     #------------- VIDEOGAMES --------------
     def show_all(self):
@@ -32,17 +37,32 @@ class GUI(ttk.Frame):
                 logger.debug(game) 
                 self.games_listbox.append(game)
             self.new_win = Toplevel(self.root)
-            IndexWindow(self.new_win, "Lista de Videojuegos", "530x600", "listbox-games.png", self.games_listbox)
+            IndexWindow(self.new_win, "Lista de Videojuegos", "770x500", "listbox-games.png", self.games_listbox)
 
     def add_game(self):
         self.new_win = Toplevel(self.root)
         AddGame(self.new_win)
 
+    def search_game(self, search_term):
+        game_list = VideojuegoDao.buscar(search_term)
+        return game_list
+
+    def delete_window(self):
+        self.new_win = Toplevel(self.root)
+        self.search_pattern = self.search_game
+        self.delete_controller = self.del_game_by_id
+        DeleteWindow(self.new_win, "Elimina Videojuego", "780x500", "delete-game.png", self.search_pattern, self.delete_controller)
+    
+    def del_game_by_id(self, id_game):
+        videogame = Videojuego(id_juego=id_game)
+        VideojuegoDao.eliminar(videogame)
+
     def games_window(self):
         self.index_game = self.show_all
         self.create_game = self.add_game
+        self.delete_game = self.delete_window
         self.clear_frames()
-        CrudWindow(self.root, "Administra Videojuego", "title-game-menu.png", "sidebar.png", "Videojuegos", self.index_game, self.create_game)
+        CrudWindow(self.root, "Administra Videojuego", "title-game-menu.png", "sidebar.png", "Videojuegos", self.index_game, self.create_game, self.delete_game)
     # -------------- CUSTOMERS -------------
     def add_customer(self):
         self.new_win = Toplevel(self.root)
@@ -52,7 +72,7 @@ class GUI(ttk.Frame):
         self.index_customer = self.show_all
         self.create_customer = self.add_customer
         self.clear_frames()
-        CrudWindow(self.root, "Administra Clientes", "title-customer-menu.png", "sidebar.png", "Clientes", self.index_customer, self.create_customer)
+        #CrudWindow(self.root, "Administra Clientes", "title-customer-menu.png", "sidebar.png", "Clientes", self.index_customer, self.create_customer)
 
     #---------------- SELLS ----------------
     def add_sell(self):
@@ -63,7 +83,7 @@ class GUI(ttk.Frame):
         self.index_sell = self.show_all
         self.create_sell = self.add_sell
         self.clear_frames()
-        CrudWindow(self.root, "Administra Ventas", "title-sell-menu.png", "sidebar.png", "Ventas" , self.index_sell, self.create_sell)
+        #CrudWindow(self.root, "Administra Ventas", "title-sell-menu.png", "sidebar.png", "Ventas" , self.index_sell, self.create_sell)
     
     #------------- EMPLOYEES --------------
     def add_employee(self):
@@ -74,7 +94,7 @@ class GUI(ttk.Frame):
         self.index_games = self.show_all
         self.create_employee = self.add_employee
         self.clear_frames()
-        CrudWindow(self.root, "Administra Empleados", "title-employee-menu.png", "sidebar.png", "Empleados", self.index_games, self.create_employee)
+        #CrudWindow(self.root, "Administra Empleados", "title-employee-menu.png", "sidebar.png", "Empleados", self.index_games, self.create_employee)
     
     #------------- DESARROLLADORAS --------------
     def add_dev(self):
@@ -85,8 +105,7 @@ class GUI(ttk.Frame):
         self.index_games = self.show_all
         self.create_dev = self.add_dev
         self.clear_frames()
-        #GameWindow(self.root)
-        CrudWindow(self.root, "Administra Desarrolladoras", "title-dev-menu.png", "sidebar.png", "Desarrolladoras", self.index_games, self.create_dev)
+        #CrudWindow(self.root, "Administra Desarrolladoras", "title-dev-menu.png", "sidebar.png", "Desarrolladoras", self.index_games, self.create_dev)
         
     #------------- COMPRAS ----------------
     def add_purchase(self):
@@ -97,7 +116,7 @@ class GUI(ttk.Frame):
         self.index_purchase = self.show_all
         self.create_purchase = self.add_purchase
         self.clear_frames()
-        CrudWindow(self.root, "Administra Compras", "title-purchase-menu.png", "sidebar.png", "Compras", self.index_purchase, self.create_purchase)
+        #CrudWindow(self.root, "Administra Compras", "title-purchase-menu.png", "sidebar.png", "Compras", self.index_purchase, self.create_purchase)
         pass
     
     #--------------- INTERFAZ ------------------
