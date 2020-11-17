@@ -10,6 +10,7 @@ class ClienteDao:
     __INSERT = "INSERT INTO cliente(nombre_cliente, email, direccion_cliente, telefono_cliente) VALUES(%s, %s, %s, %s)"
     __UPDATE = "UPDATE cliente SET nombre_cliente = %s, email = %s, direccion_cliente = %s, telefono_cliente = %s WHERE id_cliente = %s"
     __DELETE = "DELETE FROM cliente WHERE id_cliente = %s"
+    __SEARCH = "SELECT * FROM cliente WHERE nombre_cliente LIKE %s"
     
     # METODO SELECT PARA MOSTRAR LOS REGISTROS DE LA TABLA EMPLEADO
     @classmethod
@@ -59,6 +60,20 @@ class ClienteDao:
             cursor.execute(cls.__DELETE, values) # EJECUCION DE LA SENTENCIA
             
             return cursor.rowcount # RETORNAMOS EL NUMERO DE ELIMINACIONES
+    
+    @classmethod
+    def buscar(cls, key_word):
+        with CursorDelPool() as cursor:
+            logger.debug(cursor.mogrify(cls.__SEARCH))
+            cursor.execute(cls.__SEARCH, key_word)
+            registros = cursor.fetchall()
+
+            clientes = []
+            for registro in registros:
+                cliente = Cliente(registro[0], registro[1], registro[2], registro[3], registro[4])
+                clientes.append(cliente)
+            
+            return clientes
 
 # SIMULACIONES (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":

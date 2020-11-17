@@ -10,6 +10,7 @@ class DesarrolladoraDao:
     __INSERT = "INSERT INTO desarrolladora(nombre_desarrolladora, telefono_desarrolladora, direccion_desarrolladora) VALUES(%s, %s, %s)"
     __UPDATE = "UPDATE desarrolladora SET nombre_desarrolladora = %s, telefono_desarrolladora = %s, direccion_desarrolladora = %s WHERE id_desarrolladora = %s"
     __DELETE = "DELETE FROM desarrolladora WHERE id_desarrolladora = %s"
+    __SEARCH = "SELECT * FROM desarrolladora WHERE nombre_desarrolladora LIKE %s"
     
     listadoDesarrolladoras = None
     
@@ -73,6 +74,20 @@ class DesarrolladoraDao:
                 nombre_encontrado = desarrolladora.getNombreDesarrolladora()
                 break
         return nombre_encontrado
+    
+    @classmethod
+    def buscar(cls, key_word):
+        with CursorDelPool() as cursor:
+            logger.debug(cursor.mogrify(cls.__SEARCH))
+            cursor.execute(cls.__SEARCH, key_word)
+            registros = cursor.fetchall()
+
+            desarrolladoras = []
+            for registro in registros:
+                desarrolladora = Desarrolladora(registro[0], registro[1], registro[2], registro[3])
+                desarrolladoras.append(desarrolladora)
+            
+            return desarrolladoras
 
 # SIMULACIONES (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":

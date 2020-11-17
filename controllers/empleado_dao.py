@@ -10,6 +10,7 @@ class EmpleadoDao:
     __INSERT = "INSERT INTO empleado(nombre_empleado, direccion_empleado, telefono_empleado) VALUES(%s, %s, %s)"
     __UPDATE = "UPDATE empleado SET nombre_empleado = %s, direccion_empleado = %s, telefono_empleado = %s WHERE id_empleado = %s"
     __DELETE = "DELETE FROM empleado WHERE id_empleado = %s"
+    __SEARCH = "SELECT * FROM empleado WHERE nombre_empleado LIKE %s"
     
     # METODO SELECT PARA MOSTRAR LOS REGISTROS DE LA TABLA EMPLEADO
     @classmethod
@@ -59,6 +60,20 @@ class EmpleadoDao:
             cursor.execute(cls.__DELETE, values) # EJECUCION DE LA SENTENCIA
             
             return cursor.rowcount # RETORNAMOS EL NUMERO DE ELIMINACIONES
+    
+    @classmethod
+    def buscar(cls, key_word):
+        with CursorDelPool() as cursor:
+            logger.debug(cursor.mogrify(cls.__SEARCH))
+            cursor.execute(cls.__SEARCH, key_word)
+            registros = cursor.fetchall()
+
+            empleados = []
+            for registro in registros:
+                empleado = Empleado(registro[0], registro[1], registro[2], registro[3])
+                empleados.append(empleado)
+            
+            return empleados
 
 # SIMULACIONES (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":
