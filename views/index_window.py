@@ -23,19 +23,25 @@ class IndexWindow(ttk.Frame):
     def init_gui(self):
         # Grid config
         self.grid(column=0, row=0, sticky=("nswe"))
-
+        
         # WIDGETS
         # Header image widget
         self.header_label = ttk.Label(self)
         self.header_label['image'] = self.header
         self.items = StringVar(value=self.items_listbox)
         self.listbox = Listbox(self.root, font='consolas', listvariable=self.items, width=80)
+
+        self.scrollbar = ttk.Scrollbar(self.root, orient=VERTICAL, command=self.listbox.yview)
         
         # Buttons
         # Widgets LAYOUT
         self.header_label.grid(row=0, column=0, rowspan=19, columnspan=2, sticky=("we"))
         self.listbox.grid(row=1, column=0, sticky=("we"))
         
+        self.scrollbar.grid(column=2, row=1, sticky=("ns"))
+        self.listbox['yscrollcommand'] = self.scrollbar.set
+            
+
         # Padding
         for child in self.winfo_children():
             child.grid_configure(padx=8, pady=2)

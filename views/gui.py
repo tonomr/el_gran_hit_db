@@ -37,7 +37,7 @@ class GUI(ttk.Frame):
                 logger.debug(game) 
                 self.games_listbox.append(game)
             self.new_win = Toplevel(self.root)
-            IndexWindow(self.new_win, "Lista de Videojuegos", "770x500", "listbox-games.png", self.games_listbox)
+            IndexWindow(self.new_win, "Lista de Videojuegos", "810x500", "listbox-games.png", self.games_listbox)
 
     def add_game(self):
         self.new_win = Toplevel(self.root)
@@ -51,7 +51,7 @@ class GUI(ttk.Frame):
         self.new_win = Toplevel(self.root)
         self.search_pattern = self.search_game
         self.delete_controller = self.del_game_by_id
-        DeleteWindow(self.new_win, "Elimina Videojuego", "780x500", "delete-game.png", self.search_pattern, self.delete_controller)
+        DeleteWindow(self.new_win, "Elimina Videojuego", "810x500", "delete-game.png", self.search_pattern, self.delete_controller)
     
     def del_game_by_id(self, id_game):
         videogame = Videojuego(id_juego=id_game)

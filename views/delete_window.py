@@ -30,8 +30,8 @@ class DeleteWindow(ttk.Frame):
     def init_gui(self):
         # Grid config
         self.grid(column=0, row=0, sticky=("nswe"))
-        self.root.grid_columnconfigure(0, weight=1)
-        self.root.grid_columnconfigure(1, weight=1)
+        #self.root.grid_columnconfigure(0, weight=1)
+        #self.root.grid_columnconfigure(1, weight=1)
         #self.root.grid_columnconfigure(2, weight=1)
 
         # WIDGETS
@@ -53,13 +53,18 @@ class DeleteWindow(ttk.Frame):
 
         self.listbox = Listbox(self.root, font='consolas', width=75, height=5)
         
+        self.scrollbar = ttk.Scrollbar(self.root, orient=VERTICAL, command=self.listbox.yview)
+
         # Buttons
         # Widgets LAYOUT
-        self.header_label.grid(row=0, column=0, columnspan=3, sticky=("we"))
+        self.header_label.grid(row=0, column=0, columnspan=2, sticky=("we"))
         self.listbox.grid(row=1, column=0, sticky=("we"))
         self.label_search.grid(row=2, column=0)
         self.search_term.grid(row=3, column=0) 
         self.btn_search.grid(row=4, column=0)
+
+        self.scrollbar.grid(column=2, row=1, sticky=("ns"))
+        self.listbox['yscrollcommand'] = self.scrollbar.set
 
         # DELETE
         self.label_delete.grid(row=5, column=0)
