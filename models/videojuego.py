@@ -22,7 +22,7 @@ class Videojuego:
     def __str__(self):
         nombre_desarrolladora = DesarrolladoraDao.buscarNombre(self.__codigo_desarrolladora)
         result = " " + '{:03d}'.format(self.__id_juego) + "   "
-        result += '{:32}'.format(self.__nombre_juego)
+        result += '{:32.30}'.format(self.__nombre_juego)
         result += '{:12}'.format(self.__estado)
         result += '{:03d}'.format(self.__cantidad) + "   "
         result += '{:6}'.format(self.__clasificacion)
