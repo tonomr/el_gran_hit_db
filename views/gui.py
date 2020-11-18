@@ -32,18 +32,16 @@ class GUI(ttk.Frame):
         ttk.Frame.__init__(self, parent, *args, **kwargs)
         self.root = parent
         self.init_gui()
-
+    
+    #------------------------------------ UTILITIES --------------------------------------------
     def clear_frames(self):
         for widget in self.root.winfo_children():
             widget.destroy()
-    
-    #------------- UTILITIES ---------------
-
-    
             
     
-    #------------- VIDEOGAMES --------------
-    def show_all(self):
+   # ------------------------------------- VIDEOGAMES ------------------------------------------
+    # Index Controller
+    def game_index_window(self):
             game_list = VideojuegoDao.seleccionar()
             self.games_listbox = []
             for game in game_list:
@@ -52,71 +50,92 @@ class GUI(ttk.Frame):
             self.new_win = Toplevel(self.root)
             IndexWindow(self.new_win, "Lista de Videojuegos", "810x500", "listbox-games.png", self.games_listbox)
 
-    def add_game(self):
+    # Create Widnow
+    def game_add_window(self):
         self.new_win = Toplevel(self.root)
         AddGame(self.new_win)
 
-    def search_game(self, search_term):
-        game_list = VideojuegoDao.buscar(search_term)
-        return game_list
-
-    def modify_game(self):
+    # Edit Window
+    def game_update_window(self):
         self.new_win = Toplevel(self.root)
         EditGame(self.new_win, "edit-game.png", self.search_game)
 
-    def delete_window(self):
+    # Delete Window
+    def game_delete_window(self):
         self.new_win = Toplevel(self.root)
         self.search_pattern = self.search_game
         self.delete_controller = self.del_game_by_id
         DeleteWindow(self.new_win, "Elimina Videojuego", "810x500", "delete-game.png", self.search_pattern, self.delete_controller)
     
+    # Delete Controller
     def del_game_by_id(self, id_game):
         videogame = Videojuego(id_juego=id_game)
         VideojuegoDao.eliminar(videogame)
 
+    # Search Game Controller
+    def search_game(self, search_term):
+        game_list = VideojuegoDao.buscar(search_term)
+        return game_list
+
+    # CRUD Window
     def games_window(self):
-        self.index_game = self.show_all
-        self.create_game = self.add_game
-        self.edit_game = self.modify_game
-        self.delete_game = self.delete_window
+        self.index_game = self.game_index_window
+        self.create_game = self.game_add_window
+        self.edit_game = self.game_update_window
+        self.delete_game = self.game_delete_window
         self.clear_frames()
         CrudWindow(self.root, "Administra Videojuego", "title-game-menu.png", "sidebar.png", "Videojuegos", self.index_game, self.create_game, self.edit_game, self.delete_game)
-    # -------------- CUSTOMERS -------------
-    def show_customers(self):
+    
+    # ------------------------------------- CUSTOMERS ------------------------------------------
+    # Index Window 
+    def customers_index_window(self):
             customers_list = ClienteDao.seleccionar()
             self.customers_listbox = []
             for customer in customers_list:
                 logger.debug(customer) 
                 self.customers_listbox.append(customer)
             self.new_win = Toplevel(self.root)
-            IndexWindow(self.new_win, "Lista de Clientes", "810x500", "listbox-games.png", self.customers_listbox, self.create_customer, self.delete_customer)
+            IndexWindow(self.new_win, "Lista de Clientes", "810x500", "listbox-games.png", self.customers_listbox)
 
-    def search_customer(self, search_term):
-        #customer_list = ClienteDao.buscar(search_term)
-        #return customer_list
-        pass
-
-    def delete_customer_window(self):
-        self.new_win = Toplevel(self.root)
-        self.search_pattern = self.search_customer
-        self.delete_controller = self.del_cust_by_id
-        DeleteWindow(self.new_win, "Elimina Cliente", "810x500", "delete-game.png", self.search_pattern, self.delete_controller)
-    
-    def del_customer_by_id(self, id_customer):
-        customer = Cliente(id_cliente=id_customer)
-        CustomerDao.eliminar(customer)
-
-    def add_customer(self):
+    # Create Window
+    def customer_add_window(self):
         self.new_win = Toplevel(self.root)
         AddCustomer(self.new_win)
 
-    def customer_window(self):
-        self.index_customer = self.show_all
-        self.create_customer = self.add_customer
-        self.clear_frames()
-        #CrudWindow(self.root, "Administra Clientes", "title-customer-menu.png", "sidebar.png", "Clientes", self.index_customer, self.create_customer)
+    # Edit Window
+    def customer_update_window(self):
+        #self.new_win = Toplevel(self.root)
+        #EditGame(self.new_win, "edit-customer.png", self.search_game)
+        pass
 
-    #---------------- SELLS ----------------
+    # Delete Window
+    def customer_delete_window(self):
+        self.new_win = Toplevel(self.root)
+        self.search_pattern = self.search_customer
+        self.delete_controller = self.del_customer_by_id
+        DeleteWindow(self.new_win, "Elimina Cliente", "810x500", "delete-game.png", self.search_pattern, self.delete_controller)
+
+    # Delete Controller
+    def del_customer_by_id(self, id_customer):
+        customer = Cliente(id_cliente=id_customer)
+        ClienteDao.eliminar(customer)
+
+    # Search Controller
+    def search_customer(self, search_term):
+        customer_list = ClienteDao.buscar(search_term)
+        return customer_list
+        
+    
+    # CRUD Window
+    def customer_window(self):
+        self.index_customer = self.customers_index_window
+        self.create_customer = self.customer_add_window
+        self.update_customer = self.customer_update_window
+        self.delete_customer = self.customer_delete_window
+        self.clear_frames()
+        CrudWindow(self.root, "Administra Clientes", "title-customer-menu.png", "sidebar.png", "Clientes", self.index_customer, self.create_customer, self.update_customer, self.delete_customer)
+
+    # ---------------------------------------- SELLS ------------------------------------------
     def add_sell(self):
         self.new_win = Toplevel(self.root)
         AddSell(self.new_win)
@@ -127,29 +146,103 @@ class GUI(ttk.Frame):
         self.clear_frames()
         #CrudWindow(self.root, "Administra Ventas", "title-sell-menu.png", "sidebar.png", "Ventas" , self.index_sell, self.create_sell)
     
-    #------------- EMPLOYEES --------------
-    def add_employee(self):
+    # ------------------------------------- EMPLOYEES ------------------------------------------
+    # Index Window 
+    def employee_index_window(self):
+            employees_list = EmpleadoDao.seleccionar()
+            self.employees_listbox = []
+            for employee in employees_list:
+                logger.debug(employee) 
+                self.employees_listbox.append(employee)
+            self.new_win = Toplevel(self.root)
+            IndexWindow(self.new_win, "Lista de Empleados", "810x500", "listbox-games.png", self.employees_listbox)
+
+    # Create Window
+    def employee_add_window(self):
         self.new_win = Toplevel(self.root)
         AddEmployee(self.new_win)
 
+    # Edit Window
+    def employee_update_window(self):
+        #self.new_win = Toplevel(self.root)
+        #EditEmployee(self.new_win, "edit-customer.png", self.search_game)
+        pass
+
+    # Delete Window
+    def employee_delete_window(self):
+        self.new_win = Toplevel(self.root)
+        self.search_pattern = self.search_employee
+        self.delete_controller = self.del_employee_by_id
+        DeleteWindow(self.new_win, "Elimina Empleado", "810x500", "delete-game.png", self.search_pattern, self.delete_controller)
+
+    # Delete Controller
+    def del_employee_by_id(self, id_employee):
+        employee = Empleado(id_empleado=id_employee)
+        EmpleadoDao.eliminar(employee)
+
+    # Search Controller
+    def search_employee(self, search_term):
+        employee_list = EmpleadoDao.buscar(search_term)
+        return employee_list
+        
+    # CRUD Window
     def employees_window(self):
-        self.index_games = self.show_all
-        self.create_employee = self.add_employee
+        self.index_employee = self.employee_index_window
+        self.create_employee = self.employee_add_window
+        self.update_employee = self.employee_update_window
+        self.delete_employee = self.employee_delete_window
         self.clear_frames()
-        #CrudWindow(self.root, "Administra Empleados", "title-employee-menu.png", "sidebar.png", "Empleados", self.index_games, self.create_employee)
+        CrudWindow(self.root, "Administra Empleado", "title-customer-menu.png", "sidebar.png", "Empleados", self.index_employee, self.create_employee, self.update_employee, self.delete_employee)
     
-    #------------- DESARROLLADORAS --------------
-    def add_dev(self):
+    # -------------------------------------- DESARROLLADORAS ------------------------------------
+    # Index Window 
+    def dev_index_window(self):
+            devs_list = DesarrolladoraDao.seleccionar()
+            self.devs_listbox = []
+            for dev in devs_list:
+                logger.debug(dev) 
+                self.devs_listbox.append(dev)
+            self.new_win = Toplevel(self.root)
+            IndexWindow(self.new_win, "Lista de Desarrolladoras", "810x500", "listbox-games.png", self.devs_listbox)
+
+    # Create Window
+    def dev_add_window(self):
         self.new_win = Toplevel(self.root)
         AddDev(self.new_win)
 
-    def devs_window(self):
-        self.index_games = self.show_all
-        self.create_dev = self.add_dev
-        self.clear_frames()
-        #CrudWindow(self.root, "Administra Desarrolladoras", "title-dev-menu.png", "sidebar.png", "Desarrolladoras", self.index_games, self.create_dev)
+    # Edit Window
+    def dev_update_window(self):
+        #self.new_win = Toplevel(self.root)
+        #EditEmployee(self.new_win, "edit-customer.png", self.search_game)
+        pass
+
+    # Delete Window
+    def dev_delete_window(self):
+        self.new_win = Toplevel(self.root)
+        self.search_pattern = self.search_dev
+        self.delete_controller = self.del_dev_by_id
+        DeleteWindow(self.new_win, "Elimina Desarrolladora", "810x500", "delete-game.png", self.search_pattern, self.delete_controller)
+
+    # Delete Controller
+    def del_dev_by_id(self, id_dev):
+        dev = Desarrolladora(id_desarrolladora=id_dev)
+        DesarrolladoraDao.eliminar(dev)
+
+    # Search Controller
+    def search_dev(self, search_term):
+        dev_list = DesarrolladoraDao.buscar(search_term)
+        return dev_list
         
-    #------------- COMPRAS ----------------
+    # CRUD Window
+    def devs_window(self):
+        self.index_dev = self.dev_index_window
+        self.create_dev = self.dev_add_window
+        self.update_dev = self.dev_update_window
+        self.delete_dev = self.dev_delete_window
+        self.clear_frames()
+        CrudWindow(self.root, "Administra Empleado", "title-customer-menu.png", "sidebar.png", "Empleados", self.index_dev, self.create_dev, self.update_dev, self.delete_dev)
+        
+    # ------------------------------------------- COMPRAS --------------------------------------
     def add_purchase(self):
         self.new_win = Toplevel(self.root)
         AddPurchase(self.new_win)
@@ -161,7 +254,7 @@ class GUI(ttk.Frame):
         #CrudWindow(self.root, "Administra Compras", "title-purchase-menu.png", "sidebar.png", "Compras", self.index_purchase, self.create_purchase)
         pass
     
-    #--------------- INTERFAZ ------------------
+    # ------------------------------------- MAIN INTERFACE --------------------------------------
     def init_gui(self):
         self.root.title('El Gran Hit Videogames')
         #self.root.geometry("600x400")
