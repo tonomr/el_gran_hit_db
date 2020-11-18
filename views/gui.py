@@ -1,9 +1,21 @@
 from tkinter import *
 from tkinter import ttk
 from services.logger_conf import logger
+# Models
 from models.videojuego import Videojuego
+from models.cliente import Cliente
+from models.empleado import Empleado
+from models.venta import Venta
+from models.compra import Compra
+from models.desarrolladora import Desarrolladora
+# Controllers
 from controllers.videojuego_dao import VideojuegoDao
+from controllers.clientes_dao import ClienteDao
+from controllers.empleado_dao import EmpleadoDao
+from controllers.venta_dao import VentaDao
+from controllers.compra_dao import CompraDao
 from controllers.desarrolladora_dao import DesarrolladoraDao
+# Views
 from views.crud_window import CrudWindow
 from views.add_game import AddGame
 from views.add_employee import AddEmployee
@@ -11,6 +23,7 @@ from views.add_customer import AddCustomer
 from views.add_purchase import AddPurchase
 from views.add_sell import AddSell
 from views.add_dev import AddDev
+from views.edit_game import EditGame
 from views.delete_window import DeleteWindow
 from views.menubar import Menubar
 from views.index_window import IndexWindow
@@ -47,6 +60,10 @@ class GUI(ttk.Frame):
         game_list = VideojuegoDao.buscar(search_term)
         return game_list
 
+    def modify_game(self):
+        self.new_win = Toplevel(self.root)
+        EditGame(self.new_win, "edit-game.png", self.search_game)
+
     def delete_window(self):
         self.new_win = Toplevel(self.root)
         self.search_pattern = self.search_game
@@ -60,10 +77,35 @@ class GUI(ttk.Frame):
     def games_window(self):
         self.index_game = self.show_all
         self.create_game = self.add_game
+        self.edit_game = self.modify_game
         self.delete_game = self.delete_window
         self.clear_frames()
-        CrudWindow(self.root, "Administra Videojuego", "title-game-menu.png", "sidebar.png", "Videojuegos", self.index_game, self.create_game, self.delete_game)
+        CrudWindow(self.root, "Administra Videojuego", "title-game-menu.png", "sidebar.png", "Videojuegos", self.index_game, self.create_game, self.edit_game, self.delete_game)
     # -------------- CUSTOMERS -------------
+    def show_customers(self):
+            customers_list = ClienteDao.seleccionar()
+            self.customers_listbox = []
+            for customer in customers_list:
+                logger.debug(customer) 
+                self.customers_listbox.append(customer)
+            self.new_win = Toplevel(self.root)
+            IndexWindow(self.new_win, "Lista de Clientes", "810x500", "listbox-games.png", self.customers_listbox, self.create_customer, self.delete_customer)
+
+    def search_customer(self, search_term):
+        #customer_list = ClienteDao.buscar(search_term)
+        #return customer_list
+        pass
+
+    def delete_customer_window(self):
+        self.new_win = Toplevel(self.root)
+        self.search_pattern = self.search_customer
+        self.delete_controller = self.del_cust_by_id
+        DeleteWindow(self.new_win, "Elimina Cliente", "810x500", "delete-game.png", self.search_pattern, self.delete_controller)
+    
+    def del_customer_by_id(self, id_customer):
+        customer = Cliente(id_cliente=id_customer)
+        CustomerDao.eliminar(customer)
+
     def add_customer(self):
         self.new_win = Toplevel(self.root)
         AddCustomer(self.new_win)

@@ -22,7 +22,7 @@ class CrudWindow(ttk.Frame):
     def __init__(self, parent, win_title,
                 header_title, sidebar, model_name,
                 index_controller, create_controller,
-                delete_controller, *args, **kwargs):
+                edit_controller, delete_controller, *args, **kwargs):
         ttk.Frame.__init__(self, parent, *args, **kwargs)
         self.root = parent                              # Ventana padre
         self.root.title(win_title)                      # Título de ventana
@@ -31,6 +31,7 @@ class CrudWindow(ttk.Frame):
         self.model_name = model_name                    # El string nombre de la entidad
         self.index_controller = index_controller        # Funcion
         self.create_controller = create_controller      # Funcion
+        self.edit_controller = edit_controller          # Funcion
         self.delete_controller = delete_controller      # Funcion
         self.init_gui()                                 # Inicia el grid y los widgets
 
@@ -67,7 +68,7 @@ class CrudWindow(ttk.Frame):
     # Call to GUI function where user is 
     # redirected to a EDIT window of the specidified entity
     def edit_window(self):
-        pass
+        self.edit_controller()
     
      # ---------------------- DELETE -------------------------
     # Call to GUI function where user is
