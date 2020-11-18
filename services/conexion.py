@@ -3,10 +3,6 @@
 from services.logger_conf import logger # DE NUESTRA CONFIGURACION DE LOGGER IMPORTAMOS LA DEFINICION
 from psycopg2 import pool  # MODULO PARA LA CONEXION PYTHON CON POSTGRESQL
 import sys  # MODULO PARA TERMINAR LA EJECUCION DEL PROGRAMA SI HAY ERROR
-import dotenv
-import os
-
-dotenv.load_dotenv()
 
 # CLASE CONEXION, DATOS DE LA CONEXION Y OBJETO POOL DE CONEXIONES
 class Conexion:
