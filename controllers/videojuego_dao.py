@@ -83,10 +83,7 @@ class VideojuegoDao:
             logger.debug(cursor.mogrify(cls.__SELECT_ONE))
             cursor.execute(cls.__SELECT_ONE, id)
             registro = cursor.fetchone()
-            
-
-            """ videojuego = Videojuego(registro[0], registro[1], registro[2], registro[3],
-                                        registro[4], registro[5], registro[6], registro[7], registro[8]) """
+        
             videojuego = Videojuego(registro[0], registro[1], registro[2], registro[3],
                                         registro[4], registro[5], registro[6], registro[7], registro[8])
             return videojuego
