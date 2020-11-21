@@ -12,6 +12,7 @@ class VideojuegoDao:
     __UPDATE = "UPDATE videojuego SET nombre_juego = %s, estado = %s, cantidad = %s, clasificacion = %s, descripcion = %s, precio = %s, fecha_publicacion = %s, codigo_desarrolladora = %s WHERE id_juego = %s"
     __DELETE = "DELETE FROM videojuego WHERE id_juego = %s"
     __SEARCH = "SELECT * FROM videojuego WHERE nombre_juego LIKE %s"
+    __SELECT_ONE =  "SELECT * FROM videojuego WHERE id_juego = %s"
     
     # METODO SELECT PARA MOSTRAR LOS REGISTROS DE LA TABLA VIDEOJUEGOS
     @classmethod
@@ -45,7 +46,7 @@ class VideojuegoDao:
     def actualizar(cls, videojuego):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__UPDATE)) # SENTENCIA A EJECUTAR
-            logger.debug(f"Videojuego a actualizar: {videojuego}") # SE IMPRIME EL OBJETO videojuego A ACTUALIZAR
+            
             values = (videojuego.getNombreJuego(), videojuego.getEstado(), videojuego.getCantidad(), videojuego.getClasificacion(), videojuego.getDescripcion(), videojuego.getPrecio(), videojuego.getFechaPublicacion(), videojuego.getCodigoDesarrolladora(), videojuego.getIdJuego())
             cursor.execute(cls.__UPDATE, values) # EJECUCION DE LA SENTENCIA
             
@@ -75,6 +76,20 @@ class VideojuegoDao:
                 videojuegos.append(videojuego)
             
             return videojuegos
+    # Método que recupera el videjuego con el ID que recibe
+    @classmethod
+    def recuperar(cls, id):
+        with CursorDelPool() as cursor:
+            logger.debug(cursor.mogrify(cls.__SELECT_ONE))
+            cursor.execute(cls.__SELECT_ONE, id)
+            registro = cursor.fetchone()
+            
+
+            """ videojuego = Videojuego(registro[0], registro[1], registro[2], registro[3],
+                                        registro[4], registro[5], registro[6], registro[7], registro[8]) """
+            videojuego = Videojuego(registro[0], registro[1], registro[2], registro[3],
+                                        registro[4], registro[5], registro[6], registro[7], registro[8])
+            return videojuego
         
 
 # SIMULACIONES (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)

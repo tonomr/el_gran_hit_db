@@ -25,7 +25,9 @@ class EditGame(ttk.Frame):
     # Add video game, function called from game
     def update_game(self):
         # Get input fields .get
+        id =  self.edit_byid.get()
         name = self.game_name.get()
+        print(name)
         condition = self.game_condition.get()
         quantity = self.game_quantity.get()
         classification = self.game_classification.get()
@@ -34,9 +36,9 @@ class EditGame(ttk.Frame):
         released = self.game_released.get()
         devs = self.game_devs.get()
         # Create videogame instance
-        videogame = Videojuego(nombre_juego=name, estado=condition, cantidad=quantity, clasificacion=classification,
+        videogame = Videojuego(id_juego=id, nombre_juego=name, estado=condition, cantidad=quantity, clasificacion=classification,
                                descripcion=description, precio=price, fecha_publicacion=released, codigo_desarrolladora=devs)
-        VideojuegoDao.insertar(videogame)
+        VideojuegoDao.actualizar(videogame)
 
     def search_item(self):
       like_pattern = ('%{}%'.format(self.search_term.get()),)
@@ -45,11 +47,22 @@ class EditGame(ttk.Frame):
         self.listbox.insert(END, item)
 
     def select_item(self):
-      #videojuego = VideojuegoDao.SELECCIONA_UNO(id_de_juego)
-      #self.game_name.insert(END, videojuego.getName(
+        videojuego = VideojuegoDao.recuperar(self.edit_byid.get())
 
-      #e.insert(END, 'default text')
-      pass
+        self.game_name.insert(END, videojuego.getNombreJuego())
+        self.game_quantity.insert(END, videojuego.getCantidad())
+        self.game_classification.insert(END, videojuego.getClasificacion())
+        self.game_description.insert(END, videojuego.getDescripcion())
+        self.game_price.insert(END, videojuego.getPrecio())
+        self.game_released.insert(END, videojuego.getFechaPublicacion())
+        self.game_devs.insert(END, videojuego.getCodigoDesarrolladora())
+
+        for condition in self.game_condition['values']:
+            if condition == videojuego.getEstado():
+                self.game_condition.set(condition)
+
+        
+        
     # Go back to previous window
     def reset_form(self):
         #self.clear_frames()
