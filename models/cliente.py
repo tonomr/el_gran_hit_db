@@ -14,11 +14,12 @@ class Cliente:
 
     # METODO STR DE LA CLASE
     def __str__(self):
-        return (f"ID: {self.__id_cliente}, "
-                f"Nombre: {self.__nombre_cliente}, "
-                f"E-Mail: {self.__email}, "
-                f"Direccion: {self.__direccion_cliente}, "
-                f"Telefono: {self.__telefono_cliente}")
+        result =  '{:03d}'.format(self.__id_cliente) + "   "
+        result += '{:25.24}'.format(self.__nombre_cliente)
+        result += '{:22.21}'.format(self.__email)
+        result += '{:20.19}'.format(self.__direccion_cliente)
+        result += '{:10}'.format(self.__telefono_cliente)
+        return result
 
     # METODOS GET DE LA CLASE
     def getIdCliente(self):

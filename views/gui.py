@@ -24,6 +24,7 @@ from views.add_purchase import AddPurchase
 from views.add_sell import AddSell
 from views.add_dev import AddDev
 from views.edit_game import EditGame
+from views.edit_customer import EditCustomer
 from views.delete_window import DeleteWindow
 from views.menubar import Menubar
 from views.index_window import IndexWindow
@@ -95,7 +96,7 @@ class GUI(ttk.Frame):
                 logger.debug(customer) 
                 self.customers_listbox.append(customer)
             self.new_win = Toplevel(self.root)
-            IndexWindow(self.new_win, "Lista de Clientes", "810x500", "listbox-games.png", self.customers_listbox)
+            IndexWindow(self.new_win, "Lista de Clientes", "810x500", "listbox-customer.png", self.customers_listbox)
 
     # Create Window
     def customer_add_window(self):
@@ -104,10 +105,9 @@ class GUI(ttk.Frame):
 
     # Edit Window
     def customer_update_window(self):
-        #self.new_win = Toplevel(self.root)
-        #EditGame(self.new_win, "edit-customer.png", self.search_game)
-        pass
-
+        self.new_win = Toplevel(self.root)
+        EditCustomer(self.new_win, "edit-customer.png", self.search_customer)
+        
     # Delete Window
     def customer_delete_window(self):
         self.new_win = Toplevel(self.root)

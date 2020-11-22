@@ -11,6 +11,7 @@ class ClienteDao:
     __UPDATE = "UPDATE cliente SET nombre_cliente = %s, email = %s, direccion_cliente = %s, telefono_cliente = %s WHERE id_cliente = %s"
     __DELETE = "DELETE FROM cliente WHERE id_cliente = %s"
     __SEARCH = "SELECT * FROM cliente WHERE nombre_cliente LIKE %s"
+    __SELECT_ONE =  "SELECT * FROM cliente WHERE id_cliente = %s"
     
     # METODO SELECT PARA MOSTRAR LOS REGISTROS DE LA TABLA EMPLEADO
     @classmethod
@@ -33,7 +34,6 @@ class ClienteDao:
     def insertar(cls, cliente):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__INSERT)) # SENTENCIA A EJECUTAR
-            logger.debug(f"Cliente a insertar: {cliente}") # OBJETO cliente A INSERTAR
             values = (cliente.getNombreCliente(), cliente.getEmail(), cliente.getDireccionCliente(), cliente.getTelefonoCliente())
             cursor.execute(cls.__INSERT, values) # EJECUCION DE LA SENTENCIA
             
@@ -44,7 +44,6 @@ class ClienteDao:
     def actualizar(cls, cliente):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__UPDATE)) # SENTENCIA A EJECUTAR
-            logger.debug(f"Cliente a actualizar: {cliente}") # SE IMPRIME EL OBJETO cliente A ACTUALIZAR
             values = (cliente.getNombreCliente(), cliente.getEmail(), cliente.getDireccionCliente(), cliente.getTelefonoCliente(), cliente.getIdCliente())
             cursor.execute(cls.__UPDATE, values) # EJECUCION DE LA SENTENCIA
             
@@ -55,7 +54,6 @@ class ClienteDao:
     def eliminar(cls, cliente):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__DELETE)) # SENTENCIA A EJECUTAR
-            logger.debug(f"Cliente a eliminar: {cliente}") # SE IMPRIME EL OBJETO cliente A ELIMINAR
             values = (cliente.getIdCliente(),)
             cursor.execute(cls.__DELETE, values) # EJECUCION DE LA SENTENCIA
             
@@ -74,6 +72,17 @@ class ClienteDao:
                 clientes.append(cliente)
             
             return clientes
+
+    # Método que recupera el item con el ID que recibe
+    @classmethod
+    def recuperar(cls, id):
+        with CursorDelPool() as cursor:
+            logger.debug(cursor.mogrify(cls.__SELECT_ONE))
+            cursor.execute(cls.__SELECT_ONE, id)
+            registro = cursor.fetchone()
+        
+            cliente = Cliente(registro[0], registro[1], registro[2], registro[3], registro[4])
+            return cliente
 
 # SIMULACIONES (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":
