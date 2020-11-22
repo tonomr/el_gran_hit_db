@@ -11,6 +11,7 @@ class EmpleadoDao:
     __UPDATE = "UPDATE empleado SET nombre_empleado = %s, direccion_empleado = %s, telefono_empleado = %s WHERE id_empleado = %s"
     __DELETE = "DELETE FROM empleado WHERE id_empleado = %s"
     __SEARCH = "SELECT * FROM empleado WHERE nombre_empleado LIKE %s"
+    __SELECT_ONE =  "SELECT * FROM empleado WHERE id_empleado = %s"
     
     # METODO SELECT PARA MOSTRAR LOS REGISTROS DE LA TABLA EMPLEADO
     @classmethod
@@ -33,7 +34,7 @@ class EmpleadoDao:
     def insertar(cls, empleado):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__INSERT)) # SENTENCIA A EJECUTAR
-            logger.debug(f"Empleado a insertar: {empleado}") # OBJETO empleado A INSERTAR
+            #logger.debug(f"Empleado a insertar: {empleado}") # OBJETO empleado A INSERTAR
             values = (empleado.getNombreEmpleado(), empleado.getDireccionEmpleado(), empleado.getTelefonoEmpleado())
             cursor.execute(cls.__INSERT, values) # EJECUCION DE LA SENTENCIA
             
@@ -44,7 +45,7 @@ class EmpleadoDao:
     def actualizar(cls, empleado):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__UPDATE)) # SENTENCIA A EJECUTAR
-            logger.debug(f"Empleado a actualizar: {empleado}") # SE IMPRIME EL OBJETO empleado A ACTUALIZAR
+            #logger.debug(f"Empleado a actualizar: {empleado}") # SE IMPRIME EL OBJETO empleado A ACTUALIZAR
             values = (empleado.getNombreEmpleado(), empleado.getDireccionEmpleado(), empleado.getTelefonoEmpleado(), empleado.getIdEmpleado())
             cursor.execute(cls.__UPDATE, values) # EJECUCION DE LA SENTENCIA
             
@@ -55,7 +56,7 @@ class EmpleadoDao:
     def eliminar(cls, empleado):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__DELETE)) # SENTENCIA A EJECUTAR
-            logger.debug(f"Empleado a eliminar: {empleado}") # SE IMPRIME EL OBJETO empleado A ELIMINAR
+            #logger.debug(f"Empleado a eliminar: {empleado}") # SE IMPRIME EL OBJETO empleado A ELIMINAR
             values = (empleado.getIdEmpleado(),)
             cursor.execute(cls.__DELETE, values) # EJECUCION DE LA SENTENCIA
             
@@ -74,6 +75,17 @@ class EmpleadoDao:
                 empleados.append(empleado)
             
             return empleados
+
+    # Método que recupera el item con el ID que recibe
+    @classmethod
+    def recuperar(cls, id):
+        with CursorDelPool() as cursor:
+            logger.debug(cursor.mogrify(cls.__SELECT_ONE))
+            cursor.execute(cls.__SELECT_ONE, id)
+            registro = cursor.fetchone()
+            empleado = Empleado(registro[0], registro[1], registro[2], registro[3])
+            
+            return empleado
 
 # SIMULACIONES (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":

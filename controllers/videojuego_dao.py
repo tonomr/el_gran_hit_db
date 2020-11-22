@@ -88,7 +88,6 @@ class VideojuegoDao:
                                         registro[4], registro[5], registro[6], registro[7], registro[8])
             return videojuego
         
-
 # SIMULACIONES (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":
     # PRUEBA SELECT

@@ -13,11 +13,13 @@ class Empleado:
 
     # METODO STR DE LA CLASE
     def __str__(self):
-        return (f"ID: {self.__id_empleado}, "
-                f"Nombre: {self.__nombre_empleado}, "
-                f"Direccion: {self.__direccion_empleado}, "
-                f"Telefono: {self.__telefono_empleado}")
-
+        result =  '{:03d}'.format(self.__id_empleado) + "   "
+        result += '{:32.31}'.format(self.__nombre_empleado)
+        result += '{:32.31}'.format(self.__direccion_empleado)
+        result += '{:10}'.format(self.__telefono_empleado)
+        
+        return result
+        
     # METODOS GET DE LA CLASE
     def getIdEmpleado(self):
         return self.__id_empleado

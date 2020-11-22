@@ -25,6 +25,7 @@ from views.add_sell import AddSell
 from views.add_dev import AddDev
 from views.edit_game import EditGame
 from views.edit_customer import EditCustomer
+from views.edit_employee import EditEmployee
 from views.delete_window import DeleteWindow
 from views.menubar import Menubar
 from views.index_window import IndexWindow
@@ -113,7 +114,7 @@ class GUI(ttk.Frame):
         self.new_win = Toplevel(self.root)
         self.search_pattern = self.search_customer
         self.delete_controller = self.del_customer_by_id
-        DeleteWindow(self.new_win, "Elimina Cliente", "810x500", "delete-game.png", self.search_pattern, self.delete_controller)
+        DeleteWindow(self.new_win, "Elimina Cliente", "810x500", "delete-customer.png", self.search_pattern, self.delete_controller)
 
     # Delete Controller
     def del_customer_by_id(self, id_customer):
@@ -155,7 +156,7 @@ class GUI(ttk.Frame):
                 logger.debug(employee) 
                 self.employees_listbox.append(employee)
             self.new_win = Toplevel(self.root)
-            IndexWindow(self.new_win, "Lista de Empleados", "810x500", "listbox-games.png", self.employees_listbox)
+            IndexWindow(self.new_win, "Lista de Empleados", "810x500", "listbox-employees.png", self.employees_listbox)
 
     # Create Window
     def employee_add_window(self):
@@ -164,8 +165,8 @@ class GUI(ttk.Frame):
 
     # Edit Window
     def employee_update_window(self):
-        #self.new_win = Toplevel(self.root)
-        #EditEmployee(self.new_win, "edit-customer.png", self.search_game)
+        self.new_win = Toplevel(self.root)
+        EditEmployee(self.new_win, "edit-employee.png", self.search_employee)
         pass
 
     # Delete Window
@@ -173,7 +174,7 @@ class GUI(ttk.Frame):
         self.new_win = Toplevel(self.root)
         self.search_pattern = self.search_employee
         self.delete_controller = self.del_employee_by_id
-        DeleteWindow(self.new_win, "Elimina Empleado", "810x500", "delete-game.png", self.search_pattern, self.delete_controller)
+        DeleteWindow(self.new_win, "Elimina Empleado", "810x500", "delete_employee.png", self.search_pattern, self.delete_controller)
 
     # Delete Controller
     def del_employee_by_id(self, id_employee):
@@ -192,7 +193,7 @@ class GUI(ttk.Frame):
         self.update_employee = self.employee_update_window
         self.delete_employee = self.employee_delete_window
         self.clear_frames()
-        CrudWindow(self.root, "Administra Empleado", "title-customer-menu.png", "sidebar.png", "Empleados", self.index_employee, self.create_employee, self.update_employee, self.delete_employee)
+        CrudWindow(self.root, "Administra Empleado", "title-employee-menu.png", "sidebar.png", "Empleados", self.index_employee, self.create_employee, self.update_employee, self.delete_employee)
     
     # -------------------------------------- DESARROLLADORAS ------------------------------------
     # Index Window 
