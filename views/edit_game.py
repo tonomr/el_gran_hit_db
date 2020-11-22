@@ -1,33 +1,24 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 from views.menubar import Menubar
 
 from models.videojuego import Videojuego
 from controllers.videojuego_dao import VideojuegoDao
 
 class EditGame(ttk.Frame):
-    # El constructor toma la ventana que se le mando y en esta nueva ventana usamos
-    # la ventana padre para seguir tranbajando la misma ventana y agregar nuevo contenido
-    # recibe, la imagen del header, y la función de búsqueda desde guy.py
     def __init__(self, parent, header_image, search_controller, *args, **kwargs):
         ttk.Frame.__init__(self, parent, *args, **kwargs)
-        self.root = parent # Set parent
-        self.header = PhotoImage(file=header_image)
-        self.search_controller = search_controller
-        self.init_gui() # Iniciar la interfaz gráfica
-
-    # Limpia la ventana, recorre todos los widgets eliminandolos uno por uno
-    # Nota: No elimina la configuración de columnas.
-    def clear_frames(self):
-        for widget in self.root.winfo_children():
-            widget.destroy()
+        self.root = parent                              # Set parent
+        self.header = PhotoImage(file=header_image)     # Imagen del header
+        self.search_controller = search_controller      # Función que busca juegos
+        self.init_gui()                                 # Iniciar la interfaz gráfica
 
     # Add video game, function called from game
     def update_game(self):
-        # Get input fields .get
-        id =  self.edit_byid.get()
+        # Get input from fields using get method
+        id_game =  self.select_byid.get()
         name = self.game_name.get()
-        print(name)
         condition = self.game_condition.get()
         quantity = self.game_quantity.get()
         classification = self.game_classification.get()
@@ -36,19 +27,41 @@ class EditGame(ttk.Frame):
         released = self.game_released.get()
         devs = self.game_devs.get()
         # Create videogame instance
-        videogame = Videojuego(id_juego=id, nombre_juego=name, estado=condition, cantidad=quantity, clasificacion=classification,
+        videogame = Videojuego(id_juego=id_game, nombre_juego=name, estado=condition, cantidad=quantity, clasificacion=classification,
                                descripcion=description, precio=price, fecha_publicacion=released, codigo_desarrolladora=devs)
         VideojuegoDao.actualizar(videogame)
+        confirm = messagebox.askyesno(parent=self.root, message='Vieojuego actualizado correctamente, ¿Desea modificar otro?', 
+                            icon='question', title='Videojuego actualizado')
 
+        if (confirm == True):
+            self.select_byid.delete(0, END)
+            self.reset_form()
+        else:
+            self.cancel_to_main()
+    
+    # ------------------------------------------------------------------
+    # search_items es llamada cuando el usuario da click en el botón de buscar
+    # y ha ingresado o no un ID
+    # like_pattern almacena en una tupla el valor insertado en el input
+    # search_term, a este string tomado del input le damos el formato
+    # %string% para que pueda ser ejecutado por la sentencia LIKE de PostgresSQL
+    # ------------------------------------------------------------------
     def search_item(self):
-      like_pattern = ('%{}%'.format(self.search_term.get()),)
-      self.list_items = self.search_controller(like_pattern)
-      for item in self.list_items:
-        self.listbox.insert(END, item)
+        self.reset_form()
+        self.clear_listbox()
+        like_pattern = ('%{}%'.format(self.search_term.get()),)
+        self.list_items = self.search_controller(like_pattern)      # search_controller regresa una lista de matches
+        for item in self.list_items:                                # Llenamos el Listbox con los elementos
+            self.listbox.insert(END, item)                          # de la lista
 
+    # select_item llena los inputs con todos los datos de el item con el id
+    # correspondiente.
     def select_item(self):
-        videojuego = VideojuegoDao.recuperar(self.edit_byid.get())
-
+        # Llamamos la función recuperar que recibe como parametro
+        # un id de videojuego, en este caso el que ha sido insertado en el
+        # campo select_byid
+        videojuego = VideojuegoDao.recuperar(self.select_byid.get())
+        # Insertamos en los inputs un valor por default
         self.game_name.insert(END, videojuego.getNombreJuego())
         self.game_quantity.insert(END, videojuego.getCantidad())
         self.game_classification.insert(END, videojuego.getClasificacion())
@@ -56,29 +69,36 @@ class EditGame(ttk.Frame):
         self.game_price.insert(END, videojuego.getPrecio())
         self.game_released.insert(END, videojuego.getFechaPublicacion())
         self.game_devs.insert(END, videojuego.getCodigoDesarrolladora())
-
+        # Al final seteamos el estado del videjuego comparando las opciones existentes
+        # Con la que contiene el videojuego que estamos buscando
         for condition in self.game_condition['values']:
             if condition == videojuego.getEstado():
                 self.game_condition.set(condition)
-
         
-        
-    # Go back to previous window
+    # Reset form
+    # delete(index, END) elimina desde índice indicado hasta END, final del arreglo.
     def reset_form(self):
-        #self.clear_frames()
-        #GameWindow(self.root)
-        pass
+        self.game_name.delete(0, END)
+        self.game_condition.current(0)
+        self.game_quantity.delete(0, END)
+        self.game_classification.delete(0, END)
+        self.game_description.delete(0, END)
+        self.game_price.delete(0, END)
+        self.game_released.delete(0, END)
+        self.game_devs.delete(0, END)
 
     # Go back to main menu
     def cancel_to_main(self):
-        #self.clear_frames()
-        pass
+        self.root.destroy()
 
+    # Clear Listbox
+    def clear_listbox(self):
+        self.listbox.delete(0, END)
 
     # Init the Graphic User Interface
     def init_gui(self):
         self.root.title("Editar un videojuego")     # Nombre de la ventana
-        self.root.geometry("790x600")               # Tamaño de la ventana
+        self.root.geometry("790x585")               # Tamaño de la ventana
         
         ############################## FRAMES ###############################
         # -------------------------- HEADER FRAME ---------------------------
@@ -107,7 +127,7 @@ class EditGame(ttk.Frame):
             self.search_frame, text='Buscar', width=15, command=self.search_item)
         
         self.label_edit = ttk.Label(self.search_frame, text="Introduzca el id para modificar")
-        self.edit_byid = ttk.Entry(self.search_frame, width=50)
+        self.select_byid = ttk.Entry(self.search_frame, width=50)
         self.btn_edit= ttk.Button(
             self.search_frame, text='Seleccionar', width=15, command=self.select_item)
         # GRID
@@ -116,16 +136,16 @@ class EditGame(ttk.Frame):
         self.btn_search.grid(row=0, column=2)
         
         self.label_edit.grid(row=1, column=0)
-        self.edit_byid.grid(row=1, column=1)
+        self.select_byid.grid(row=1, column=1)
         self.btn_edit.grid(row=1, column=2)
 
-        # --------------------- ROOT LEVEL ---------------------------
+        # --------------------------- ROOT LEVEL --------------------------------
         # Horizontal bar
         self.horizontal_bar = PhotoImage(file="horizontal-bar.png")
         self.bar_label = ttk.Label(self.root)
         self.bar_label['image'] = self.horizontal_bar
         
-        # ----------------------- INPUTS FRAME --------------------------------
+        # ------------------------- INPUTS FRAME --------------------------------
         self.inputs_frame = ttk.Frame(self.root)
         # Widgets
         self.label_name = ttk.Label(self.inputs_frame, text="Nombre del videojuego")
@@ -137,7 +157,7 @@ class EditGame(ttk.Frame):
         self.game_condition = ttk.Combobox(self.inputs_frame, width=60)
         # Agrega una tupla a la configuración 'values' del input
         # Aquí agregamos los valores que se usan
-        self.game_condition['values'] = ('Nuevo', 'Seminuevo', 'Usado')
+        self.game_condition['values'] = (' ','Nuevo', 'Seminuevo', 'Usado')
         # Configuramos el estado del input para que sea únicamente de lectura
         # y el usario no pueda modificar su valor
         self.game_condition.state(['readonly'])
@@ -155,33 +175,7 @@ class EditGame(ttk.Frame):
         self.label_devs = ttk.Label(self.inputs_frame, text="Desarrolladora")
         self.game_devs = ttk.Entry(self.inputs_frame, width=50)
 
-        #--------------------------------------------------------------------------
-        # BUTTONS
-        # Add button
-        # Al presionar este parametro, mandamos llamar la función que específicamos
-        # en 'command'
-        #--------------------------------------------------------------------------
-        # Add
-        self.btn_update = ttk.Button(
-            self.inputs_frame, text='Actualizar', width=30, command=self.update_game)
-        # Reset
-        self.btn_reset = ttk.Button(
-            self.inputs_frame, text='Reset', width=30, command=self.reset_form)
-        # Cancel
-        self.btn_cancel = ttk.Button(
-            self.inputs_frame, text='Cancelar', width=30, command=self.cancel_to_main)
-
-        # -------------------------------------------------------------------------
-        # GRID 
-        # Especificamos las columnas, las filas. El ancho de las columnas NO es estático
-        # Su ancho depende del widget que haya dentro de ella, es decir, si no
-        # existe nada en una columna dada, el espacio no se verá reflejado en el grid de
-        # de nuestra ventana.
-        # Sticky puede llevar cualquier combinacion de caracteres
-        # Para alinear o estierar el widget en alguna de las direcciones cardinales
-        # 'w' west (izquierda) 'e' east (derecha) 'n' north 's' south
-        #---------------------------------------------------------------------------
-        # Inputs
+        # GRID inputs
         self.label_name.grid(row=0, column=0, sticky=("w"), columnspan=2)
         self.game_name.grid(row=0, column=2, sticky=("we"), columnspan=3)
 
@@ -204,18 +198,37 @@ class EditGame(ttk.Frame):
         self.label_devs.grid(row=7, column=0, sticky=("w"), columnspan=2)
         self.game_devs.grid(row=7, column=2, sticky=("we"), columnspan=3)
 
+        #--------------------------------------------------------------------------
+        # BUTTONS
+        # Add button
+        # Al presionar este parametro, mandamos llamar la función que específicamos
+        # en 'command'
+        #--------------------------------------------------------------------------
+        # Buttons Frame
+        self.btns_frame = ttk.Frame(self.root)
+        # Add
+        self.btn_update = ttk.Button(
+            self.btns_frame, text='Actualizar', width=20, command=self.update_game)
+        # Reset
+        self.btn_reset = ttk.Button(
+            self.btns_frame, text='Reset', width=20, command=self.reset_form)
+        # Cancel
+        self.btn_cancel = ttk.Button(
+            self.btns_frame, text='Cancelar', width=20, command=self.cancel_to_main)
+
         # Buttons
-        self.btn_update.grid(row=9, column=3, sticky=("we"))
-        self.btn_reset.grid(row=10, column=3, sticky=("we"))
-        self.btn_cancel.grid(row=11, column=3, sticky=("we"))
+        self.btn_update.grid(row=9, column=1, pady=15)
+        self.btn_reset.grid(row=9, column=2, pady=15)
+        self.btn_cancel.grid(row=9, column=3, pady=15)
 
         # -------------------------- GRID ROOT -------------------------------
         self.header_frame.grid(row=0, column=0)
         self.listbox_frame.grid(row=1, column=0)
-        self.search_frame.grid(row=2, column=0)
-        self.bar_label.grid(row=3, column=0)
+        self.search_frame.grid(row=2, column=0, pady=8)
+        self.bar_label.grid(row=3, column=0, pady=15)
         self.inputs_frame.grid(row=4, column=0)
+        self.btns_frame.grid(row=5, column=0, padx=10, sticky=("e"))
         
         # Padding
         for child in self.inputs_frame.winfo_children():
-            child.grid_configure(padx=8, pady=2)
+            child.grid_configure(padx=8, pady=3)
