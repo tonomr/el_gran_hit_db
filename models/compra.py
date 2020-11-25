@@ -1,4 +1,7 @@
 from services.logger_conf import logger
+from controllers.videojuego_dao import VideojuegoDao
+from controllers.empleado_dao import EmpleadoDao
+
 
 class Compra:
     # CONSTRUCTOR
@@ -9,16 +12,26 @@ class Compra:
         self.__precio_compra = precio_compra
         self.__codigo_videojuego = codigo_videojuego
         self.__codigo_empleado = codigo_empleado
-    
+
     # TO_STRING
     def __str__(self):
-        return (f"ID: {self.__id_compra}, "
-                f"Estado: {self.__estado_compra}, "
-                f"Fecha de la compra: {self.__fecha_compra}, "
-                f"Precio final: {self.__precio_compra}, "
-                f"Nombre del videojuego: {self.__codigo_videojuego}, "
-                f"Nombre del empleado: {self.__codigo_empleado}")
+        return (f"{self.__id_compra:03d}" + "  "
+                f"{self.__codigo_videojuego:25.24}"
+                f"{self.__estado_compra:11}"
+                f"{self.__codigo_empleado:24.23}"
+                f"{self.__fecha_compra}  " 
+                f"{self.__precio_compra:06.2f}")
     
+    # To String
+    def to_str(self):
+        game_name = VideojuegoDao.buscar_nombre([self.__codigo_videojuego])
+        employee_name = EmpleadoDao.buscar_nombre([self.__codigo_empleado])
+        return (f" {self.__id_compra:03d}" + "  "
+                f"{game_name[0]:25.24}"
+                f"{employee_name[0]:24.23}"
+                f"{self.__estado_compra:11}"
+                f"{self.__fecha_compra}  "
+                f"{self.__precio_compra:06.2f} ")
     # METODOS GET
     def getIdCompra(self):
         return self.__id_compra

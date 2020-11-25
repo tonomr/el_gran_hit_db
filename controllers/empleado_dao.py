@@ -12,6 +12,7 @@ class EmpleadoDao:
     __DELETE = "DELETE FROM empleado WHERE id_empleado = %s"
     __SEARCH = "SELECT * FROM empleado WHERE nombre_empleado LIKE %s"
     __SELECT_ONE =  "SELECT * FROM empleado WHERE id_empleado = %s"
+    __SELECT_NOMBRE = "SELECT nombre_empleado FROM empleado WHERE id_empleado = %s"
     
     # METODO SELECT PARA MOSTRAR LOS REGISTROS DE LA TABLA EMPLEADO
     @classmethod
@@ -57,6 +58,7 @@ class EmpleadoDao:
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__DELETE)) # SENTENCIA A EJECUTAR
             #logger.debug(f"Empleado a eliminar: {empleado}") # SE IMPRIME EL OBJETO empleado A ELIMINAR
+            
             values = (empleado.getIdEmpleado(),)
             cursor.execute(cls.__DELETE, values) # EJECUCION DE LA SENTENCIA
             
@@ -86,6 +88,15 @@ class EmpleadoDao:
             empleado = Empleado(registro[0], registro[1], registro[2], registro[3])
             
             return empleado
+
+    # Método que recupera el nombre del empleado con el ID que recibe
+    @classmethod
+    def buscar_nombre(cls, id):
+        with CursorDelPool() as cursor:
+            #logger.debug(cursor.mogrify(cls.__SELECT_NOMBRE))
+            cursor.execute(cls.__SELECT_NOMBRE, id)
+            registro = cursor.fetchone()
+            return registro
 
 # SIMULACIONES (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":

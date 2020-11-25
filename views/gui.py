@@ -244,16 +244,58 @@ class GUI(ttk.Frame):
         CrudWindow(self.root, "Administra Empleado", "title-customer-menu.png", "sidebar.png", "Empleados", self.index_dev, self.create_dev, self.update_dev, self.delete_dev)
         
     # ------------------------------------------- COMPRAS --------------------------------------
-    def add_purchase(self):
+    # Index Window 
+    def purchase_index_window(self):
+        purchases_list = CompraDao.seleccionar()
+        self.purchases_listbox = []
+        for purchase in purchases_list:
+            #logger.debug(purchase) 
+            self.purchases_listbox.append(purchase)
+        self.new_win = Toplevel(self.root)
+        IndexWindow(self.new_win, "Lista de Compras", "810x500", "listbox-games.png", self.purchases_listbox)
+
+    # Create Window
+    def purchase_add_window(self):
         self.new_win = Toplevel(self.root)
         AddPurchase(self.new_win)
 
-    def purchases_window(self):
-        self.index_purchase = self.show_all
-        self.create_purchase = self.add_purchase
-        self.clear_frames()
-        #CrudWindow(self.root, "Administra Compras", "title-purchase-menu.png", "sidebar.png", "Compras", self.index_purchase, self.create_purchase)
+    # Edit Window
+    def purchase_update_window(self):
+        #self.new_win = Toplevel(self.root)
+        #EditEmployee(self.new_win, "edit-customer.png", self.search_game)
         pass
+
+    # Delete Window
+    def purchase_delete_window(self):
+        self.new_win = Toplevel(self.root)
+        self.search_pattern = self.search_purchase
+        self.delete_controller = self.del_purchase_by_id
+        DeleteWindow(self.new_win, "Elimina Compra", "810x500", "delete-game.png", self.search_pattern, self.delete_controller)
+
+    # Delete Controller
+    def del_purchase_by_id(self, id_purchase):
+        purchase = Compra(id_compra=id_purchase)
+        CompraDao.eliminar(purchase)
+
+    # Search Controller
+    def search_purchase(self, search_term):
+        employee = CompraDao.buscar_empleado(search_term)
+        purchases = CompraDao.buscar(employee.getIdEmpleado())
+        purchase_list = []
+        for purchase in purchases:
+            purchase_list.append(purchase.to_str())
+
+        return purchase_list
+        
+    # CRUD Window
+    def purchases_window(self):
+        self.index_purchase = self.purchase_index_window
+        self.create_purchase = self.purchase_add_window
+        self.update_purchase = self.purchase_update_window
+        self.delete_purchase = self.purchase_delete_window
+        self.clear_frames()
+        CrudWindow(self.root, "Administra Compra", "title-customer-menu.png", "sidebar.png", "Compras", self.index_purchase, self.create_purchase, self.update_purchase, self.delete_purchase)
+        
     
     # ------------------------------------- MAIN INTERFACE --------------------------------------
     def init_gui(self):

@@ -10,28 +10,28 @@ class CompraDao:
     __UPDATE = "UPDATE compra SET estado_compra = %s, fecha_compra = %s, precio_compra = %s, codigo_videojuego = %s, codigo_empleado = %s WHERE id_compra = %s"
     __DELETE = "DELETE FROM compra WHERE id_compra = %s"
     __SEARCH_EMPLEADO = "SELECT * FROM empleado WHERE nombre_empleado LIKE %s"
-    __SEARCH = "SELECT * FROM compra WHERE CAST(codigo_empleado AS VARCHAR) LIKE CAST(%s AS VARCHAR)"
+    __SEARCH = "SELECT * FROM compra WHERE codigo_empleado = %s" 
     __SELECT_ONE =  "SELECT * FROM compra WHERE id_compra = %s"
     
     @classmethod
     def seleccionar(cls):
         with CursorDelPool() as cursor:
-            logger.debug(cursor.mogrify(cls.__SELECT))
+            #logger.debug(cursor.mogrify(cls.__SELECT))
+            logger.debug("Lllega aqui")
             cursor.execute(cls.__SELECT)
             registros = cursor.fetchall()
-            
+            logger.debug("TAMBIEN AQUI")
             compras = []
             for registro in registros:
                 compra = Compra(registro[0], registro[1], registro[2], registro[3], registro[4], registro[5])
                 compras.append(compra)
-            
             return compras
     
     @classmethod
     def insertar(cls, compra):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__INSERT))
-            logger.debug(f"Compra a insertar: {compra}")
+            #logger.debug(f"Compra a insertar: {compra}")
             values = (compra.getEstadoCompra(), compra.getFechaCompra(), compra.getPrecioCompra(), compra.getCodigoVideojuego(), compra.getCodigoEmpleado())
             cursor.execute(cls.__INSERT, values)
             
@@ -41,7 +41,7 @@ class CompraDao:
     def actualizar(cls, compra):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__UPDATE))
-            logger.debug(f"Compra a actualizar: {compra}")
+            #logger.debug(f"Compra a actualizar: {compra}")
             values = (compra.getEstadoCompra(), compra.getFechaCompra(), compra.getPrecioCompra(), compra.getCodigoVideojuego(), compra.getCodigoEmpleado(), compra.getIdCompra())
             cursor.execute(cls.__UPDATE, values)
             
@@ -51,7 +51,8 @@ class CompraDao:
     def eliminar(cls, compra):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__DELETE))
-            logger.debug(f"Compra a eliminar: {compra}")
+            #logger.debug(f"Compra a eliminar: {compra}")
+            logger.debug("Lllega aqui")
             values = (compra.getIdCompra(),)
             cursor.execute(cls.__DELETE, values)
             

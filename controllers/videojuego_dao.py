@@ -13,6 +13,9 @@ class VideojuegoDao:
     __DELETE = "DELETE FROM videojuego WHERE id_juego = %s"
     __SEARCH = "SELECT * FROM videojuego WHERE nombre_juego LIKE %s"
     __SELECT_ONE =  "SELECT * FROM videojuego WHERE id_juego = %s"
+    __SELECT_NOMBRE = "SELECT nombre_juego FROM videojuego WHERE id_juego = %s"
+
+    listadoVideojuegos = None
     
     # METODO SELECT PARA MOSTRAR LOS REGISTROS DE LA TABLA VIDEOJUEGOS
     @classmethod
@@ -88,6 +91,28 @@ class VideojuegoDao:
             videojuego = Videojuego(registro[0], registro[1], registro[2], registro[3],
                                         registro[4], registro[5], registro[6], registro[7], registro[8])
             return videojuego
+
+    # ESTE METODO RECIBE UN ID DE DESARROLLADORA PARA DEVOLVER MEDIANTE UNA BUSQUEDA EL NOMBRE DE TAL
+    """     
+    @classmethod
+    def buscarNombre(cls, id_busqueda):
+        nombre_encontrado = None
+        if cls.listadoVideojuegos == None:
+            cls.listadoVideojuegos = VideojuegoDao.seleccionar()
+        for videojuego in cls.listadoVideojuegos:
+            if videojuego.getIdJuego() == id_busqueda:
+                nombre_encontrado = videojuego.getNombreJuego()
+                break
+        return nombre_encontrado
+    """
+    # Método que recupera el nombre del videjuego con el ID que recibe
+    @classmethod
+    def buscar_nombre(cls, id):
+        with CursorDelPool() as cursor:
+            #logger.debug(cursor.mogrify(cls.__SELECT_NOMBRE))
+            cursor.execute(cls.__SELECT_NOMBRE, id)
+            registro = cursor.fetchone()
+            return registro
         
 # SIMULACIONES (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":
