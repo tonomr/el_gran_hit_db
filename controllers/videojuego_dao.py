@@ -76,6 +76,7 @@ class VideojuegoDao:
                 videojuegos.append(videojuego)
             
             return videojuegos
+
     # Método que recupera el videjuego con el ID que recibe
     @classmethod
     def recuperar(cls, id):
