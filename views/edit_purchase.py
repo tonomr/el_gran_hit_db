@@ -138,7 +138,7 @@ class EditPurchase(ttk.Frame):
         # ------------------------- INPUTS FRAME --------------------------------
         self.inputs_frame = ttk.Frame(self.root)
         # Widgets
-        self.label_name = ttk.Label(self.inputs_frame, text="Nombre del videojuego")
+        self.label_name = ttk.Label(self.inputs_frame, text="ID del videojuego")
         self.game_id = ttk.Entry(self.inputs_frame, width=60)
         # Multiple Option input
         # Crea la etiqueta "Condición"
