@@ -6,7 +6,7 @@ from services.logger_conf import logger
 class VentaDao:
     # SENTENCIAS SQL
     __SELECT = "SELECT * FROM venta"
-    __INSERT = "INSERT INTO venta(fecha_venta, cantidad_venta, subtotal, total, direccion_envio, codigo_videojuego, codigo_cliente) VALUES(%s, %s, %s, %s, %s, %s, %s)"
+    __INSERT = "INSERT INTO venta(fecha_venta, cantidad, subtotal, total, direccion_envio, codigo_videojuego, codigo_cliente) VALUES(%s, %s, %s, %s, %s, %s, %s)"
     __UPDATE = "UPDATE venta SET fecha_venta = %s, cantidad = %s, subtotal = %s, total = %s, direccion_envio = %s, codigo_videojuego = %s, codigo_cliente = %s WHERE id_venta = %s"
     __DELETE = "DELETE FROM venta WHERE id_venta = %s"
     __SEARCH_CLIENTE = "SELECT * FROM cliente WHERE nombre_cliente LIKE %s"
@@ -31,7 +31,7 @@ class VentaDao:
     def insertar(cls, venta):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__INSERT))
-            logger.debug(f"Venta a insertar: {venta}")
+            #logger.debug(f"Venta a insertar: {venta}")
             values = (venta.getFechaVenta(), venta.getCantidad(), venta.getSubtotal(), venta.getTotal(), venta.getDireccionEnvio(), venta.getCodigoVideojuego(), venta.getCodigoCliente())
             cursor.execute(cls.__INSERT, values)
             
@@ -41,7 +41,7 @@ class VentaDao:
     def actualizar(cls, venta):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__UPDATE))
-            logger.debug(f"Venta a actualizar: {venta}")
+            #logger.debug(f"Venta a actualizar: {venta}")
             values = (venta.getFechaVenta(), venta.getCantidad(), venta.getSubtotal(), venta.getTotal(), venta.getDireccionEnvio(), venta.getCodigoVideojuego(), venta.getCodigoCliente(), venta.getIdVenta())
             cursor.execute(cls.__UPDATE, values)
             
