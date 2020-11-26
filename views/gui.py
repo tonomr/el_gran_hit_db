@@ -26,6 +26,7 @@ from views.add_dev import AddDev
 from views.edit_game import EditGame
 from views.edit_customer import EditCustomer
 from views.edit_employee import EditEmployee
+from views.edit_purchase import EditPurchase
 from views.delete_window import DeleteWindow
 from views.menubar import Menubar
 from views.index_window import IndexWindow
@@ -252,7 +253,7 @@ class GUI(ttk.Frame):
             #logger.debug(purchase) 
             self.purchases_listbox.append(purchase)
         self.new_win = Toplevel(self.root)
-        IndexWindow(self.new_win, "Lista de Compras", "810x500", "listbox-games.png", self.purchases_listbox)
+        IndexWindow(self.new_win, "Lista de Compras", "810x500", "listbox-purchases.png", self.purchases_listbox)
 
     # Create Window
     def purchase_add_window(self):
@@ -261,16 +262,16 @@ class GUI(ttk.Frame):
 
     # Edit Window
     def purchase_update_window(self):
-        #self.new_win = Toplevel(self.root)
-        #EditEmployee(self.new_win, "edit-customer.png", self.search_game)
-        pass
+        self.new_win = Toplevel(self.root)
+        EditPurchase(self.new_win, "edit-purchase.png", self.search_purchase)
+        
 
     # Delete Window
     def purchase_delete_window(self):
         self.new_win = Toplevel(self.root)
         self.search_pattern = self.search_purchase
         self.delete_controller = self.del_purchase_by_id
-        DeleteWindow(self.new_win, "Elimina Compra", "810x500", "delete-game.png", self.search_pattern, self.delete_controller)
+        DeleteWindow(self.new_win, "Elimina Compra", "810x500", "delete-purchase.png", self.search_pattern, self.delete_controller)
 
     # Delete Controller
     def del_purchase_by_id(self, id_purchase):
@@ -284,7 +285,7 @@ class GUI(ttk.Frame):
         purchase_list = []
         for purchase in purchases:
             purchase_list.append(purchase.to_str())
-
+        print(employee)
         return purchase_list
         
     # CRUD Window
@@ -294,7 +295,7 @@ class GUI(ttk.Frame):
         self.update_purchase = self.purchase_update_window
         self.delete_purchase = self.purchase_delete_window
         self.clear_frames()
-        CrudWindow(self.root, "Administra Compra", "title-customer-menu.png", "sidebar.png", "Compras", self.index_purchase, self.create_purchase, self.update_purchase, self.delete_purchase)
+        CrudWindow(self.root, "Administra Compra", "title-purchase-menu.png", "sidebar.png", "Compras", self.index_purchase, self.create_purchase, self.update_purchase, self.delete_purchase)
         
     
     # ------------------------------------- MAIN INTERFACE --------------------------------------

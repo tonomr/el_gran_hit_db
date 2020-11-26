@@ -48,7 +48,7 @@ class AddPurchase(ttk.Frame):
     def init_gui(self):
         self.clear_frames()
         # WINDOW TITLE
-        self.root.title("Agregar Cliente")
+        self.root.title("Agregar Compra")
 
         # WINDOW SIZE
         self.root.geometry("600x400")

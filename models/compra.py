@@ -28,10 +28,10 @@ class Compra:
         employee_name = EmpleadoDao.buscar_nombre([self.__codigo_empleado])
         return (f" {self.__id_compra:03d}" + "  "
                 f"{game_name[0]:25.24}"
-                f"{employee_name[0]:24.23}"
                 f"{self.__estado_compra:11}"
+                f"{employee_name[0]:24.23}"
                 f"{self.__fecha_compra}  "
-                f"{self.__precio_compra:06.2f} ")
+                f"{self.__precio_compra:06.2f}")
     # METODOS GET
     def getIdCompra(self):
         return self.__id_compra
