@@ -13,15 +13,15 @@ class Venta:
         self.__codigo_cliente = codigo_cliente
     
     # TO_STRING
-    def __str__(self):
-        return (f"ID: {self.__id_venta}, "
-                f"Fecha: {self.__fecha_venta}, "
-                f"Cantidad: {self.__cantidad}, "
-                f"Subtotal: {self.__subtotal}, "
-                f"Total: {self.__total}, "
-                f"Direccion a enviar: {self.__direccion_envio}, "
-                f"ID del Videojuego: {self.__codigo_videojuego}, "
-                f"ID del Cliente: {self.__codigo_cliente}")
+    def __str__(self):                
+        return (f"{self.__id_venta:03d}" + "   "
+                f"{self.__fecha_venta}" + "   "
+                f"{self.__cantidad:02d}" + "   "
+                f"{self.__subtotal:06.2f}" + "   "
+                f"{self.__total:06.2f}" + "   "
+                f"{self.__direccion_envio:24.23}"
+                f"{self.__codigo_videojuego:03d}" + "       "
+                f"{self.__codigo_cliente:03d}")
     
     # METODOS GET
     def getIdVenta(self):

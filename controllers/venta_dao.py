@@ -51,7 +51,7 @@ class VentaDao:
     def eliminar(cls, venta):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__DELETE))
-            logger.debug(f"Venta a eliminar: {venta}")
+            #logger.debug(f"Venta a eliminar: {venta}")
             values = (venta.getIdVenta(),)
             cursor.execute(cls.__DELETE, values)
             
