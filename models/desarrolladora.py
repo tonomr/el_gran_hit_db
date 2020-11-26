@@ -13,10 +13,10 @@ class Desarrolladora:
 
     # METODO STR DE LA CLASE
     def __str__(self):
-        return (f"ID: {self.__id_desarrolladora}, "
-                f"Nombre: {self.__nombre_desarrolladora}, "
-                f"Telefono: {self.__telefono_desarrolladora}, "
-                f"Direccion: {self.__direccion_desarrolladora}")
+        return (f"{self.__id_desarrolladora:03d}" + "  "
+                f"{self.__nombre_desarrolladora:24.23}"
+                f"{self.__telefono_desarrolladora:15.10}"
+                f"{self.__direccion_desarrolladora:21.30}")
 
     # METODOS GET DE LA CLASE
     def getIdDesarrolladora(self):
