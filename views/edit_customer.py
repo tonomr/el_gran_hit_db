@@ -54,7 +54,8 @@ class EditCustomer(ttk.Frame):
     # correspondiente.
     def select_item(self):
         # Recupera un sólo item
-        customer = ClienteDao.recuperar(self.select_byid.get())
+        id = (self.select_byid.get(),)
+        customer = ClienteDao.recuperar(id)
         # Insertamos en los inputs un valor por default
         self.customer_name.insert(END, customer.getNombreCliente())
         self.customer_email.insert(END, customer.getEmail())

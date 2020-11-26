@@ -60,7 +60,8 @@ class EditGame(ttk.Frame):
         # Llamamos la función recuperar que recibe como parametro
         # un id de videojuego, en este caso el que ha sido insertado en el
         # campo select_byid
-        videojuego = VideojuegoDao.recuperar(self.select_byid.get())
+        id = (self.select_byid.get(),)
+        videojuego = VideojuegoDao.recuperar(id)
         # Insertamos en los inputs un valor por default
         self.game_name.insert(END, videojuego.getNombreJuego())
         self.game_quantity.insert(END, videojuego.getCantidad())

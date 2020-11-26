@@ -54,7 +54,8 @@ class EditDev(ttk.Frame):
     # correspondiente.
     def select_item(self):
         # Recupera un sólo item
-        dev = DesarrolladoraDao.recuperar(self.select_byid.get())
+        id = (self.select_byid.get(),)
+        dev = DesarrolladoraDao.recuperar(id)
         # Insertamos en los inputs un valor por default
         self.dev_name.insert(END, dev.getNombreDesarrolladora())
         self.dev_address.insert(END, dev.getDireccionDesarrolladora())

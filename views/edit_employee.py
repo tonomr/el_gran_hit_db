@@ -53,7 +53,8 @@ class EditEmployee(ttk.Frame):
     # correspondiente.
     def select_item(self):
         # Recupera un sólo item
-        employee = EmpleadoDao.recuperar(self.select_byid.get())
+        id = (self.select_byid.get(),)
+        employee = EmpleadoDao.recuperar(id)
         # Insertamos en los inputs un valor por default
         self.employee_name.insert(END, employee.getNombreEmpleado())
         self.employee_address.insert(END, employee.getDireccionEmpleado())

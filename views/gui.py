@@ -28,6 +28,7 @@ from views.edit_customer import EditCustomer
 from views.edit_employee import EditEmployee
 from views.edit_purchase import EditPurchase
 from views.edit_dev import EditDev
+from views.edit_sell import EditSell
 from views.delete_window import DeleteWindow
 from views.menubar import Menubar
 from views.index_window import IndexWindow
@@ -139,15 +140,58 @@ class GUI(ttk.Frame):
         CrudWindow(self.root, "Administra Clientes", "title-customer-menu.png", "sidebar.png", "Clientes", self.index_customer, self.create_customer, self.update_customer, self.delete_customer)
 
     # ---------------------------------------- SELLS ------------------------------------------
-    def add_sell(self):
+     # Index Window 
+    def sell_index_window(self):
+        sells_list = VentaDao.seleccionar()
+        self.sells_listbox = []
+        for sell in sells_list:
+            #logger.debug(sell) 
+            self.sells_listbox.append(sell)
+        self.new_win = Toplevel(self.root)
+        IndexWindow(self.new_win, "Lista de Ventas", "810x500", "listbox-sells.png", self.sells_listbox)
+
+    # Create Window
+    def sell_add_window(self):
         self.new_win = Toplevel(self.root)
         AddSell(self.new_win)
 
+    # Edit Window
+    def sell_update_window(self):
+        self.new_win = Toplevel(self.root)
+        EditSell(self.new_win, "edit-sell.png", self.search_sell)
+        pass
+
+    # Delete Window
+    def sell_delete_window(self):
+        self.new_win = Toplevel(self.root)
+        self.search_pattern = self.search_sell
+        self.delete_controller = self.del_sell_by_id
+        DeleteWindow(self.new_win, "Elimina Venta", "810x500", "delete-sell.png", self.search_pattern, self.delete_controller)
+
+    # Delete Controller
+    def del_sell_by_id(self, id_venta):
+        sell = Venta(id_venta=id_venta)
+        VentaDao.eliminar(sell)
+
+    # Search Controller
+    def search_sell(self, search_term):
+        customer = VentaDao.buscar_cliente(search_term)
+        sells = VentaDao.buscar(customer.getIdCliente())
+        sell_list = []
+        for sell in sells:
+            sell_list.append(sell)
+ 
+        return sell_list
+        
+    # CRUD Window
     def sells_window(self):
-        self.index_sell = self.show_all
-        self.create_sell = self.add_sell
+        self.index_sell = self.sell_index_window
+        self.create_sell = self.sell_add_window
+        self.update_sell = self.sell_update_window
+        self.delete_sell = self.sell_delete_window
         self.clear_frames()
-        #CrudWindow(self.root, "Administra Ventas", "title-sell-menu.png", "sidebar.png", "Ventas" , self.index_sell, self.create_sell)
+        CrudWindow(self.root, "Administra Venta", "title-sell-menu.png", "sidebar.png", "Ventas", self.index_sell, self.create_sell, self.update_sell, self.delete_sell)
+        
     
     # ------------------------------------- EMPLOYEES ------------------------------------------
     # Index Window 
@@ -343,8 +387,9 @@ class GUI(ttk.Frame):
         self.btn_employees.grid(row=21, column=2, sticky=("we")) 
         self.btn_customers.grid(row=22, column=2, sticky=("we"))
         self.btn_sells.grid(row=23, column=2, sticky=("we"))
-        self.btn_devs.grid(row=24, column=2, sticky=("we"))
-        self.btn_purchases.grid(row=25, column=2, sticky=("we"))
+        self.btn_purchases.grid(row=24, column=2, sticky=("we"))
+        self.btn_devs.grid(row=25, column=2, sticky=("we"))
+        
         
         # Padding
         for child in self.winfo_children():

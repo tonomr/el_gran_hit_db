@@ -3,10 +3,10 @@ from tkinter import ttk
 from tkinter import messagebox
 from views.menubar import Menubar
 
-from models.compra import Compra
-from controllers.compra_dao import CompraDao
+from models.venta import Venta
+from controllers.venta_dao import VentaDao
 
-class EditPurchase(ttk.Frame):
+class EditSell(ttk.Frame):
     def __init__(self, parent, header_image, search_controller, *args, **kwargs):
         ttk.Frame.__init__(self, parent, *args, **kwargs)
         self.root = parent                              # Set parent
@@ -15,19 +15,23 @@ class EditPurchase(ttk.Frame):
         self.init_gui()                                 # Iniciar la interfaz gráfica
 
     # Update purchase
-    def update_purchase(self):
+    def update_sell(self):
         # Get input from fields using get method
-        id_purchase =  self.select_byid.get()
-        condition = self.game_condition.get()
-        price = self.game_price.get()
-        purchase_date = self.purchase_date.get()
-        employee = self.employee_id.get()
-        game_id = self.game_id.get()
-        # Create videogame instance
-        purchase = Compra(id_compra=id_purchase, estado_compra=condition,fecha_compra=purchase_date, precio_compra=price, codigo_videojuego=game_id, codigo_empleado=employee)
-        CompraDao.actualizar(purchase)
-        confirm = messagebox.askyesno(parent=self.root, message='Compra actualizada correctamente, ¿Desea modificar otra?', 
-                            icon='question', title='Videojuego actualizado')
+        self.id_sell =  self.select_byid.get()
+        self.date = self.sell_date.get()
+        self.quantity = self.sell_quantity.get()
+        self.address = self.sell_address.get()
+        self.gameid = self.game_id.get()
+        self.customerid = self.customer_id.get()
+
+        # Default inputs
+        
+
+        # Create sell instance
+        sell = Venta(id_venta=self.id_sell, fecha_venta=self.date, cantidad=self.quantity, subtotal=self.subtotal, total=self.total, direccion_envio=self.address, codigo_videojuego=self.gameid, codigo_cliente=self.customerid)
+        VentaDao.actualizar(sell)
+        confirm = messagebox.askyesno(parent=self.root, message='Venta actualizada correctamente, ¿Desea modificar otra?', 
+                            icon='question', title='Venta actualizada')
 
         if (confirm == True):
             self.select_byid.delete(0, END)
@@ -57,26 +61,25 @@ class EditPurchase(ttk.Frame):
         # un id de videojuego, en este caso el que ha sido insertado en el
         # campo select_byid
         id = (self.select_byid.get(),)
-        purchase = CompraDao.recuperar(id)
+        sell = VentaDao.recuperar(id)
         # Insertamos en los inputs un valor por default
-        self.game_id.insert(END, purchase.getCodigoVideojuego())
-        self.game_price.insert(END, purchase.getPrecioCompra())
-        self.purchase_date.insert(END, purchase.getFechaCompra())
-        self.employee_id.insert(END, purchase.getCodigoEmpleado())
-        # Al final seteamos el estado del videjuego comparando las opciones existentes
-        # Con la que contiene el videojuego que estamos buscando
-        for condition in self.game_condition['values']:
-            if condition == purchase.getEstadoCompra():
-                self.game_condition.set(condition)
+        self.game_id.insert(END, sell.getCodigoVideojuego())
+        self.sell_date.insert(END, sell.getFechaVenta())
+        self.sell_quantity.insert(END, sell.getCantidad())
+        self.customer_id.insert(END, sell.getCodigoCliente())
+        self.sell_address.insert(END, sell.getDireccionEnvio())
+        # Defaults
+        self.subtotal = sell.getSubtotal()
+        self.total = sell.getTotal()
         
     # Reset form
     # delete(index, END) elimina desde índice indicado hasta END, final del arreglo.
     def reset_form(self):
         self.game_id.delete(0, END)
-        self.game_condition.current(0)
-        self.game_price.delete(0, END)
-        self.purchase_date.delete(0, END)
-        self.employee_id.delete(0, END)
+        self.sell_date.delete(0, END)
+        self.sell_quantity.delete(0, END)
+        self.sell_address.delete(0, END)
+        self.customer_id.delete(0, END)
 
     # Go back to main menu
     def cancel_to_main(self):
@@ -88,8 +91,8 @@ class EditPurchase(ttk.Frame):
 
     # Init the Graphic User Interface
     def init_gui(self):
-        self.root.title("Editar una compra")         # Nombre de la ventana
-        self.root.geometry("790x585")                # Tamaño de la ventana
+        self.root.title("Editar una venta")         # Nombre de la ventana
+        self.root.geometry("790x585")               # Tamaño de la ventana
         
         ############################## FRAMES ###############################
         # -------------------------- HEADER FRAME ---------------------------
@@ -139,41 +142,34 @@ class EditPurchase(ttk.Frame):
         # ------------------------- INPUTS FRAME --------------------------------
         self.inputs_frame = ttk.Frame(self.root)
         # Widgets
-        self.label_name = ttk.Label(self.inputs_frame, text="ID del videojuego")
+        self.label_gameid = ttk.Label(self.inputs_frame, text="ID de videojuego")
         self.game_id = ttk.Entry(self.inputs_frame, width=60)
-        # Multiple Option input
-        # Crea la etiqueta "Condición"
-        self.label_condition = ttk.Label(self.inputs_frame, text="Estado")
-        # Crea el objeto de input múltiple, recibe ventana padre y ocpional el ancho
-        self.game_condition = ttk.Combobox(self.inputs_frame, width=60)
-        # Agrega una tupla a la configuración 'values' del input
-        # Aquí agregamos los valores que se usan
-        self.game_condition['values'] = (' ','Nuevo', 'Seminuevo', 'Usado')
-        # Configuramos el estado del input para que sea únicamente de lectura
-        # y el usario no pueda modificar su valor
-        self.game_condition.state(['readonly'])
-        # More labels and input fields...
-        self.label_price = ttk.Label(self.inputs_frame, text="Precio")
-        self.game_price = ttk.Entry(self.inputs_frame, width=15)
-        self.label_purchase_date = ttk.Label(self.inputs_frame, text="Fecha de compra")
-        self.purchase_date = ttk.Entry(self.inputs_frame, width=15)
-        self.label_employee = ttk.Label(self.inputs_frame, text="ID de empleado")
-        self.employee_id = ttk.Entry(self.inputs_frame, width=50)
+        
+        self.label_date = ttk.Label(self.inputs_frame, text="Fecha de venta")
+        self.sell_date = ttk.Entry(self.inputs_frame, width=15)
+
+        self.label_quantity = ttk.Label(self.inputs_frame, text="Cantidad")
+        self.sell_quantity = ttk.Entry(self.inputs_frame, width=15)
+
+        self.label_address = ttk.Label(self.inputs_frame, text="Dirección envío")
+        self.sell_address = ttk.Entry(self.inputs_frame, width=15)
+
+        self.label_customer = ttk.Label(self.inputs_frame, text="ID de cliente")
+        self.customer_id = ttk.Entry(self.inputs_frame, width=50)
 
         # GRID inputs
-        self.label_name.grid(row=0, column=0, sticky=("w"), columnspan=2)
+        self.label_gameid.grid(row=0, column=0, sticky=("w"), columnspan=2)
         self.game_id.grid(row=0, column=2, sticky=("we"), columnspan=3)
+        self.label_date.grid(row=2, column=0, sticky=("w"))
+        self.sell_date.grid(row=2, column=2, sticky=("we"))
+        self.label_quantity.grid(row=3, column=0, sticky=("w"))
+        self.sell_quantity.grid(row=3, column=2, sticky=("we"))
 
-        self.label_condition.grid(row=1, column=0, sticky=("w"), columnspan=2)
-        self.game_condition.grid(row=1, column=2, sticky=("we"), columnspan=3)
+        self.label_address.grid(row=4, column=0, sticky=("w"))
+        self.sell_address.grid(row=4, column=2, sticky=("we"))
 
-        self.label_price.grid(row=5, column=0, sticky=("w"))
-        self.game_price.grid(row=5, column=2, sticky=("we"))
-        self.label_purchase_date.grid(row=5, column=3, sticky=("w"))
-        self.purchase_date.grid(row=5, column=4, sticky=("we"))
-
-        self.label_employee.grid(row=7, column=0, sticky=("w"), columnspan=2)
-        self.employee_id.grid(row=7, column=2, sticky=("we"), columnspan=3)
+        self.label_customer.grid(row=5, column=0, sticky=("w"), columnspan=2)
+        self.customer_id.grid(row=5, column=2, sticky=("we"), columnspan=3)
 
         #--------------------------------------------------------------------------
         # BUTTONS
@@ -185,7 +181,7 @@ class EditPurchase(ttk.Frame):
         self.btns_frame = ttk.Frame(self.root)
         # Add
         self.btn_update = ttk.Button(
-            self.btns_frame, text='Actualizar', width=20, command=self.update_purchase)
+            self.btns_frame, text='Actualizar', width=20, command=self.update_sell)
         # Reset
         self.btn_reset = ttk.Button(
             self.btns_frame, text='Reset', width=20, command=self.reset_form)
