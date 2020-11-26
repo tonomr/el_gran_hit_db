@@ -11,7 +11,8 @@ class DesarrolladoraDao:
     __UPDATE = "UPDATE desarrolladora SET nombre_desarrolladora = %s, telefono_desarrolladora = %s, direccion_desarrolladora = %s WHERE id_desarrolladora = %s"
     __DELETE = "DELETE FROM desarrolladora WHERE id_desarrolladora = %s"
     __SEARCH = "SELECT * FROM desarrolladora WHERE nombre_desarrolladora LIKE %s"
-    
+    __SELECT_ONE =  "SELECT * FROM desarrolladora WHERE id_desarrolladora = %s"
+
     listadoDesarrolladoras = None
     
     # METODO SELECT PARA MOSTRAR LOS REGISTROS DE LA TABLA DESARROLLADORA
@@ -88,6 +89,18 @@ class DesarrolladoraDao:
                 desarrolladoras.append(desarrolladora)
             
             return desarrolladoras
+
+    # Método que recupera el videjuego con el ID que recibe
+    @classmethod
+    def recuperar(cls, id):
+        with CursorDelPool() as cursor:
+            logger.debug(cursor.mogrify(cls.__SELECT_ONE))
+            cursor.execute(cls.__SELECT_ONE, id)
+            registro = cursor.fetchone()
+        
+            desarrolladora = Desarrolladora(registro[0], registro[1], registro[2], registro[3])
+
+            return desarrolladora
 
 # SIMULACIONES (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":

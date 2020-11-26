@@ -27,6 +27,7 @@ from views.edit_game import EditGame
 from views.edit_customer import EditCustomer
 from views.edit_employee import EditEmployee
 from views.edit_purchase import EditPurchase
+from views.edit_dev import EditDev
 from views.delete_window import DeleteWindow
 from views.menubar import Menubar
 from views.index_window import IndexWindow
@@ -199,23 +200,23 @@ class GUI(ttk.Frame):
     # -------------------------------------- DESARROLLADORAS ------------------------------------
     # Index Window 
     def dev_index_window(self):
-            devs_list = DesarrolladoraDao.seleccionar()
-            self.devs_listbox = []
-            for dev in devs_list:
-                logger.debug(dev) 
-                self.devs_listbox.append(dev)
-            self.new_win = Toplevel(self.root)
-            IndexWindow(self.new_win, "Lista de Desarrolladoras", "810x500", "listbox-games.png", self.devs_listbox)
+        devs_list = DesarrolladoraDao.seleccionar()
+        self.devs_listbox = []
+        for dev in devs_list:
+            logger.debug(dev) 
+            self.devs_listbox.append(dev)
+        self.new_win = Toplevel(self.root)
+        IndexWindow(self.new_win, "Lista de Desarrolladoras", "810x500", "listbox-games.png", self.devs_listbox)
 
     # Create Window
     def dev_add_window(self):
-        self.new_win = Toplevel(self.root)
+        self.new_win = Toplevel(self.root) 
         AddDev(self.new_win)
 
     # Edit Window
     def dev_update_window(self):
-        #self.new_win = Toplevel(self.root)
-        #EditEmployee(self.new_win, "edit-customer.png", self.search_game)
+        self.new_win = Toplevel(self.root)
+        EditDev(self.new_win, "edit-customer.png", self.search_dev)
         pass
 
     # Delete Window
@@ -242,7 +243,7 @@ class GUI(ttk.Frame):
         self.update_dev = self.dev_update_window
         self.delete_dev = self.dev_delete_window
         self.clear_frames()
-        CrudWindow(self.root, "Administra Empleado", "title-customer-menu.png", "sidebar.png", "Empleados", self.index_dev, self.create_dev, self.update_dev, self.delete_dev)
+        CrudWindow(self.root, "Administra Desarrolladoras", "title-dev-menu.png", "sidebar.png", "Desarrolladoras", self.index_dev, self.create_dev, self.update_dev, self.delete_dev)
         
     # ------------------------------------------- COMPRAS --------------------------------------
     # Index Window 
