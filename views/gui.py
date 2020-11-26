@@ -206,7 +206,7 @@ class GUI(ttk.Frame):
             logger.debug(dev) 
             self.devs_listbox.append(dev)
         self.new_win = Toplevel(self.root)
-        IndexWindow(self.new_win, "Lista de Desarrolladoras", "810x500", "listbox-games.png", self.devs_listbox)
+        IndexWindow(self.new_win, "Lista de Desarrolladoras", "810x500", "listbox-devs.png", self.devs_listbox)
 
     # Create Window
     def dev_add_window(self):
@@ -216,7 +216,7 @@ class GUI(ttk.Frame):
     # Edit Window
     def dev_update_window(self):
         self.new_win = Toplevel(self.root)
-        EditDev(self.new_win, "edit-customer.png", self.search_dev)
+        EditDev(self.new_win, "edit-dev.png", self.search_dev)
         pass
 
     # Delete Window
@@ -224,7 +224,7 @@ class GUI(ttk.Frame):
         self.new_win = Toplevel(self.root)
         self.search_pattern = self.search_dev
         self.delete_controller = self.del_dev_by_id
-        DeleteWindow(self.new_win, "Elimina Desarrolladora", "810x500", "delete-game.png", self.search_pattern, self.delete_controller)
+        DeleteWindow(self.new_win, "Elimina Desarrolladora", "810x500", "delete-dev.png", self.search_pattern, self.delete_controller)
 
     # Delete Controller
     def del_dev_by_id(self, id_dev):
