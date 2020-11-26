@@ -36,7 +36,7 @@ class DesarrolladoraDao:
     def insertar(cls, desarrolladora):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__INSERT)) # SENTENCIA A EJECUTAR
-            logger.debug(f"Desarrolladora a insertar: {desarrolladora}") # OBJETO desarrolladora A INSERTAR
+            #logger.debug(f"Desarrolladora a insertar: {desarrolladora}") # OBJETO desarrolladora A INSERTAR
             values = (desarrolladora.getNombreDesarrolladora(), desarrolladora.getTelefonoDesarrolladora(), desarrolladora.getDireccionDesarrolladora())
             cursor.execute(cls.__INSERT, values) # EJECUCION DE LA SENTENCIA
             
@@ -47,7 +47,7 @@ class DesarrolladoraDao:
     def actualizar(cls, desarrolladora):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__UPDATE)) # SENTENCIA A EJECUTAR
-            logger.debug(f"Desarrolladora a actualizar: {desarrolladora}") # SE IMPRIME EL OBJETO desarrolladora A ACTUALIZAR
+            #logger.debug(f"Desarrolladora a actualizar: {desarrolladora}") # SE IMPRIME EL OBJETO desarrolladora A ACTUALIZAR
             values = (desarrolladora.getNombreDesarrolladora(), desarrolladora.getTelefonoDesarrolladora(), desarrolladora.getDireccionDesarrolladora(), desarrolladora.getIdDesarrolladora())
             cursor.execute(cls.__UPDATE, values) # EJECUCION DE LA SENTENCIA
             
@@ -58,7 +58,7 @@ class DesarrolladoraDao:
     def eliminar(cls, desarrolladora):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__DELETE)) # SENTENCIA A EJECUTAR
-            logger.debug(f"Desarrolladora a eliminar: {desarrolladora}") # SE IMPRIME EL OBJETO desarrolladora A ELIMINAR
+            #logger.debug(f"Desarrolladora a eliminar: {desarrolladora}") # SE IMPRIME EL OBJETO desarrolladora A ELIMINAR
             values = (desarrolladora.getIdDesarrolladora(),)
             cursor.execute(cls.__DELETE, values) # EJECUCION DE LA SENTENCIA
             
