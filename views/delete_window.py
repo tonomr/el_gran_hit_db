@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from views.menubar import Menubar
+from tkinter import messagebox
 # This class is a pop up window that receives a function to search for an item
 # in the DB and another function to delete that item using its ID as selector
 class DeleteWindow(ttk.Frame):
@@ -19,13 +20,26 @@ class DeleteWindow(ttk.Frame):
             widget.destroy()
 
     def search_item(self):
-      like_pattern = ('%{}%'.format(self.search_term.get()),)
-      self.list_items = self.search_controller(like_pattern)
-      for item in self.list_items:
-        self.listbox.insert(END, item)
+        self.clear_listbox()
+        like_pattern = ('%{}%'.format(self.search_term.get()),)
+        self.list_items = self.search_controller(like_pattern)
+        for item in self.list_items:
+            self.listbox.insert(END, item)
 
     def delete_item(self):
-      self.delete_controller(self.delete_byid.get())
+        self.delete_controller(self.delete_byid.get())
+
+        confirm = messagebox.askyesno(parent=self.root, message='Eliminado correctamente, ¿Desea eliminar otro?', 
+                            icon='question', title='Eliminación extiosa')
+
+        if (confirm == True):
+            self.clear_listbox()
+        else:
+            self.cancel_to_main()
+
+     # Clear Listbox
+    def clear_listbox(self):
+        self.listbox.delete(0, END)
 
     def init_gui(self):
         # Grid config
