@@ -7,13 +7,13 @@ from services.logger_conf import logger # IMPORTAMOS EL LOGGER
 # LA CLASE VIDEOJUEGODAO CONTIENE LAS CONSTANTES PARA HACER LAS CONSULTAS A LA BASE DE DATOS Y SUS RESPECTIVOS METODOS PARA MOSTRARLAS AL USUARIO
 class VideojuegoDao:
     # SENTENCIAS
-    __SELECT = "SELECT * FROM videojuego"
-    __INSERT = "INSERT INTO videojuego(nombre_juego, estado, cantidad, clasificacion, descripcion, precio, fecha_publicacion, codigo_desarrolladora) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-    __UPDATE = "UPDATE videojuego SET nombre_juego = %s, estado = %s, cantidad = %s, clasificacion = %s, descripcion = %s, precio = %s, fecha_publicacion = %s, codigo_desarrolladora = %s WHERE id_juego = %s"
-    __DELETE = "DELETE FROM videojuego WHERE id_juego = %s"
-    __SEARCH = "SELECT * FROM videojuego WHERE nombre_juego LIKE %s"
-    __SELECT_ONE =  "SELECT * FROM videojuego WHERE id_juego = %s"
-    __SELECT_NOMBRE = "SELECT nombre_juego FROM videojuego WHERE id_juego = %s"
+    __SELECT = "SELECT * FROM videojuegos ORDER BY id_videojuego"
+    __INSERT = "INSERT INTO videojuegos(nombre_videojuego, estado_videojuego, cantidad_videojuego, clasificacion_videojuego, descripcion_videojuego, precio_videojuego, publicacion_videojuego, codigo_desarrolladora) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
+    __UPDATE = "UPDATE videojuegos SET nombre_videojuego = %s, estado_videojuego = %s, cantidad_videojuego = %s, clasificacion_videojuego = %s, descripcion_videojuego = %s, precio_videojuego = %s, publicacion_videojuego = %s, codigo_desarrolladora = %s WHERE id_videojuego = %s"
+    __DELETE = "DELETE FROM videojuegos WHERE id_videojuego = %s"
+    __SEARCH = "SELECT * FROM videojuegos WHERE nombre_videojuego LIKE %s"
+    __SELECT_ONE =  "SELECT * FROM videojuegos WHERE id_videojuego = %s"
+    __SELECT_NOMBRE = "SELECT nombre_videojuego FROM videojuegos WHERE id_videojuego = %s"
 
     listadoVideojuegos = None
     
@@ -39,7 +39,7 @@ class VideojuegoDao:
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__INSERT)) # SENTENCIA A EJECUTAR
             #logger.debug(f"Videojuego a insertar: {videojuego}") # OBJETO videojuego A INSERTAR
-            values = (videojuego.getNombreJuego(), videojuego.getEstado(), videojuego.getCantidad(), videojuego.getClasificacion(), videojuego.getDescripcion(), videojuego.getPrecio(), videojuego.getFechaPublicacion(), videojuego.getCodigoDesarrolladora())
+            values = (videojuego.get_nombre_videojuego(), videojuego.get_estado_videojuego(), videojuego.get_cantidad_videojuego(), videojuego.get_clasificacion_videojuego(), videojuego.get_descripcion_videojuego(), videojuego.get_precio_videojuego(), videojuego.get_publicacion_videojuego(), videojuego.get_codigo_desarrolladora())
             cursor.execute(cls.__INSERT, values) # EJECUCION DE LA SENTENCIA
             
             return cursor.rowcount # RETORNAMOS EL NUMERO DE INSERCIONES
@@ -50,7 +50,7 @@ class VideojuegoDao:
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__UPDATE)) # SENTENCIA A EJECUTAR
             
-            values = (videojuego.getNombreJuego(), videojuego.getEstado(), videojuego.getCantidad(), videojuego.getClasificacion(), videojuego.getDescripcion(), videojuego.getPrecio(), videojuego.getFechaPublicacion(), videojuego.getCodigoDesarrolladora(), videojuego.getIdJuego())
+            values = (videojuego.get_nombre_videojuego(), videojuego.get_estado_videojuego(), videojuego.get_cantidad_videojuego(), videojuego.get_clasificacion_videojuego(), videojuego.get_descripcion_videojuego(), videojuego.get_precio_videojuego(), videojuego.get_publicacion_videojuego(), videojuego.get_codigo_desarrolladora(), videojuego.get_id_videojuego())
             cursor.execute(cls.__UPDATE, values) # EJECUCION DE LA SENTENCIA
             
             return cursor.rowcount # RETORNAMOS EL NUMERO DE ACTUALIZACIONES
@@ -60,7 +60,7 @@ class VideojuegoDao:
     def eliminar(cls, videojuego):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__DELETE)) # SENTENCIA A EJECUTAR
-            values = (videojuego.getIdJuego(),)
+            values = (videojuego.get_id_videojuego(),)
             cursor.execute(cls.__DELETE, values) # EJECUCION DE LA SENTENCIA
             
             return cursor.rowcount # RETORNAMOS EL NUMERO DE ELIMINACIONES
@@ -69,7 +69,8 @@ class VideojuegoDao:
     def buscar(cls, key_word):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__SEARCH))
-            cursor.execute(cls.__SEARCH, key_word)
+            values = (key_word,)
+            cursor.execute(cls.__SEARCH, values)
             registros = cursor.fetchall()
 
             videojuegos = []
@@ -85,7 +86,8 @@ class VideojuegoDao:
     def recuperar(cls, id):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__SELECT_ONE))
-            cursor.execute(cls.__SELECT_ONE, id)
+            values = (id,)
+            cursor.execute(cls.__SELECT_ONE, values)
             registro = cursor.fetchone()
         
             videojuego = Videojuego(registro[0], registro[1], registro[2], registro[3],
@@ -100,20 +102,22 @@ class VideojuegoDao:
         if cls.listadoVideojuegos == None:
             cls.listadoVideojuegos = VideojuegoDao.seleccionar()
         for videojuego in cls.listadoVideojuegos:
-            if videojuego.getIdJuego() == id_busqueda:
-                nombre_encontrado = videojuego.getNombreJuego()
+            if videojuego.get_id_videojuego() == id_busqueda:
+                nombre_encontrado = videojuego.get_nombre_videojuego()
                 break
         return nombre_encontrado
     """
+
     # Método que recupera el nombre del videjuego con el ID que recibe
     @classmethod
     def buscar_nombre(cls, id):
         with CursorDelPool() as cursor:
             #logger.debug(cursor.mogrify(cls.__SELECT_NOMBRE))
-            cursor.execute(cls.__SELECT_NOMBRE, id)
+            values = (id,)
+            cursor.execute(cls.__SELECT_NOMBRE, values)
             registro = cursor.fetchone()
             return registro
-        
+
 # SIMULACIONES (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":
     # PRUEBA SELECT
@@ -121,19 +125,19 @@ if __name__ == "__main__":
     # POR CADA REGISTRO EN LA LISTA videojuegos IMPRIMIR CON SU METODO STR
     for videojuego in videojuegos:
         logger.debug(videojuego)
-    #    logger.debug(videojuego.getIdJuego()) # SE PUEDE IMPRIMIR LOS CAMPOS POR SEPARADO
+    #    logger.debug(videojuego.get_id_videojuego()) # SE PUEDE IMPRIMIR LOS CAMPOS POR SEPARADO
     
     # PRUEBA INSERT
-    #videojuego = Videojuego(nombre_juego="Mario Bros 2", estado="Nuevo", cantidad=33, clasificacion="E", descripcion="Juego clasico de plataformas de los 80s", precio=150.50, fecha_publicacion="2/5/1985", codigo_desarrolladora=1)
+    #videojuego = Videojuego(nombre_videojuego="Mario Bros 2", estado_videojuego="Nuevo", cantidad_videojuego=33, clasificacion_videojuego="E", descripcion_videojuego="Juego clasico de plataformas de los 80s", precio_videojuego=150.50, publicacion_videojuego="2/5/1985", codigo_desarrolladora=1)
     #registros_insertados = VideojuegoDao.insertar(videojuego)
     #logger.debug(f"Registros insertados: {registros_insertados}")
     
     #PRUEBA UPDATE
-    #videojuego = Videojuego(2, "Mario Bros 3", "Usado", 45, "EE", "Juego clasico de plataformas de los 90s", 200.50, "2/5/1995", 1)
+    #videojuego = Videojuego(3, "Mario Bros 3", "Usado", 45, "EE", "Juego clasico de plataformas de los 90s", 200.50, "2/5/1995", 1)
     #registros_actualizados = VideojuegoDao.actualizar(videojuego)
     #logger.debug(f"Registros actualizados: {registros_actualizados}")
     
     #PRUEBA DELETE
-    #videojuego = Videojuego(id_juego=2)
+    #videojuego = Videojuego(id_videojuego=3)
     #registros_eliminados = VideojuegoDao.eliminar(videojuego)
     #logger.debug(f"Registros eliminados: {registros_eliminados}")

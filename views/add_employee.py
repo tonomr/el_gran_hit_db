@@ -28,7 +28,7 @@ class AddEmployee(ttk.Frame):
         telephone = self.employee_telephone.get()
         # Create Employee instance
         
-        employee = Empleado(nombre_empleado=name, direccion_empleado=address, telefono_empleado=telephone)
+        employee = Empleado(nombre_empleado=name, telefono_empleado=telephone, direccion_empleado=address)
         EmpleadoDao.insertar(employee)
 
     # Go back to previous window

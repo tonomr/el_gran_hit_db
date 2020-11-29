@@ -6,15 +6,15 @@ from services.logger_conf import logger # IMPORTAMOS EL LOGGER
 
 class DesarrolladoraDao:
     # SENTENCIAS
-    __SELECT = "SELECT * FROM desarrolladora"
-    __INSERT = "INSERT INTO desarrolladora(nombre_desarrolladora, telefono_desarrolladora, direccion_desarrolladora) VALUES(%s, %s, %s)"
-    __UPDATE = "UPDATE desarrolladora SET nombre_desarrolladora = %s, telefono_desarrolladora = %s, direccion_desarrolladora = %s WHERE id_desarrolladora = %s"
-    __DELETE = "DELETE FROM desarrolladora WHERE id_desarrolladora = %s"
-    __SEARCH = "SELECT * FROM desarrolladora WHERE nombre_desarrolladora LIKE %s"
-    __SELECT_ONE =  "SELECT * FROM desarrolladora WHERE id_desarrolladora = %s"
+    __SELECT = "SELECT * FROM desarrolladoras ORDER BY id_desarrolladora"
+    __INSERT = "INSERT INTO desarrolladoras(nombre_desarrolladora, telefono_desarrolladora, direccion_desarrolladora) VALUES(%s, %s, %s)"
+    __UPDATE = "UPDATE desarrolladoras SET nombre_desarrolladora = %s, telefono_desarrolladora = %s, direccion_desarrolladora = %s WHERE id_desarrolladora = %s"
+    __DELETE = "DELETE FROM desarrolladoras WHERE id_desarrolladora = %s"
+    __SEARCH = "SELECT * FROM desarrolladoras WHERE nombre_desarrolladora LIKE %s"
+    __SELECT_ONE =  "SELECT * FROM desarrolladoras WHERE id_desarrolladora = %s"
 
     listadoDesarrolladoras = None
-    
+
     # METODO SELECT PARA MOSTRAR LOS REGISTROS DE LA TABLA DESARROLLADORA
     @classmethod
     def seleccionar(cls):
@@ -37,7 +37,7 @@ class DesarrolladoraDao:
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__INSERT)) # SENTENCIA A EJECUTAR
             #logger.debug(f"Desarrolladora a insertar: {desarrolladora}") # OBJETO desarrolladora A INSERTAR
-            values = (desarrolladora.getNombreDesarrolladora(), desarrolladora.getTelefonoDesarrolladora(), desarrolladora.getDireccionDesarrolladora())
+            values = (desarrolladora.get_nombre_desarrolladora(), desarrolladora.get_telefono_desarrolladora(), desarrolladora.get_direccion_desarrolladora())
             cursor.execute(cls.__INSERT, values) # EJECUCION DE LA SENTENCIA
             
             return cursor.rowcount # RETORNAMOS EL NUMERO DE INSERCIONES
@@ -48,7 +48,7 @@ class DesarrolladoraDao:
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__UPDATE)) # SENTENCIA A EJECUTAR
             #logger.debug(f"Desarrolladora a actualizar: {desarrolladora}") # SE IMPRIME EL OBJETO desarrolladora A ACTUALIZAR
-            values = (desarrolladora.getNombreDesarrolladora(), desarrolladora.getTelefonoDesarrolladora(), desarrolladora.getDireccionDesarrolladora(), desarrolladora.getIdDesarrolladora())
+            values = (desarrolladora.get_nombre_desarrolladora(), desarrolladora.get_telefono_desarrolladora(), desarrolladora.get_direccion_desarrolladora(), desarrolladora.get_id_desarrolladora())
             cursor.execute(cls.__UPDATE, values) # EJECUCION DE LA SENTENCIA
             
             return cursor.rowcount # RETORNAMOS EL NUMERO DE ACTUALIZACIONES
@@ -59,7 +59,7 @@ class DesarrolladoraDao:
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__DELETE)) # SENTENCIA A EJECUTAR
             #logger.debug(f"Desarrolladora a eliminar: {desarrolladora}") # SE IMPRIME EL OBJETO desarrolladora A ELIMINAR
-            values = (desarrolladora.getIdDesarrolladora(),)
+            values = (desarrolladora.get_id_desarrolladora(),)
             cursor.execute(cls.__DELETE, values) # EJECUCION DE LA SENTENCIA
             
             return cursor.rowcount # RETORNAMOS EL NUMERO DE ELIMINACIONES
@@ -71,8 +71,8 @@ class DesarrolladoraDao:
         if cls.listadoDesarrolladoras == None:
             cls.listadoDesarrolladoras = DesarrolladoraDao.seleccionar()
         for desarrolladora in cls.listadoDesarrolladoras:
-            if desarrolladora.getIdDesarrolladora() == id_busqueda:
-                nombre_encontrado = desarrolladora.getNombreDesarrolladora()
+            if desarrolladora.get_id_desarrolladora() == id_busqueda:
+                nombre_encontrado = desarrolladora.get_nombre_desarrolladora()
                 break
         return nombre_encontrado
     
@@ -80,7 +80,8 @@ class DesarrolladoraDao:
     def buscar(cls, key_word):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__SEARCH))
-            cursor.execute(cls.__SEARCH, key_word)
+            values = (key_word,)
+            cursor.execute(cls.__SEARCH, values)
             registros = cursor.fetchall()
 
             desarrolladoras = []
@@ -95,7 +96,8 @@ class DesarrolladoraDao:
     def recuperar(cls, id):
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__SELECT_ONE))
-            cursor.execute(cls.__SELECT_ONE, id)
+            values = (id,)
+            cursor.execute(cls.__SELECT_ONE, values)
             registro = cursor.fetchone()
         
             desarrolladora = Desarrolladora(registro[0], registro[1], registro[2], registro[3])
@@ -109,19 +111,19 @@ if __name__ == "__main__":
     # POR CADA REGISTRO EN LA LISTA desarrolladoras IMPRIMIR CON SU METODO STR
     for desarrolladora in desarrolladoras:
         logger.debug(desarrolladora)
-    #    logger.debug(desarrolladora.getIdDesarrolladora()) # SE PUEDE IMPRIMIR LOS CAMPOS POR SEPARADO
+    #    logger.debug(desarrolladora.get_id_desarrolladora()) # SE PUEDE IMPRIMIR LOS CAMPOS POR SEPARADO
     
     # PRUEBA INSERT
-    #desarrolladora = Desarrolladora(nombre_desarrolladora="Nintendo", telefono_desarrolladora="1234567890", direccion_desarrolladora="Puntasvergas 123")
+    #desarrolladora = Desarrolladora(nombre_desarrolladora="Nintendo", telefono_desarrolladora="1234567890", direccion_desarrolladora="Calle Galeana #13")
     #registros_insertados = DesarrolladoraDao.insertar(desarrolladora)
     #logger.debug(f"Registros insertados: {registros_insertados}")
     
     #PRUEBA UPDATE
-    #desarrolladora = Desarrolladora(2, "Nintendo Ultimate", "0987654321", "Lomas de los Alots")
+    #desarrolladora = Desarrolladora(3, "Nintendo Ultimate", "0987654321", "Avenida Abasolo #61")
     #registros_actualizados = DesarrolladoraDao.actualizar(desarrolladora)
     #logger.debug(f"Registros actualizados: {registros_actualizados}")
     
     #PRUEBA DELETE
-    #desarrolladora = Desarrolladora(id_desarrolladora=2)
+    #desarrolladora = Desarrolladora(id_desarrolladora=3)
     #registros_eliminados = DesarrolladoraDao.eliminar(desarrolladora)
     #logger.debug(f"Registros eliminados: {registros_eliminados}")

@@ -22,11 +22,11 @@ class CursorDelPool:
     def __exit__(self, exception_type, exception_value, exception_traceback):
         if exception_value:
             self.__conn.rollback()
-            logger.debug(f"Ocurrio una excepcion: {exception_value}")
+            logger.error(f"Ocurrio una excepcion: {exception_value}")
         
         else:
             self.__conn.commit()
-            logger.debug(f"Commit de la transaccion")
+            logger.info(f"Commit de la transaccion")
             
         self.__cursor.close()
         Conexion.liberarConexion(self.__conn)

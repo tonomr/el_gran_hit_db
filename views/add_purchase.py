@@ -30,7 +30,7 @@ class AddPurchase(ttk.Frame):
         id_game = self.purchase_idgame.get()
         id_employee = self.purchase_idemployee.get()
         # Create Purchase instance
-        purchase = Compra(estado_compra=condition, fecha_compra=date,precio_compra=total, codigo_videojuego=id_game, codigo_empleado=id_employee)
+        purchase = Compra(fecha_compra=date, estado_compra=condition,precio_compra=total, codigo_videojuego=id_game, codigo_empleado=id_employee)
         CompraDao.insertar(purchase)
 
     # Go back to previous window

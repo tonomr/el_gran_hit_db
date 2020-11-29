@@ -32,6 +32,7 @@ from views.edit_sell import EditSell
 from views.delete_window import DeleteWindow
 from views.menubar import Menubar
 from views.index_window import IndexWindow
+
 class GUI(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
         ttk.Frame.__init__(self, parent, *args, **kwargs)
@@ -74,7 +75,7 @@ class GUI(ttk.Frame):
     
     # Delete Controller
     def del_game_by_id(self, id_game):
-        videogame = Videojuego(id_juego=id_game)
+        videogame = Videojuego(id_videojuego=id_game)
         VideojuegoDao.eliminar(videogame)
 
     # Search Game Controller
@@ -176,7 +177,7 @@ class GUI(ttk.Frame):
     # Search Controller
     def search_sell(self, search_term):
         customer = VentaDao.buscar_cliente(search_term)
-        sells = VentaDao.buscar(customer.getIdCliente())
+        sells = VentaDao.buscar(customer.get_id_cliente())
         sell_list = []
         for sell in sells:
             sell_list.append(sell)
@@ -326,7 +327,7 @@ class GUI(ttk.Frame):
     # Search Controller
     def search_purchase(self, search_term):
         employee = CompraDao.buscar_empleado(search_term)
-        purchases = CompraDao.buscar(employee.getIdEmpleado())
+        purchases = CompraDao.buscar(employee.get_id_empleado())
         purchase_list = []
         for purchase in purchases:
             purchase_list.append(purchase.to_str())
@@ -399,5 +400,3 @@ if __name__ == '__main__':
     root = tkinter.Tk()
     GUI(root)
     root.mainloop()
-
-

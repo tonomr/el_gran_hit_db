@@ -22,8 +22,8 @@ class EditEmployee(ttk.Frame):
         address = self.employee_address.get()
         tel = self.employee_tel.get()
         # Create customer instance
-        employee = Empleado(id_empleado=id_employee, nombre_empleado=name, direccion_empleado=address,
-                          telefono_empleado=tel)
+        employee = Empleado(id_empleado=id_employee, nombre_empleado=name, telefono_empleado=tel, 
+                            direccion_empleado=address)
         EmpleadoDao.actualizar(employee)
         confirm = messagebox.askyesno(parent=self.root, message='Empleado actualizado correctamente, ¿Desea modificar otro?', 
                             icon='question', title='Empleado actualizado')
@@ -56,9 +56,9 @@ class EditEmployee(ttk.Frame):
         id = (self.select_byid.get(),)
         employee = EmpleadoDao.recuperar(id)
         # Insertamos en los inputs un valor por default
-        self.employee_name.insert(END, employee.getNombreEmpleado())
-        self.employee_address.insert(END, employee.getDireccionEmpleado())
-        self.employee_tel.insert(END, employee.getTelefonoEmpleado())
+        self.employee_name.insert(END, employee.get_nombre_empleado())
+        self.employee_tel.insert(END, employee.get_telefono_empleado())
+        self.employee_address.insert(END, employee.get_direccion_empleado())
         
     # Reset form
     # delete(index, END) elimina desde índice indicado hasta END, final del arreglo.

@@ -4,14 +4,14 @@
 from services.logger_conf import logger
 
 class Empleado:
-    # CONSTRUCTOR DE LA CLASE
-    def __init__(self, id_empleado=None, nombre_empleado=None, direccion_empleado=None, telefono_empleado=None):
+    # METODO CONSTRUCTOR 
+    def __init__(self, id_empleado=None, nombre_empleado="N/A", telefono_empleado="N/A", direccion_empleado="N/A"):
         self.__id_empleado = id_empleado
         self.__nombre_empleado = nombre_empleado
-        self.__direccion_empleado = direccion_empleado
         self.__telefono_empleado = telefono_empleado
+        self.__direccion_empleado = direccion_empleado
 
-    # METODO STR DE LA CLASE
+    # METODO TO_STRING
     def __str__(self):
         result =  '{:03d}'.format(self.__id_empleado) + "   "
         result += '{:32.31}'.format(self.__nombre_empleado)
@@ -21,34 +21,34 @@ class Empleado:
         return result
         
     # METODOS GET DE LA CLASE
-    def getIdEmpleado(self):
+    def get_id_empleado(self):
         return self.__id_empleado
 
-    def getNombreEmpleado(self):
+    def get_nombre_empleado(self):
         return self.__nombre_empleado
-    
-    def getDireccionEmpleado(self):
-        return self.__direccion_empleado
 
-    def getTelefonoEmpleado(self):
+    def get_telefono_empleado(self):
         return self.__telefono_empleado
 
+    def get_direccion_empleado(self):
+        return self.__direccion_empleado
+
     # METODOS SET DE LA CLASE
-    def setIdEmpleado(self, id_empleado):
+    def set_id_empleado(self, id_empleado):
         self.__id_empleado = id_empleado
 
-    def setNombreEmpleado(self, nombre_empleado):
+    def set_nombre_empleado(self, nombre_empleado):
         self.__nombre_empleado = nombre_empleado
-    
-    def setDireccionEmpleado(self, direccion_empleado):
-        self.__direccion_empleado = direccion_empleado
 
-    def setTelefonoEmpleado(self, telefono_empleado):
+    def set_telefono_empleado(self, telefono_empleado):
         self.__telefono_empleado = telefono_empleado
+
+    def set_direccion_empleado(self, direccion_empleado):
+        self.__direccion_empleado = direccion_empleado
 
 # SIMULACION (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":
-    empleado1 = Empleado(1, "Francisco Chamorro", "Puntasvergas 20", "3378509182")
+    empleado1 = Empleado(1, "Francisco Chamorro", "3378509182", "Calle Ocre #20")
     logger.debug(empleado1)
-    empleado2 = Empleado(nombre_empleado="Antonio Magaña", direccion_empleado="Libertad 45")
+    empleado2 = Empleado(nombre_empleado="Antonio Magaña", direccion_empleado="Calle Libertad #45")
     logger.debug(empleado2)

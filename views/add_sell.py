@@ -26,13 +26,14 @@ class AddSell(ttk.Frame):
         # Get input fields .get
         date = self.sell_date.get()
         quantity = self.sell_quantity.get()
-        subtotal = self.sell_subtotal.get()
-        total = self.sell_total.get()
-        delivery = self.sell_delivery.get()
+        #subtotal = self.sell_subtotal.get()
+        #total = self.sell_total.get()
+        #delivery = self.sell_delivery.get()
         id_game = self.sell_idgame.get()
         id_customer = self.sell_idcustomer.get()
         # Create Purchase instance
-        sell = Venta(fecha_venta=date, cantidad=quantity, subtotal=subtotal, total=total, direccion_envio=delivery, codigo_videojuego=id_game, codigo_cliente=id_customer)
+        #sell = Venta(fecha_venta=date, cantidad_venta=quantity, subtotal_venta=subtotal, total_venta=total, direccion_envio=delivery, codigo_videojuego=id_game, codigo_cliente=id_customer)
+        sell = Venta(fecha_venta=date, cantidad_venta=quantity, codigo_videojuego=id_game, codigo_cliente=id_customer)
         VentaDao.insertar(sell)
 
     # Go back to previous window
@@ -70,6 +71,7 @@ class AddSell(ttk.Frame):
         # Cantidad
         self.label_quantity = ttk.Label(self.root, text="Cantidad")
         self.sell_quantity = ttk.Entry(self.root, width=50)
+        '''
         # Subtotal
         self.label_subtotal = ttk.Label(self.root, text="Subtotal")
         self.sell_subtotal = ttk.Entry(self.root, width=50)
@@ -79,6 +81,7 @@ class AddSell(ttk.Frame):
         # Dirección de envío  
         self.label_delivery = ttk.Label(self.root, text="Envío a")
         self.sell_delivery = ttk.Entry(self.root, width=15)
+        '''
         # Id del videjuego
         self.label_idgame = ttk.Label(self.root, text="ID videojuego")
         self.sell_idgame = ttk.Entry(self.root, width=50)
@@ -117,12 +120,14 @@ class AddSell(ttk.Frame):
         self.sell_date.grid(row=1, column=2, sticky=("we"))
         self.label_quantity.grid(row=2, column=0)
         self.sell_quantity.grid(row=2, column=2, sticky=("we"))
+        '''
         self.label_subtotal.grid(row=3, column=0)
         self.sell_subtotal.grid(row=3, column=2, sticky=("we"))
         self.label_total.grid(row=4, column=0)
         self.sell_total.grid(row=4, column=2, sticky=("we"))
         self.label_delivery.grid(row=5, column=0)
         self.sell_delivery.grid(row=5, column=2, sticky=("we"))
+        '''
         self.label_idgame.grid(row=6, column=0)
         self.sell_idgame.grid(row=6, column=2, sticky=("we"))
         self.label_idcustomer.grid(row=7, column=0)

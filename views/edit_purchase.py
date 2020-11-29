@@ -24,7 +24,7 @@ class EditPurchase(ttk.Frame):
         employee = self.employee_id.get()
         game_id = self.game_id.get()
         # Create videogame instance
-        purchase = Compra(id_compra=id_purchase, estado_compra=condition,fecha_compra=purchase_date, precio_compra=price, codigo_videojuego=game_id, codigo_empleado=employee)
+        purchase = Compra(id_compra=id_purchase, fecha_compra=purchase_date, estado_compra=condition, precio_compra=price, codigo_videojuego=game_id, codigo_empleado=employee)
         CompraDao.actualizar(purchase)
         confirm = messagebox.askyesno(parent=self.root, message='Compra actualizada correctamente, ¿Desea modificar otra?', 
                             icon='question', title='Videojuego actualizado')
@@ -59,14 +59,14 @@ class EditPurchase(ttk.Frame):
         id = (self.select_byid.get(),)
         purchase = CompraDao.recuperar(id)
         # Insertamos en los inputs un valor por default
-        self.game_id.insert(END, purchase.getCodigoVideojuego())
-        self.game_price.insert(END, purchase.getPrecioCompra())
-        self.purchase_date.insert(END, purchase.getFechaCompra())
-        self.employee_id.insert(END, purchase.getCodigoEmpleado())
+        self.game_id.insert(END, purchase.get_codigo_videojuego())
+        self.game_price.insert(END, purchase.get_precio_compra())
+        self.purchase_date.insert(END, purchase.get_fecha_compra())
+        self.employee_id.insert(END, purchase.get_codigo_empleado())
         # Al final seteamos el estado del videjuego comparando las opciones existentes
         # Con la que contiene el videojuego que estamos buscando
         for condition in self.game_condition['values']:
-            if condition == purchase.getEstadoCompra():
+            if condition == purchase.get_estado_compra():
                 self.game_condition.set(condition)
         
     # Reset form

@@ -5,14 +5,14 @@ from services.logger_conf import logger
 
 class VentaDao:
     # SENTENCIAS SQL
-    __SELECT = "SELECT * FROM venta"
-    __INSERT = "INSERT INTO venta(fecha_venta, cantidad, subtotal, total, direccion_envio, codigo_videojuego, codigo_cliente) VALUES(%s, %s, %s, %s, %s, %s, %s)"
-    __UPDATE = "UPDATE venta SET fecha_venta = %s, cantidad = %s, subtotal = %s, total = %s, direccion_envio = %s, codigo_videojuego = %s, codigo_cliente = %s WHERE id_venta = %s"
-    __DELETE = "DELETE FROM venta WHERE id_venta = %s"
-    __SEARCH_CLIENTE = "SELECT * FROM cliente WHERE nombre_cliente LIKE %s"
-    __SEARCH = "SELECT * FROM venta WHERE CAST(codigo_cliente AS VARCHAR) LIKE CAST(%s AS VARCHAR)"
-    __SELECT_ONE =  "SELECT * FROM venta WHERE id_venta = %s"
-        
+    __SELECT = "SELECT * FROM ventas ORDER BY id_venta"
+    __INSERT = "INSERT INTO ventas(fecha_venta, cantidad_venta, codigo_videojuego, codigo_cliente) VALUES(%s, %s, %s, %s)"
+    __UPDATE = "UPDATE ventas SET fecha_venta = %s, cantidad_venta = %s, subtotal_venta = %s, total_venta = %s, direccion_envio = %s, codigo_videojuego = %s, codigo_cliente = %s WHERE id_venta = %s"
+    __DELETE = "DELETE FROM ventas WHERE id_venta = %s"
+    __SEARCH_CLIENTE = "SELECT * FROM clientes WHERE nombre_cliente LIKE %s"
+    __SEARCH = "SELECT * FROM ventas WHERE CAST(codigo_cliente AS VARCHAR) LIKE CAST(%s AS VARCHAR)"
+    __SELECT_ONE =  "SELECT * FROM ventas WHERE id_venta = %s"
+
     @classmethod
     def seleccionar(cls):
         with CursorDelPool() as cursor:
@@ -32,7 +32,7 @@ class VentaDao:
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__INSERT))
             #logger.debug(f"Venta a insertar: {venta}")
-            values = (venta.getFechaVenta(), venta.getCantidad(), venta.getSubtotal(), venta.getTotal(), venta.getDireccionEnvio(), venta.getCodigoVideojuego(), venta.getCodigoCliente())
+            values = (venta.get_fecha_venta(), venta.get_cantidad_venta(), venta.get_codigo_videojuego(), venta.get_codigo_cliente())
             cursor.execute(cls.__INSERT, values)
             
             return cursor.rowcount
@@ -42,7 +42,7 @@ class VentaDao:
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__UPDATE))
             #logger.debug(f"Venta a actualizar: {venta}")
-            values = (venta.getFechaVenta(), venta.getCantidad(), venta.getSubtotal(), venta.getTotal(), venta.getDireccionEnvio(), venta.getCodigoVideojuego(), venta.getCodigoCliente(), venta.getIdVenta())
+            values = (venta.get_fecha_venta(), venta.get_cantidad_venta(), venta.get_subtotal_venta(), venta.get_total_venta(), venta.get_direccion_envio(), venta.get_codigo_videojuego(), venta.get_codigo_cliente(), venta.get_id_venta())
             cursor.execute(cls.__UPDATE, values)
             
             return cursor.rowcount
@@ -52,7 +52,7 @@ class VentaDao:
         with CursorDelPool() as cursor:
             logger.debug(cursor.mogrify(cls.__DELETE))
             #logger.debug(f"Venta a eliminar: {venta}")
-            values = (venta.getIdVenta(),)
+            values = (venta.get_id_venta(),)
             cursor.execute(cls.__DELETE, values)
             
             return cursor.rowcount
@@ -107,26 +107,25 @@ if __name__ == "__main__":
     #    logger.debug(venta)
     
     # SIMULANDO INSERT
-    #venta = Venta(fecha_venta="14/11/2020", cantidad=2, subtotal=100.00, total=200.00, direccion_envio="Libertad 45", codigo_videojuego=2, codigo_cliente=1)
+    #venta = Venta(fecha_venta="14/11/2020", cantidad_venta=2, codigo_videojuego=2, codigo_cliente=1)
     #registros_insertados = VentaDao.insertar(venta)
     #logger.debug(f"Registros insertados: {registros_insertados}")
     
     # SIMULANDO UPDATE
-    #venta = Venta(2, "10/12/2021", 3, 100.00, 300.00, "5 de Mayo S/N", 2, 1)
+    #venta = Venta(3, "10/12/2021", 3, 100.00, 300.00, "5 de Mayo S/N", 2, 1)
     #registros_actualizados = VentaDao.actualizar(venta)
     #logger.debug(f"Registros actualizados: {registros_actualizados}")
     
     # SIMULANDO DELETE
-    #venta = Venta(id_venta=2)
+    #venta = Venta(id_venta=3)
     #registros_eliminados = VentaDao.eliminar(venta)
     #logger.debug(f"Registros eliminados: {registros_eliminados}")
     
     # SIMULANDO BUSQUEDA
-    #nombre_cliente = "Don Lizardi"
     nombre_cliente = input("Ingrese nombre del cliente para ver sus ventas: ")
     cliente = VentaDao.buscar_cliente(nombre_cliente)
     
-    ventas = VentaDao.buscar(cliente.getIdCliente())
+    ventas = VentaDao.buscar(cliente.get_id_cliente())
     for venta in ventas:
         print(venta)
     

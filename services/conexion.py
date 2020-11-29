@@ -12,7 +12,7 @@ class Conexion:
     __PORT = "5433"
     __HOST = "127.0.0.1"
     __MIN_CON = 1
-    __MAX_CON = 5
+    __MAX_CON = 10
     __pool = None
 
     # EL METODO obtenerPool CREA UN POOL DE CONEXIONES SIMPLE CON LOS DATOS DE LA CONEXION,  LIMITES DE LAS CONEXIONES Y LO REGRESA A LA VARIABLE __pool
@@ -55,7 +55,7 @@ class Conexion:
     @classmethod
     def cerrarConexiones(cls):
         cls.obtenerPool().closeall()
-        logger.debug(f"Conexiones del pool cerradas: {cls.__pool}")
+        logger.info(f"Conexiones del pool cerradas: {cls.__pool}")
 
 # PRUEBA DE CONFIGURACION (SOLO SE EJECUTARA CUANDO SE EJECUTE ESTE MODULO)
 if __name__ == "__main__":

@@ -27,10 +27,10 @@ class EditGame(ttk.Frame):
         released = self.game_released.get()
         devs = self.game_devs.get()
         # Create videogame instance
-        videogame = Videojuego(id_juego=id_game, nombre_juego=name, estado=condition, cantidad=quantity, clasificacion=classification,
-                               descripcion=description, precio=price, fecha_publicacion=released, codigo_desarrolladora=devs)
+        videogame = Videojuego(id_videojuego=id_game, nombre_videojuego=name, estado_videojuego=condition, cantidad_videojuego=quantity, clasificacion_videojuego=classification,
+                               descripcion_videojuego=description, precio_videojuego=price, publicacion_videojuego=released, codigo_desarrolladora=devs)
         VideojuegoDao.actualizar(videogame)
-        confirm = messagebox.askyesno(parent=self.root, message='Vieojuego actualizado correctamente, ¿Desea modificar otro?', 
+        confirm = messagebox.askyesno(parent=self.root, message='Videojuego actualizado correctamente, ¿Desea modificar otro?', 
                             icon='question', title='Videojuego actualizado')
 
         if (confirm == True):
@@ -63,13 +63,13 @@ class EditGame(ttk.Frame):
         id = (self.select_byid.get(),)
         videojuego = VideojuegoDao.recuperar(id)
         # Insertamos en los inputs un valor por default
-        self.game_name.insert(END, videojuego.getNombreJuego())
-        self.game_quantity.insert(END, videojuego.getCantidad())
-        self.game_classification.insert(END, videojuego.getClasificacion())
-        self.game_description.insert(END, videojuego.getDescripcion())
-        self.game_price.insert(END, videojuego.getPrecio())
-        self.game_released.insert(END, videojuego.getFechaPublicacion())
-        self.game_devs.insert(END, videojuego.getCodigoDesarrolladora())
+        self.game_name.insert(END, videojuego.get_nombre_videojuego())
+        self.game_quantity.insert(END, videojuego.get_cantidad_videojuego())
+        self.game_classification.insert(END, videojuego.get_clasificacion_videojuego())
+        self.game_description.insert(END, videojuego.get_descripcion_videojuego())
+        self.game_price.insert(END, videojuego.get_precio_videojuego())
+        self.game_released.insert(END, videojuego.get_publicacion_videojuego())
+        self.game_devs.insert(END, videojuego.get_codigo_desarrolladora())
         # Al final seteamos el estado del videjuego comparando las opciones existentes
         # Con la que contiene el videojuego que estamos buscando
         for condition in self.game_condition['values']:

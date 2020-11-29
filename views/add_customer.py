@@ -29,7 +29,7 @@ class AddCustomer(ttk.Frame):
         address = self.customer_address.get()
         telephone = self.customer_telephone.get()
         # Create Employee instance
-        customer = Cliente(nombre_cliente=name, email=email,direccion_cliente=address, telefono_cliente=telephone)
+        customer = Cliente(nombre_cliente=name, email_cliente=email, telefono_cliente=telephone, direccion_cliente=address)
         ClienteDao.insertar(customer)
 
     # Go back to previous window

@@ -32,8 +32,8 @@ class AddGame(ttk.Frame):
         released = self.game_released.get()
         devs = self.game_devs.get()
         # Create videogame instance
-        videogame = Videojuego(nombre_juego=name, estado=condition, cantidad=quantity, clasificacion=classification,
-                               descripcion=description, precio=price, fecha_publicacion=released, codigo_desarrolladora=devs)
+        videogame = Videojuego(nombre_videojuego=name, estado_videojuego=condition, cantidad_videojuego=quantity, clasificacion_videojuego=classification,
+                               descripcion_videojuego=description, precio_videojuego=price, publicacion_videojuego=released, codigo_desarrolladora=devs)
         VideojuegoDao.insertar(videogame)
 
     # Go back to previous window

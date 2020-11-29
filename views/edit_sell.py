@@ -28,7 +28,7 @@ class EditSell(ttk.Frame):
         
 
         # Create sell instance
-        sell = Venta(id_venta=self.id_sell, fecha_venta=self.date, cantidad=self.quantity, subtotal=self.subtotal, total=self.total, direccion_envio=self.address, codigo_videojuego=self.gameid, codigo_cliente=self.customerid)
+        sell = Venta(id_venta=self.id_sell, fecha_venta=self.date, cantidad_venta=self.quantity, subtotal_venta=self.subtotal, total_venta=self.total, direccion_envio=self.address, codigo_videojuego=self.gameid, codigo_cliente=self.customerid)
         VentaDao.actualizar(sell)
         confirm = messagebox.askyesno(parent=self.root, message='Venta actualizada correctamente, ¿Desea modificar otra?', 
                             icon='question', title='Venta actualizada')
@@ -63,14 +63,14 @@ class EditSell(ttk.Frame):
         id = (self.select_byid.get(),)
         sell = VentaDao.recuperar(id)
         # Insertamos en los inputs un valor por default
-        self.game_id.insert(END, sell.getCodigoVideojuego())
-        self.sell_date.insert(END, sell.getFechaVenta())
-        self.sell_quantity.insert(END, sell.getCantidad())
-        self.customer_id.insert(END, sell.getCodigoCliente())
-        self.sell_address.insert(END, sell.getDireccionEnvio())
+        self.game_id.insert(END, sell.get_codigo_videojuego())
+        self.sell_date.insert(END, sell.get_fecha_venta())
+        self.sell_quantity.insert(END, sell.get_cantidad_venta())
+        self.customer_id.insert(END, sell.get_codigo_cliente())
+        self.sell_address.insert(END, sell.get_direccion_envio())
         # Defaults
-        self.subtotal = sell.getSubtotal()
-        self.total = sell.getTotal()
+        self.subtotal = sell.get_subtotal_venta()
+        self.total = sell.get_total_venta()
         
     # Reset form
     # delete(index, END) elimina desde índice indicado hasta END, final del arreglo.

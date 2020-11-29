@@ -22,8 +22,8 @@ class EditDev(ttk.Frame):
         address = self.dev_address.get()
         tel = self.dev_tel.get()
         # Create customer instance
-        dev = Desarrolladora(id_desarrolladora=id_dev, nombre_desarrolladora=name, direccion_desarrolladora=address,
-                          telefono_desarrolladora=tel)
+        dev = Desarrolladora(id_desarrolladora=id_dev, nombre_desarrolladora=name, telefono_desarrolladora=tel, 
+                             direccion_desarrolladora=address)
         DesarrolladoraDao.actualizar(dev)
         confirm = messagebox.askyesno(parent=self.root, message='Desarrolladora actualizada correctamente, ¿Desea modificar otra?', 
                             icon='question', title='Desarolladora actualizada')
@@ -57,10 +57,10 @@ class EditDev(ttk.Frame):
         id = (self.select_byid.get(),)
         dev = DesarrolladoraDao.recuperar(id)
         # Insertamos en los inputs un valor por default
-        self.dev_name.insert(END, dev.getNombreDesarrolladora())
-        self.dev_address.insert(END, dev.getDireccionDesarrolladora())
-        self.dev_tel.insert(END, dev.getTelefonoDesarrolladora())
-        
+        self.dev_name.insert(END, dev.get_nombre_desarrolladora())
+        self.dev_tel.insert(END, dev.get_telefono_desarrolladora())
+        self.dev_address.insert(END, dev.get_direccion_desarrolladora())
+
     # Reset form
     # delete(index, END) elimina desde índice indicado hasta END, final del arreglo.
     def reset_form(self):

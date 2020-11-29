@@ -23,8 +23,7 @@ class EditCustomer(ttk.Frame):
         address = self.customer_address.get()
         tel = self.customer_tel.get()
         # Create customer instance
-        customer = Cliente(id_cliente=id_customer, nombre_cliente=name, email=email, direccion_cliente=address,
-                          telefono_cliente=tel)
+        customer = Cliente(id_cliente=id_customer, nombre_cliente=name, email_cliente=email, telefono_cliente=tel, direccion_cliente=address)
         ClienteDao.actualizar(customer)
         confirm = messagebox.askyesno(parent=self.root, message='Cliente actualizado correctamente, ¿Desea modificar otro?', 
                             icon='question', title='Cliente actualizado')
@@ -57,10 +56,10 @@ class EditCustomer(ttk.Frame):
         id = (self.select_byid.get(),)
         customer = ClienteDao.recuperar(id)
         # Insertamos en los inputs un valor por default
-        self.customer_name.insert(END, customer.getNombreCliente())
-        self.customer_email.insert(END, customer.getEmail())
-        self.customer_address.insert(END, customer.getDireccionCliente())
-        self.customer_tel.insert(END, customer.getTelefonoCliente())
+        self.customer_name.insert(END, customer.get_nombre_cliente())
+        self.customer_email.insert(END, customer.get_email_cliente())
+        self.customer_tel.insert(END, customer.get_telefono_cliente())
+        self.customer_address.insert(END, customer.get_direccion_cliente())
         
     # Reset form
     # delete(index, END) elimina desde índice indicado hasta END, final del arreglo.
