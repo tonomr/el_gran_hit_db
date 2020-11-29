@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from views.menubar import Menubar
+from tkinter import messagebox
 
 from models.compra import Compra
 from controllers.compra_dao import CompraDao
@@ -15,67 +16,88 @@ class AddPurchase(ttk.Frame):
         self.root = parent # Set parent
         self.init_gui() # Iniciar la interfaz gráfica
 
-    # Limpia la ventana, recorre todos los widgets eliminandolos uno por uno
-    # Nota: No elimina la configuración de columnas.
-    def clear_frames(self):
-        for widget in self.root.winfo_children():
-            widget.destroy()
 
     # Add video game, function called from game
     def add_purchase(self):
         # Get input fields .get
         condition = self.game_condition.get()
         date = self.purchase_date.get()
-        total = self.purchase_total.get()
-        id_game = self.purchase_idgame.get()
-        id_employee = self.purchase_idemployee.get()
+        total = self.game_price.get()
+        id_game = self.game_id.get()
+        id_employee = self.employee_id.get()
         # Create Purchase instance
         purchase = Compra(fecha_compra=date, estado_compra=condition,precio_compra=total, codigo_videojuego=id_game, codigo_empleado=id_employee)
         CompraDao.insertar(purchase)
 
-    # Go back to previous window
-    def back_to_prev(self):
-        #self.clear_frames()
-        #GameWindow(self.root)
-        pass
+    # Reset form
+    # delete(index, END) elimina desde índice indicado hasta END, final del arreglo.
+    def reset_form(self):
+        self.game_id.delete(0, END)
+        self.game_condition.current(0)
+        self.game_price.delete(0, END)
+        self.purchase_date.delete(0, END)
+        self.employee_id.delete(0, END)
 
     # Go back to main menu
     def cancel_to_main(self):
-        #self.clear_frames()
-        pass
+        self.root.destroy()
 
     # Init the Graphic User Interface
     def init_gui(self):
-        self.clear_frames()
         # WINDOW TITLE
         self.root.title("Agregar Compra")
 
         # WINDOW SIZE
         self.root.geometry("600x400")
-        # Configuración de columnas
-        #self.grid_columnconfigure(0, weight=1)
-        #self.grid_columnconfigure(2, weight=1)
+        
+        ############################## FRAMES ###############################
+        # -------------------------- HEADER FRAME ---------------------------
+        # Widgets
+        self.header = PhotoImage(file='add-purchase.png')   
+        self.header_frame = ttk.Frame(self.root)          # Crea un frame
+        self.header_label = ttk.Label(self.header_frame)  # Crea una etiqueta para la img
+        self.header_label['image'] = self.header          # Setea el label al tipo imagen
+        # Grid
+        self.header_label.grid(row=0, column=0)
+        
+        # ------------------------- INPUTS FRAME --------------------------------
+        self.inputs_frame = ttk.Frame(self.root)
+        # Widgets
+        self.label_name = ttk.Label(self.inputs_frame, text="ID del videojuego")
+        self.game_id = ttk.Entry(self.inputs_frame, width=60)
+        # Multiple Option input
+        # Crea la etiqueta "Condición"
+        self.label_condition = ttk.Label(self.inputs_frame, text="Estado")
+        # Crea el objeto de input múltiple, recibe ventana padre y ocpional el ancho
+        self.game_condition = ttk.Combobox(self.inputs_frame, width=60)
+        # Agrega una tupla a la configuración 'values' del input
+        # Aquí agregamos los valores que se usan
+        self.game_condition['values'] = (' ','Nuevo', 'Seminuevo', 'Usado')
+        # Configuramos el estado del input para que sea únicamente de lectura
+        # y el usario no pueda modificar su valor
+        self.game_condition.state(['readonly'])
+        # More labels and input fields...
+        self.label_price = ttk.Label(self.inputs_frame, text="Precio")
+        self.game_price = ttk.Entry(self.inputs_frame, width=15)
+        self.label_purchase_date = ttk.Label(self.inputs_frame, text="Fecha de compra")
+        self.purchase_date = ttk.Entry(self.inputs_frame, width=15)
+        self.label_employee = ttk.Label(self.inputs_frame, text="ID de empleado")
+        self.employee_id = ttk.Entry(self.inputs_frame, width=50)
 
-        #--------------------------------------------------------------------------
-        # LABEL AND INPUT FIELDS    
-        # Label es una etiqueta, que describe lo que deberías escribir en el campo
-        # Entry es un widget del tipo input
-        #--------------------------------------------------------------------------
-        # Estado
-        self.label_condition = ttk.Label(self.root, text="Estado del videojuego")
-        self.game_condition = ttk.Entry(self.root, width=50)
-        # Fecha de Compra
-        self.label_date = ttk.Label(self.root, text="Fecha de compra")
-        self.purchase_date = ttk.Entry(self.root, width=50)
-        # Precio final  
-        self.label_total = ttk.Label(self.root, text="Precio final")
-        self.purchase_total = ttk.Entry(self.root, width=15)
-        # Id del videjuego
-        self.label_idgame = ttk.Label(self.root, text="ID videojuego")
-        self.purchase_idgame = ttk.Entry(self.root, width=50)
-        # Id del empleado
-        self.label_idemployee = ttk.Label(self.root, text="ID empleado")
-        self.purchase_idemployee = ttk.Entry(self.root, width=50)
+        # GRID inputs
+        self.label_name.grid(row=0, column=0, sticky=("w"), columnspan=2)
+        self.game_id.grid(row=0, column=2, sticky=("we"), columnspan=3)
+
+        self.label_condition.grid(row=1, column=0, sticky=("w"), columnspan=2)
+        self.game_condition.grid(row=1, column=2, sticky=("we"), columnspan=3)
+
+        self.label_price.grid(row=5, column=0, sticky=("w"))
+        self.game_price.grid(row=5, column=2, sticky=("we"))
+        self.label_purchase_date.grid(row=5, column=3, sticky=("w"))
+        self.purchase_date.grid(row=5, column=4, sticky=("we"))
+
+        self.label_employee.grid(row=7, column=0, sticky=("w"), columnspan=2)
+        self.employee_id.grid(row=7, column=2, sticky=("we"), columnspan=3)
 
         #--------------------------------------------------------------------------
         # BUTTONS
@@ -83,39 +105,29 @@ class AddPurchase(ttk.Frame):
         # Al presionar este parametro, mandamos llamar la función que específicamos
         # en 'command'
         #--------------------------------------------------------------------------
+        # Buttons Frame
+        self.btns_frame = ttk.Frame(self.root)
         # Add
-        self.btn_add = ttk.Button(
-            self.root, text='Agregar', width=30, command=self.add_purchase)
-        # Back
-        self.btn_back = ttk.Button(
-            self.root, text='Atrás', width=30, command=self.back_to_prev)
+        self.btn_update = ttk.Button(
+            self.btns_frame, text='Agregar', width=20, command=self.add_purchase)
+        # Reset
+        self.btn_reset = ttk.Button(
+            self.btns_frame, text='Reset', width=20, command=self.reset_form)
         # Cancel
         self.btn_cancel = ttk.Button(
-            self.root, text='Cancelar', width=30, command=self.cancel_to_main)
-
-        # -------------------------------------------------------------------------
-        # GRID 
-        # Especificamos las columnas, las filas. El ancho de las columnas NO es estático
-        # Su ancho depende del widget que haya dentro de ella, es decir, si no
-        # existe nada en una columna dada, el espacio no se verá reflejado en el grid de
-        # de nuestra ventana.
-        # Sticky puede llevar cualquier combinacion de caracteres
-        # Para alinear o estierar el widget en alguna de las direcciones cardinales
-        # 'w' west (izquierda) 'e' east (derecha) 'n' north 's' south
-        #---------------------------------------------------------------------------
-        # Inputs
-        self.label_condition.grid(row=0, column=0)
-        self.game_condition.grid(row=0, column=2, sticky=("we"))
-        self.label_date.grid(row=1, column=0)
-        self.purchase_date.grid(row=1, column=2, sticky=("we"))
-        self.label_total.grid(row=2, column=0)
-        self.purchase_total.grid(row=2, column=2, sticky=("we"))
-        self.label_idgame.grid(row=3, column=0)
-        self.purchase_idgame.grid(row=3, column=2, sticky=("we"))
-        self.label_idemployee.grid(row=4, column=0)
-        self.purchase_idemployee.grid(row=4, column=2, sticky=("we"))
+            self.btns_frame, text='Cancelar', width=20, command=self.cancel_to_main)
 
         # Buttons
-        self.btn_add.grid(row=19, column=2, sticky=("we"))
-        #self.btn_back.grid(row=19, column=3, sticky=("we"))
-        #self.btn_cancel.grid(row=19, column=4, sticky=("we"))
+        self.btn_update.grid(row=9, column=1, pady=15)
+        self.btn_reset.grid(row=9, column=2, pady=15)
+        self.btn_cancel.grid(row=9, column=3, pady=15)
+
+        # -------------------------- GRID ROOT -------------------------------
+        self.header_frame.grid(row=0, column=0)
+    
+        self.inputs_frame.grid(row=4, column=0)
+        self.btns_frame.grid(row=5, column=0, padx=10, sticky=("e"))
+        
+        # Padding
+        for child in self.inputs_frame.winfo_children():
+            child.grid_configure(padx=8, pady=3)

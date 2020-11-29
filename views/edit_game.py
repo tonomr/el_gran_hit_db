@@ -73,7 +73,7 @@ class EditGame(ttk.Frame):
         # Al final seteamos el estado del videjuego comparando las opciones existentes
         # Con la que contiene el videojuego que estamos buscando
         for condition in self.game_condition['values']:
-            if condition == videojuego.getEstado():
+            if condition == videojuego.get_estado_videojuego():
                 self.game_condition.set(condition)
         
     # Reset form
@@ -198,6 +198,7 @@ class EditGame(ttk.Frame):
 
         self.label_devs.grid(row=7, column=0, sticky=("w"), columnspan=2)
         self.game_devs.grid(row=7, column=2, sticky=("we"), columnspan=3)
+
 
         #--------------------------------------------------------------------------
         # BUTTONS

@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from views.menubar import Menubar
+from tkinter import messagebox
 
 from models.desarrolladora import Desarrolladora 
 from controllers.desarrolladora_dao import DesarrolladoraDao
@@ -25,48 +26,70 @@ class AddDev(ttk.Frame):
         # Get input fields .get
         name = self.dev_name.get()
         address = self.dev_address.get()
-        telephone = self.dev_telephone.get()
+        telephone = self.dev_tel.get()
         # Create Employee instance
         dev = Desarrolladora(nombre_desarrolladora=name, telefono_desarrolladora=telephone, direccion_desarrolladora=address)
         DesarrolladoraDao.insertar(dev)
 
-    # Go back to previous window
-    def back_to_prev(self):
-        #self.clear_frames()
-        #GameWindow(self.root)
-        pass
+        confirm = messagebox.askyesno(parent=self.root, message='Desarrolladora agregada correctamente, ¿Desea agregar otro?', 
+                            icon='question', title='Desarrolladora agregada')
+
+        if (confirm == True):
+            self.reset_form()
+        else:
+            self.cancel_to_main()
+
+    # Reset form
+    # delete(index, END) elimina desde índice indicado hasta END, final del arreglo.
+    def reset_form(self):
+        self.dev_name.delete(0, END)
+        self.dev_address.delete(0, END)
+        self.dev_tel.delete(0, END)
 
     # Go back to main menu
     def cancel_to_main(self):
-        #self.clear_frames()
-        pass
+        self.root.destroy()
+
 
     # Init the Graphic User Interface
     def init_gui(self):
-        self.clear_frames()
         # WINDOW TITLE
         self.root.title("Agregar Desarrolladora")
 
         # WINDOW SIZE
         self.root.geometry("600x400")
-        # Configuración de columnas
-        #self.grid_columnconfigure(0, weight=1)
-        #self.grid_columnconfigure(2, weight=1)
+        
+        ############################## FRAMES ###############################
+        # -------------------------- HEADER FRAME ---------------------------
+        # Widgets
+        self.header = PhotoImage(file='add-dev.png') 
+        self.header_frame = ttk.Frame(self.root)          # Crea un frame
+        self.header_label = ttk.Label(self.header_frame)  # Crea una etiqueta para la img
+        self.header_label['image'] = self.header          # Setea el label al tipo imagen
+        # Grid
+        self.header_label.grid(row=0, column=0)
+    
+        # ------------------------- INPUTS FRAME --------------------------------
+        self.inputs_frame = ttk.Frame(self.root)
+        # Widgets
+        self.label_name = ttk.Label(self.inputs_frame, text="Nombre de Desarrolladora")
+        self.dev_name = ttk.Entry(self.inputs_frame, width=60)
+        
+        self.label_address = ttk.Label(self.inputs_frame, text="Dirección")
+        self.dev_address = ttk.Entry(self.inputs_frame, width=50)
+        
+        self.label_tel = ttk.Label(self.inputs_frame, text="Teléfono")
+        self.dev_tel = ttk.Entry(self.inputs_frame, width=50)
 
-        #--------------------------------------------------------------------------
-        # LABEL AND INPUT FIELDS    
-        # Label es una etiqueta, que describe lo que deberías escribir en el campo
-        # Entry es un widget del tipo input
-        #--------------------------------------------------------------------------
-        # Name
-        self.label_name = ttk.Label(self.root, text="Nombre de la Desarrolladora")
-        self.dev_name = ttk.Entry(self.root, width=50)
-        # Address    
-        self.label_address = ttk.Label(self.root, text="Dirección")
-        self.dev_address = ttk.Entry(self.root, width=15)
-        # Telephone
-        self.label_telephone = ttk.Label(self.root, text="Teléfono")
-        self.dev_telephone = ttk.Entry(self.root, width=50)
+        # GRID inputs
+        self.label_name.grid(row=0, column=0, sticky=("w"), columnspan=2)
+        self.dev_name.grid(row=0, column=2, sticky=("we"), columnspan=3)
+
+        self.label_address.grid(row=1, column=0, sticky=("w"), columnspan=2)
+        self.dev_address.grid(row=1, column=2, sticky=("we"), columnspan=3)
+        
+        self.label_tel.grid(row=2, column=0, sticky=("w"), columnspan=2)
+        self.dev_tel.grid(row=2, column=2, sticky=("we"), columnspan=3)
 
         #--------------------------------------------------------------------------
         # BUTTONS
@@ -74,35 +97,28 @@ class AddDev(ttk.Frame):
         # Al presionar este parametro, mandamos llamar la función que específicamos
         # en 'command'
         #--------------------------------------------------------------------------
+        # Buttons Frame
+        self.btns_frame = ttk.Frame(self.root)
         # Add
-        self.btn_add = ttk.Button(
-            self.root, text='Agregar', width=30, command=self.add_dev)
-        # Back
-        self.btn_back = ttk.Button(
-            self.root, text='Atrás', width=30, command=self.back_to_prev)
+        self.btn_update = ttk.Button(
+            self.btns_frame, text='Agregar', width=20, command=self.add_dev)
+        # Reset
+        self.btn_reset = ttk.Button(
+            self.btns_frame, text='Reset', width=20, command=self.reset_form)
         # Cancel
         self.btn_cancel = ttk.Button(
-            self.root, text='Cancelar', width=30, command=self.cancel_to_main)
-
-        # -------------------------------------------------------------------------
-        # GRID 
-        # Especificamos las columnas, las filas. El ancho de las columnas NO es estático
-        # Su ancho depende del widget que haya dentro de ella, es decir, si no
-        # existe nada en una columna dada, el espacio no se verá reflejado en el grid de
-        # de nuestra ventana.
-        # Sticky puede llevar cualquier combinacion de caracteres
-        # Para alinear o estierar el widget en alguna de las direcciones cardinales
-        # 'w' west (izquierda) 'e' east (derecha) 'n' north 's' south
-        #---------------------------------------------------------------------------
-        # Inputs
-        self.label_name.grid(row=0, column=0)
-        self.dev_name.grid(row=0, column=2, sticky=("we"))
-        self.label_address.grid(row=1, column=0)
-        self.dev_address.grid(row=1, column=2, sticky=("we"))
-        self.label_telephone.grid(row=2, column=0)
-        self.dev_telephone.grid(row=2, column=2, sticky=("we"))
+            self.btns_frame, text='Cancelar', width=20, command=self.cancel_to_main)
 
         # Buttons
-        self.btn_add.grid(row=19, column=2, sticky=("we"))
-        #self.btn_back.grid(row=19, column=3, sticky=("we"))
-        #self.btn_cancel.grid(row=19, column=4, sticky=("we"))
+        self.btn_update.grid(row=1, column=1, pady=15)
+        self.btn_reset.grid(row=1, column=2, pady=15)
+        self.btn_cancel.grid(row=1, column=3, pady=15)
+
+        # -------------------------- GRID ROOT -------------------------------
+        self.header_frame.grid(row=0, column=0)
+        self.inputs_frame.grid(row=4, column=0)
+        self.btns_frame.grid(row=5, column=0, padx=10, sticky=("e"))
+        
+        # Padding
+        for child in self.inputs_frame.winfo_children():
+            child.grid_configure(padx=8, pady=3)
