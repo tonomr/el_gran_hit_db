@@ -40,6 +40,10 @@ class DeleteWindow(ttk.Frame):
      # Clear Listbox
     def clear_listbox(self):
         self.listbox.delete(0, END)
+    
+    # Go back to main menu
+    def cancel_to_main(self):
+        self.root.destroy()
 
     def init_gui(self):
         # Grid config
