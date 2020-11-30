@@ -20,7 +20,7 @@ class AddSell(ttk.Frame):
         self.game_id.delete(0, END)
         self.sell_date.delete(0, END)
         self.sell_quantity.delete(0, END)
-        self.sell_address.delete(0, END)
+        #self.sell_address.delete(0, END)
         self.customer_id.delete(0, END)
 
     # Go back to main menu
@@ -82,8 +82,8 @@ class AddSell(ttk.Frame):
         self.label_quantity = ttk.Label(self.inputs_frame, text="Cantidad")
         self.sell_quantity = ttk.Entry(self.inputs_frame, width=15)
 
-        self.label_address = ttk.Label(self.inputs_frame, text="Dirección envío")
-        self.sell_address = ttk.Entry(self.inputs_frame, width=15)
+        #self.label_address = ttk.Label(self.inputs_frame, text="Dirección envío")
+        #self.sell_address = ttk.Entry(self.inputs_frame, width=15)
 
         self.label_customer = ttk.Label(self.inputs_frame, text="ID de cliente")
         self.customer_id = ttk.Entry(self.inputs_frame, width=50)
@@ -96,8 +96,8 @@ class AddSell(ttk.Frame):
         self.label_quantity.grid(row=3, column=0, sticky=("w"))
         self.sell_quantity.grid(row=3, column=2, sticky=("we"))
 
-        self.label_address.grid(row=4, column=0, sticky=("w"))
-        self.sell_address.grid(row=4, column=2, sticky=("we"))
+        #self.label_address.grid(row=4, column=0, sticky=("w"))
+        #self.sell_address.grid(row=4, column=2, sticky=("we"))
 
         self.label_customer.grid(row=5, column=0, sticky=("w"), columnspan=2)
         self.customer_id.grid(row=5, column=2, sticky=("we"), columnspan=3)
